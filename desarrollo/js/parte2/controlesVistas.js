@@ -21,8 +21,8 @@ function v_seleccionarOrdenesTrabajo()
     v_seleccionarListaOT();
     cargarListaOrdenTrabajo();
     //v_seleccionarUnaOT(2);
-    v_seleccionarUnOperacion(1);
-    cargarComentarios(1);
+    //v_seleccionarUnOperacion(1);
+    //cargarComentarios(1);
 }
 
 

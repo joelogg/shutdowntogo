@@ -61,7 +61,7 @@
         <div id="sectionComentariosOpe" class="seccionOpcionesDetalles" style="border: 0;">
 
 
-
+            <!--
             <div class="card car-chat">
                 <div class="card-body">
                     <div class="media">
@@ -83,7 +83,7 @@
             <div class="card car-chat">
                 <div class="card-body">
                     <div class="media">
-                        <img src="<?php echo $_SESSION["base_del_url"]."desarrollo/img/5.png"; ?>" alt class="d-block ui-w-40 rounded-circle">
+                        <button class="btn btnAvatarUsuario">JG</button>
                         <div class="media-body ml-4">
                             <a href="javascript:void(0)">Nellie Maxwell</a>
                             <div class="text-muted small">02/02/2020 &nbsp; 08:50 am</div>
@@ -98,8 +98,7 @@
                     </div>
                 </div>
             </div>
-
-            
+            -->
 
 
             
