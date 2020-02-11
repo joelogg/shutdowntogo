@@ -1,0 +1,47 @@
+
+#logo
+{
+	margin-top: 87px;
+	width: 168px;
+	height: 136px;
+	opacity: 1;
+}
+
+
+#nombreGerencia
+{
+	margin-top: 15px;
+  	font-size: 16px;
+  	font-family: 'Rubik Regular', sans-serif;
+	letter-spacing: 0;
+	color: #595B60;
+	opacity: 1;
+}
+
+#nombrePrincipal
+{
+	margin-top: 66px;
+}
+
+#nombreRecuperarContrasena
+{
+	cursor: pointer;
+	font-size: 14px;
+	font-family: 'Rubik Medium', sans-serif;
+	letter-spacing: 0;
+	color: #4D7CFE;
+	opacity: 1;
+}
+
+@media only screen and (max-width: 768px) 
+{
+	#nombrePrincipal
+	{
+		margin-top: 20px;
+	}
+}
+
+
+
+
+

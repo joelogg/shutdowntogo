@@ -1,0 +1,326 @@
+#nombrePrincipal
+{
+    margin-top: 142px;
+}
+
+.nombres
+{
+    font-size: 25px;
+    font-family: 'Rubik Regular', sans-serif;
+    letter-spacing: -0.13px;
+    color: #1B1E24;
+    opacity: 1;
+}
+
+#buttonPrincipalOtro
+{
+    height: 46px;
+    width: 152px;
+    margin-top: 10px;
+    font-size: 14px;
+    font-family: 'Rubik Medium', sans-serif;
+    letter-spacing: -0.1px;
+    color: #FFFFFF;
+    opacity: 1;
+    background: #4D7CFE 0% 0% no-repeat padding-box;
+    margin-bottom: 50px;
+}
+
+#imgCel
+{
+    width: 40px;
+    height: 70px;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+#inputCelular
+{
+    max-width: 359px;
+}
+
+#imgEmpresa
+{
+    width: 67px;
+    height: 67px;
+    margin-right: 12px;
+    background-color: burlywood;
+}
+
+#txtEmpresa
+{
+    font-size: 14px;
+    font-family: 'Rubik Medium', sans-serif;
+    letter-spacing: -0.02px;
+    color: #98A9BC;
+    opacity: 1;
+}
+
+#divAvatars td, #divColores td
+{
+    border: 0;
+}
+
+#btnAvatarImg
+{
+    border: 0;
+    width: 112px;
+    height: 112px;
+
+    font-size: 12px;
+    font-family: 'Rubik Medium', sans-serif;
+    letter-spacing: -0.06px;
+    color: #98A9BC;
+
+
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #E8ECEF;
+    opacity: 1;
+}
+
+
+#btnAvatarColor
+{
+    border: 0;
+    width: 112px;
+    height: 112px;
+    background: #4D7CFE 0% 0% no-repeat padding-box;
+
+    font-size: 40px;
+    font-family: 'Rubik Regular', sans-serif;
+    letter-spacing: -0.2px;
+    color: #FFFFFF;
+    opacity: 1;
+}
+
+
+.table td, .table th 
+{
+    vertical-align: middle;
+}
+
+.btnColores
+{
+    border: 0;
+    background-color: inherit;
+    width: 18px;
+    height: 18px;
+
+    transition: .5s ease;
+ 	-moz-transition: .5s ease; /* Firefox */
+ 	-webkit-transition: .5s ease; /* Chrome - Safari */
+ 	-o-transition: .5s ease; /* Opera */
+}
+
+#btnColor1{ background: #FF9E2A 0% 0% no-repeat padding-box; position: relative;}
+#btnColor2{ background: #FE5B24  0% 0% no-repeat padding-box; }
+#btnColor3{ background: #F62B31  0% 0% no-repeat padding-box; }
+#btnColor4{ background: #ED3068  0% 0% no-repeat padding-box; }
+#btnColor5{ background: #F500FF  0% 0% no-repeat padding-box; }
+#btnColor6{ background: #7C68EB  0% 0% no-repeat padding-box; }
+#btnColor7{ background: #4269DE  0% 0% no-repeat padding-box; }
+
+#btnColor8{ background: #06B4F9  0% 0% no-repeat padding-box; }
+#btnColor9{ background: #04C4D9  0% 0% no-repeat padding-box; }
+#btnColor10{ background: #079F93  0% 0% no-repeat padding-box; }
+#btnColor11{ background: #1DBA53  0% 0% no-repeat padding-box; }
+#btnColor12{ background: #2CA32B 0% 0% no-repeat padding-box; }
+#btnColor13{ background: #767482  0% 0% no-repeat padding-box; }
+#btnColor14{ background: #1F1F1F 0% 0% no-repeat padding-box; }
+
+.btnColores:hover
+{ 
+    transform : scale(2);
+	-moz-transform : scale(2); /* Firefox */
+	-webkit-transform : scale(2); /* Chrome - Safari */
+	-o-transform : scale(2); /* Opera */
+    -ms-transform : scale(2); /* IE9 */ 
+}        
+
+#btnColor1:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #FF9E2A 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #FF9E2A), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #FF9E2A 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #FF9E2A 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #FF9E2A 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #FF9E2A 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FF9E2A', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor2:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #FE5B24 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #FE5B24), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #FE5B24 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #FE5B24 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #FE5B24 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #FE5B24 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FE5B24', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor3:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #F62B31 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #F62B31), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #F62B31 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #F62B31 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #F62B31 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #F62B31 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F62B31', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor4:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #ED3068 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #ED3068), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #ED3068 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #ED3068 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #ED3068 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #ED3068 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ED3068', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor5:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #F500FF 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #F500FF), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #F500FF 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #F500FF 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #F500FF 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #F500FF 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#F500FF', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor6:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #7C68EB 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #7C68EB), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #7C68EB 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #7C68EB 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #7C68EB 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #7C68EB 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7C68EB', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor7:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #4269DE 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #4269DE), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #4269DE 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #4269DE 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #4269DE 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #4269DE 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4269DE', endColorstr='#ffffff', GradientType=1 );
+}
+
+#btnColor8:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #06B4F9 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #06B4F9), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #06B4F9 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #06B4F9 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #06B4F9 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #06B4F9 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#06B4F9', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor9:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #04C4D9 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #04C4D9), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #04C4D9 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #04C4D9 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #04C4D9 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #04C4D9 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#04C4D9', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor10:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #079F93 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #079F93), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #079F93 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #079F93 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #079F93 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #079F93 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#079F93', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor11:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #1DBA53 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #1DBA53), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #1DBA53 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #1DBA53 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #1DBA53 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #1DBA53 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1DBA53', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor12:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #2CA32B 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #2CA32B), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #2CA32B 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #2CA32B 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #2CA32B 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #2CA32B 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2CA32B', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor13:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #767482 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #767482), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #767482 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #767482 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #767482 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #767482 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#767482', endColorstr='#ffffff', GradientType=1 );
+}
+#btnColor14:hover
+{
+    background: -moz-radial-gradient(center, ellipse cover, #1F1F1F 25%, #ffffff 100%);
+    background: -webkit-gradient(radial, center center, 250x, center center, 100%, color-stop(0%, #1F1F1F), color-stop(100%, #ffffff));
+    background: -webkit-radial-gradient(center, ellipse cover, #1F1F1F 25%, #ffffff 100%);
+    background: -o-radial-gradient(center, ellipse cover, #1F1F1F 25%, #ffffff 100%);
+    background: -ms-radial-gradient(center, ellipse cover, #1F1F1F 25%, #ffffff 100%);
+    background: radial-gradient(ellipse at center, #1F1F1F 25%, #ffffff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1F1F1F', endColorstr='#ffffff', GradientType=1 );
+}
+
+
+
+@media only screen and (max-width: 768px) 
+{
+	#nombrePrincipal
+	{
+		margin-top: 20px;
+	}
+}
+
+@media only screen and (min-width: 576px) 
+{
+	#nombrePrincipal
+	{
+		min-width: 500px;
+	}
+}
+
+@media only screen and (max-width: 576px) 
+{
+	.inputForm
+	{
+		width: 300px;
+	}
+}
+@media only screen and (max-width: 450px) 
+{
+	.inputForm
+	{
+		width: 200px;
+	}
+}
+
+@media only screen and (max-width: 320px) 
+{
+    #btnAvatarImg, #btnAvatarColor
+    {
+        width: 90px;
+        height: 90px;
+    }
+
+    .inputForm 
+    {
+        width: 180px;
+    }
+}

@@ -1,0 +1,209 @@
+html, body
+{
+	background-color: #F8FAFB;
+	height:100%;
+	margin: 0;	
+}
+
+
+.alinearTCentro
+{
+	text-align: center;
+}
+
+.alinearTIzquierda
+{
+	text-align: left;
+}
+
+.alinearTDerecha
+{
+	text-align: right;
+}
+
+.centrar
+{
+	margin: 0 auto;
+}
+
+.container, .container-fluid
+{
+	top: 0px;
+	left: 0px;
+	background: #F8FAFB 0% 0% no-repeat padding-box;
+	opacity: 1;
+}
+
+#panelDerecho
+{
+	top: 0px;
+	height: 900px;
+	background: transparent linear-gradient(180deg, #8DE5F8 0%, #0869C9 100%) 0% 0% no-repeat padding-box;
+	opacity: 1;
+}
+
+#nombrePrincipal
+{
+	font-size: 25px;
+	font-family: 'Rubik Regular', sans-serif;
+	letter-spacing: 0;
+	color: #1B1E24;
+}
+
+
+
+
+.labelForm
+{
+	text-align: left;
+	font-size: 14px;
+  	font-family: 'Rubik Regular', sans-serif;
+	letter-spacing: 0;
+	color: #252631;
+}
+
+.inputForm
+{
+	width: 100%;
+	height: 52px;
+	background: #FFFFFF 0% 0% no-repeat padding-box;
+	border: 1px solid #E8ECEF;
+	border-radius: 4px;
+	padding-left: 10px;
+}
+
+#formEtiqueta
+{
+	margin-top: 54px
+}
+
+
+::-webkit-input-placeholder 
+{
+	font-size: 14px;
+	font-family: 'Rubik Regular', sans-serif;
+	letter-spacing: 0;
+	color: #98A9BC;
+}
+
+::-moz-placeholder 
+{
+	font-size: 14px;
+	font-family: 'Rubik Regular', sans-serif;
+	letter-spacing: 0;
+	color: #98A9BC;
+}
+:-moz-placeholder
+{
+	font-size: 14px;
+	font-family: 'Rubik Regular', sans-serif;
+	letter-spacing: 0;
+	color: #98A9BC;
+}
+:-ms-input-placeholder
+{
+	font-size: 14px;
+	font-family: 'Rubik Regular', sans-serif;
+	letter-spacing: 0;
+	color: #98A9BC;
+}
+
+
+#buttonPrincipal
+{
+	width: 100%;
+	height: 46px;
+	font-size: 14px;
+	font-family: 'Rubik Medium', sans-serif;
+	background: #4D7CFE 0% 0% no-repeat padding-box;
+	margin-bottom: 50px; 
+}
+
+
+
+/*panel derecho*/
+
+
+#imgSVG
+{
+	/*margin-top: 324px;*/
+	width: 99px;
+	height: 157px;
+	opacity: 1;
+}
+
+#nombreShutdown
+{
+	margin-top: 26px;
+	/*font-family: 'Rubik Light', sans-serif;*/
+	font-weight: lighter;
+	font-size: 36px;
+	letter-spacing: 0;
+	color: #FFFFFF;
+}
+
+#nombreGestiona
+{
+	margin-top: 70px;
+	/*font-family: 'Rubik Light', sans-serif;*/
+	font-weight: lighter;
+	font-size: 20px;
+	letter-spacing: 0;
+	color: #FFFFFF;
+}
+
+
+#divMensaje
+{
+	background: #FFAB2B;	opacity: 1;
+	
+	width: 100%;
+	position: fixed;
+	z-index: 10;
+	display: none;
+	text-align: center;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+#pMensaje
+{
+	
+	font-size: 18px;
+	/*font-family: 'Rubik Light', sans-serif;*/
+	font-weight: lighter;
+	letter-spacing: 0;
+	color: #FFFFFF;
+	opacity: 1;
+	margin: 0;
+}
+
+
+@media only screen and (max-width: 768px) 
+{	
+	#logo
+	{
+		margin-top: 30px;
+	}
+	#imgSVG 
+	{
+	    margin-top: 50px;
+	}
+	#formEtiqueta 
+	{
+	    margin-top: 10px;
+	}
+	#panelDerecho 
+	{
+	    height: auto;
+	}
+}
+
+#txtEscribeMin
+{
+    font-size: 12px;
+  	font-family: 'Rubik Regular', sans-serif;
+    letter-spacing: -0.06px;
+    color: #98A9BC;
+    opacity: 1;
+}

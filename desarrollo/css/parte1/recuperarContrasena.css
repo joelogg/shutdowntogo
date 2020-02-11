@@ -1,0 +1,13 @@
+
+#nombrePrincipal
+{
+	margin-top: 300px;
+}
+
+@media only screen and (max-width: 768px) 
+{
+	#nombrePrincipal
+	{
+		margin-top: 200px;
+	}
+}

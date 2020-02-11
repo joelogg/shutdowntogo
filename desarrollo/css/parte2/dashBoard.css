@@ -1,0 +1,38 @@
+.btnMenuDashBoard
+{
+    font-size: 16px;
+    color: #778CA2;
+    font-weight: 600;
+}
+
+#divGraficosDashBoard
+{
+    
+}
+
+.titGraficasDashBoard
+{
+    color: #778CA2;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.divGrafDashBoard
+{
+    /*float: left;
+    margin-left: 0.5rem;
+    margin-right: 1rem;*/
+    margin-bottom: 2rem;
+}
+
+.divUnGrafDashBoard
+{
+    width: 400px;
+    background-color: white;
+    margin-top: 0.5rem;
+    border-radius: 10px;
+    border-right: 1px solid #EEE;
+    border-bottom: 1px solid #EEE;
+    width: 100%;
+}

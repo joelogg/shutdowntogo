@@ -1,0 +1,82 @@
+.txtFotoPerfil
+{
+    background: #4D7CFE 0% 0% no-repeat padding-box;
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    border: 0;
+    color: #FFF;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 0 auto;
+}
+
+.btnImportarExportar
+{
+    width: 290px;
+    height: 206px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 2px 16px #999BA81F;
+    border-radius: 4px;
+    border: 0;
+
+    text-align: center;
+    vertical-align: middle;
+
+    font-size: 18px;
+    font-weight: 400;
+    color: #252631;
+}
+
+.modal-footer-personalizado
+{
+    background-color: white;
+    width: 100%;
+    min-height: 94px;
+    padding: 20px;
+    position: absolute;
+    bottom: 0;
+}
+
+.inputAjustes 
+{
+    height: 46px;
+    border: 1px solid #E8ECEF;
+    font-size: 14px;
+    font-family: 'Rubik Medium', sans-serif;
+    color: #1B1E24;
+}
+
+.titFooterModal {
+    font-family: 'Rubik Regular', sans-serif;
+    font-size: 18px;
+    color: #252631;
+    margin: 0;
+}
+
+.labelAjustes 
+{
+    font-family: 'Rubik Regular', sans-serif;
+    font-size: 14px;
+    color: #252631;
+}
+
+.txtVistaPrevia
+{
+    font-size: 16px;
+    font-weight: 500;
+}
+
+#divTablaListusuarios
+{
+    padding-bottom: 145px;
+    max-height: 600px;
+}
+
+.switcher-input:checked ~ .switcher-indicator {
+    background: #4D7CFE 0% 0% no-repeat padding-box;
+    color: #fff;
+}

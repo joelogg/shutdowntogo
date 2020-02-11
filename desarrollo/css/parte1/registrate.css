@@ -1,0 +1,31 @@
+#nombrePrincipal
+{
+    margin-top: 192px;
+    font-size: 25px;
+    letter-spacing: -0.13px;
+    color: #1B1E24;
+    opacity: 1;
+}
+
+#correoLeido
+{
+    height: 25px;
+    font-size: 14px;
+  	font-family: 'Rubik Regular', sans-serif;    
+    letter-spacing: -0.07px;
+    color: #98A9BC;
+}
+
+.form-group
+{
+    margin-bottom: 30px;
+}
+
+
+@media only screen and (max-width: 768px) 
+{
+	#nombrePrincipal
+	{
+		margin-top: 20px;
+	}
+}

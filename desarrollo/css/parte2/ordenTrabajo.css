@@ -1,0 +1,248 @@
+#divListaOT, #divDetalleOT, #divDetalleOperaciones
+{
+    height: calc(100vh - 59px);
+    border-bottom: 1px solid #DDD;
+}
+
+.dataTables_scrollBody
+{
+    height: calc(100vh - 326px)  !important;
+}
+#divListaOT
+{
+    transition-duration: 1s;
+    position: absolute;
+    width: calc( 100% - 250px);
+    z-index: 3;
+    background: #F8FAFB 0% 0% no-repeat padding-box;
+}
+#divDetalleOT
+{
+    transition-duration: 1s;
+    background: #F8FAFB 0% 0% no-repeat padding-box;
+    position: absolute;
+    width: calc( 100% - 250px);
+    z-index: 2;
+}
+
+#divDetalleOperaciones
+{
+    transition-duration: 1s;
+    background: #F8FAFB 0% 0% no-repeat padding-box;
+    position: absolute;
+    width: calc( 100% - 250px);
+    z-index: 1;
+}
+
+
+
+.divTxtInfo
+{
+    padding-bottom: 0.5rem;
+    color: rgb(111, 121, 133);
+}
+
+.txtItemTitulo
+{
+    font-weight: 700;
+    font-family: "Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif;
+    line-height: 1.47;
+    color: #4E5155;
+}
+
+.txtItemContenido
+{
+    font-size: 15px;
+}
+
+.divTituloCabeceraDetalle
+{
+    text-align: center;
+    width: 100%;
+    height: 50px;
+    font-size: 20px;
+    font-weight: 600;
+
+    justify-content: center;
+    align-items: center;
+    padding-left: 2.5rem;
+    padding-right: 0.5rem;
+
+    color: rgb(83, 87, 92);
+}
+
+.divCabeceraDetalle 
+{
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+}
+
+.divTituloCabeceraDetalle, .divCabeceraDetalle
+{
+    /*background-color: rgb(229, 237, 240);*/
+} 
+
+.descripcionLadoIzquierdo
+{
+    padding-right: 1rem;
+}
+
+
+.badge-miIndicador
+{
+    min-width: 75px;
+}
+
+#navOpcionesDetallesOT
+{
+    background: #F8FAFB 0% 0% no-repeat padding-box;
+}
+
+
+.btnBack
+{
+    background-color: inherit;
+    width: 35px;
+    font-size: 25px;
+    border-radius: 20px;
+    border: 0;
+    text-align: left;
+    padding-left: 0;
+}
+
+/* ------- Lista de OTs ------*/
+.elementoListOT
+{
+    cursor: pointer;
+    color: #1e70cd;
+}
+
+/* ------- detalles de una OT ------*/
+#navOpcionesDetallesOT
+{
+    padding-bottom: 0;
+    padding-left: 2.5rem;
+}
+
+.divOpcionesDetalle
+{
+    position: relative;
+    overflow: auto;
+
+    padding: 1rem;
+    padding-top: 0;
+
+    background-color: white;
+}
+
+#divOpcionesDetalleOT
+{
+    height: calc(100vh - 281px)  !important;
+}
+
+#divOpcionesDetalleOpe
+{
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+    height: calc(100vh - 409px)  !important;
+}
+
+
+.seccionOpcionesDetalles
+{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.itemSectionGeneral
+{
+    padding: 0.5rem;
+    color: rgb(111, 121, 133);
+}
+
+.btnVerDetalleOp
+{
+    background-color: inherit;
+    border: 0;
+    font-size: 14px;
+    width: 50px;
+    text-align: right;
+}
+
+.itemListOperaciones
+{
+    text-align: left;
+}
+
+.itemListOperaciones:hover
+{
+    background-color: rgb(234, 239, 241);
+}
+
+.normalNavOpciones
+{
+    
+    font-size: 15px;
+    color: #778CA2;
+    border-bottom: 2px solid rgb(229, 237, 240);
+}
+
+#navOpcionesDetalles
+{
+    padding-bottom: 0;
+}
+
+
+#navOpcionesDetallesOT>.nav>.nav-item>.nav-link
+{
+    border-radius: .5rem 0.5rem 0 0;
+    /*margin-left: 1rem;*/
+}
+
+#navOpcionesDetallesOT>.nav>.nav-item>.nav-link.active
+{
+    background-color: white;
+    transition: border-bottom .5s ease-in-out;
+    color: #4D7CFE;
+    font-weight: bolder;
+    border-bottom: 2px solid #4D7CFE;
+}
+
+
+
+/* ------- detalles de una Operaciones ------*/
+#navOpcionesDetallesOpe
+{
+    padding-bottom: 0;
+    padding-left: 2.5rem;
+}
+
+#navOpcionesDetallesOpe>.nav>.nav-item>.nav-link
+{
+    border-radius: .5rem 0.5rem 0 0;
+}
+
+#navOpcionesDetallesOpe>.nav>.nav-item>.nav-link.active
+{
+    background-color: white;
+    transition: border-bottom .5s ease-in-out;
+    color: #4D7CFE;
+    font-weight: bolder;
+    border-bottom: 2px solid #4D7CFE;
+}
+
+
+/* ----------- css chat -------------*/
+.imgAdjuComentarios
+{
+    height: 150px;
+    width: 150px;
+}
+
+.car-chat
+{
+    margin-bottom: 1rem;
+    border-bottom: 2px solid rgba(24,28,33,0.06);
+    border-bottom: 5px solid rgba(24,28,33,0.06);
+    border-right: 5px solid rgba(24,28,33,0.06);
+}

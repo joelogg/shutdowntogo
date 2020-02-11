@@ -1,0 +1,50 @@
+#nombrePrincipal
+{
+    margin-top: 333px;
+    font-size: 20px;
+    letter-spacing: -0.1px;
+    color: #1B1E24;
+    opacity: 1;
+}
+
+#nombreContacto
+{
+    margin-top: 30px;
+    font-size: 30px;
+    font-family: 'Rubik Regular', sans-serif;
+    letter-spacing: -0.15px;
+    color: #4D7CFE;
+    opacity: 1;
+}
+
+#txtExtra
+{
+    margin-top: 29px;
+    font-size: 14px;
+    font-family: 'Rubik Regular', sans-serif;
+    letter-spacing: -0.14px;
+    color: #252631;
+    opacity: 1;
+}
+
+#buttonPrincipalOtro
+{
+    height: 46px;
+    width: 152px;
+    margin-top: 10px;
+    font-size: 14px;
+    font-family: 'Rubik Medium', sans-serif;
+    letter-spacing: -0.1px;
+    color: #FFFFFF;
+    opacity: 1;
+    background: #4D7CFE 0% 0% no-repeat padding-box;
+    margin-bottom: 50px;
+}
+
+@media only screen and (max-width: 768px) 
+{
+	#nombrePrincipal
+	{
+		margin-top: 20px;
+	}
+}

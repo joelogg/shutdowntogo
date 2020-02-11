@@ -1,0 +1,16 @@
+#nombrePrincipal
+{
+	margin-top: 277px;
+  	font-size: 25px;
+	letter-spacing: -0.13px;
+	color: #1B1E24;
+	opacity: 1;
+}
+
+@media only screen and (max-width: 768px) 
+{
+	#nombrePrincipal
+	{
+		margin-top: 200px;
+	}
+}
