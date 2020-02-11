@@ -228,7 +228,7 @@ class Data_model extends CI_Model
         return $idOT;
     }
 
-    public function selectOrdenesTrabajo($usuario, $estado)
+    public function selectOrdenesTrabajo($usuario, $webMovil)
     {
         $rpta = [];
 
@@ -238,33 +238,33 @@ class Data_model extends CI_Model
         {
             $this->db->select('ordenestrabajo.id as id, ordentrabajo, ordenestrabajo.descripcion, 
                             ordenestrabajo.visible AS visible, responsable, ordenestrabajo.fechainicio, ordenestrabajo.fechafin,
-                            estadoOT_id, estadoot.descripcion as estado,
+                            estadoOT_id, estadoot.descripcion as estado, estadoot.color as estadoOT_color,
                             prioridad.id as prioridad_id, prioridad.descripcion as descripcionPrioridad, prioridad.color as colorPrioridad,
                             equipo.id as equipo_id, equipo.descripcion as descripcionEquipo, equipo.codigo as codigoEquipo, 
                             area.id as area_id, area.descripcion as descripcionArea,
                             proyecto.id as proyecto_id, proyecto.revision as revisionProyecto,
                             tipo.id as tipo_id, tipo.descripcion as descripcionTipo, tipo.tag as tagTipo');
-            $this->db->where('ordenestrabajo.visible=1');
             $this->db->from('ordenestrabajo, estadoot');
+
+            $this->db->where('ordenestrabajo.visible=1');
             $this->db->where('ordenestrabajo.estadoOT_id=estadoot.id');
+            if($webMovil=="movil")
+            {   
+                $where = "estadoot.descripcion!='Finalizada' AND 
+                estadoot.descripcion!='Reprogramada' AND
+                ( estadoot.descripcion='Atrazada' OR ordenestrabajo.fechafin<=CURDATE() )";
+                
+            }
+            $this->db->where($where);
+
             $this->db->join('prioridad', 'ordenestrabajo.prioridad_id=prioridad.id', 'left');
             $this->db->join('equipo', 'ordenestrabajo.equipo_id=equipo.id', 'left');
             $this->db->join('proyecto', 'ordenestrabajo.proyecto_id=proyecto.id', 'left');
             $this->db->join('tipo', 'ordenestrabajo.tipo_id=tipo.id', 'left');
             $this->db->join('area', 'equipo.area_id=area.id', 'left');
 
-            if($estado == "")
-            {
-            }
-            elseif($estado == "Finalizado")
-            {
-                $this->db->where('estadoot.descripcion="Finalizado"');
-            }
-            else
-            {
-                $this->db->where('estadoot.descripcion!="Finalizado"');
-            }
 
+            $this->db->order_by('estadoot.id', 'ASC');
             $this->db->order_by('ordenestrabajo.fechafin', 'ASC');
             $this->db->order_by('ordenestrabajo.id', 'ASC');
         }

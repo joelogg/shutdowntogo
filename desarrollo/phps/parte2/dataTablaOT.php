@@ -41,9 +41,9 @@ else
         $ordentrabajo = '<span class="elementoListOT" onclick="v_seleccionarUnaOT('.$valor['id'].')">'.$valor['ordentrabajo'].'</span>' ;
 
         $status = "";
-        if($status = $valor['estadoOT_id']==4)
+        if($status = $valor['estadoOT_id']==1)
         {
-            $status = '<span style="color:red">' .$valor['estado']. '</span>';
+            $status = '<span style="color:#'.$valor['estadoOT_color'].'">' .$valor['estado']. '</span>';
         }
         else
         {

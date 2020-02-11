@@ -46,8 +46,9 @@
     <!-- Opciones (Nav) --> 
     <nav id="navOpcionesDetallesOpe" class="navbar">
         <ul class="nav nav-pills">
-            <li class="nav-item">
-	            <a id="idNavOpcGeneral" class="nav-link normalNavOpciones" href="#sectionComentariosOpe" onclick="selectNavOpcCementatios()">COMENTARIOS</a>
+            <li class="nav-item flex">
+                <a id="idNavOpcComentarios" class="nav-link normalNavOpciones" href="#sectionComentariosOpe" onclick="selectNavOpcCementatios()">COMENTARIOS</a>
+                
 	        </li>
         </ul>
     </nav>
@@ -55,13 +56,13 @@
 
 
     <!-- Seccion de tabs -->
+    
     <div id="divOpcionesDetalleOpe" class="divOpcionesDetalle" data-spy="scroll" data-target="#navOpcionesDetallesOpe" data-offset="0" class="scrollspy-example">
 
         <!-- Seccion General --> 
         <div id="sectionComentariosOpe" class="seccionOpcionesDetalles" style="border: 0;">
 
-
-            <!--
+            
             <div class="card car-chat">
                 <div class="card-body">
                     <div class="media">
@@ -98,11 +99,48 @@
                     </div>
                 </div>
             </div>
-            -->
+
+            <div class="card car-chat">
+                <div class="card-body">
+                    <div class="media">
+                        <img src="<?php echo $_SESSION["base_del_url"]."desarrollo/img/5.png"; ?>" alt class="d-block ui-w-40 rounded-circle">
+                        <div class="media-body ml-4">
+                            <a href="javascript:void(0)">Nellie Maxwell</a>
+                            <div class="text-muted small">02/02/2020 &nbsp; 08:50 am</div>
+                            <div class="mt-2">
+                                Nulla mollis sem id tempus pharetra. Mauris finibus eros et leo ultricies volutpat. Nunc in lacus nec ex posuere gravida. Mauris metus nulla, mollis at felis vitae, congue ullamcorper velit. In vulputate dui sapien, in placerat tellus pellentesque ac. Duis pretium ex felis, sed vulputate orci efficitur id. Vivamus nec mauris ex. Nullam sed dolor id augue elementum ullamcorper. Donec sit amet consectetur erat.
+                            </div>
+                            <div class="mt-2">
+                                <img src="<?php echo $_SESSION["base_del_url"]."desarrollo/img/5.png"; ?>" alt class="imgAdjuComentarios">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card car-chat">
+                <div class="card-body">
+                    <div class="media">
+                        <button class="btn btnAvatarUsuario">JG</button>
+                        <div class="media-body ml-4">
+                            <a href="javascript:void(0)">Nellie Maxwell</a>
+                            <div class="text-muted small">02/02/2020 &nbsp; 08:50 am</div>
+                            <div class="mt-2">
+                                Nulla mollis sem id tempus pharetra. Mauris finibus eros et leo ultricies volutpat. Nunc in lacus nec ex posuere gravida. Mauris metus nulla, mollis at felis vitae, congue ullamcorper velit. In vulputate dui sapien, in placerat tellus pellentesque ac. Duis pretium ex felis, sed vulputate orci efficitur id. Vivamus nec mauris ex. Nullam sed dolor id augue elementum ullamcorper. Donec sit amet consectetur erat.
+                            </div>
+                            <div class="mt-2">
+                                <img src="<?php echo $_SESSION["base_del_url"]."desarrollo/img/imgAmplia.jpg"; ?>" alt class="imgAdjuComentarios">
+                                <img src="<?php echo $_SESSION["base_del_url"]."desarrollo/img/5.png"; ?>" alt class="imgAdjuComentarios">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
 
 
             
-
+            
         </div>
         <!-- Fin Seccion General --> 
     </div>

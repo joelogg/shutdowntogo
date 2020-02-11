@@ -378,7 +378,7 @@ class Api extends CI_Controller {
 
 		if( !isset($data['estadoOT_id']) )
 		{
-			$data['estadoOT_id'] = 1;
+			$data['estadoOT_id'] = 2;//En la BD abierta
 		}
 
 		$this->load->model('data_model');
@@ -413,12 +413,12 @@ class Api extends CI_Controller {
 		$token = $_POST["token"];
 
 		$this->load->model('data_model');
-		/*$rpta = $this->data_model->selectUsuarioToken($token);
+		$rpta = $this->data_model->selectUsuarioToken($token);
 		
 		if($rpta["data"]!="")
-		{*/
-			//$rpta = $this->data_model->selectOrdenesTrabajo($rpta["data"], "");
-			$rpta = $this->data_model->selectOrdenesTrabajo(1, "");
+		{
+			$rpta = $this->data_model->selectOrdenesTrabajo($rpta["data"], "web");
+			//$rpta = $this->data_model->selectOrdenesTrabajo(1);
 			$usuarios = $this->data_model->selectUsuarios();
 
 
@@ -446,7 +446,7 @@ class Api extends CI_Controller {
 				"message" => "listado de OTs",
 				"data"=>$rpta
 			);
-		/*}
+		}
 		else
 		{
 			$results = array(
@@ -455,12 +455,12 @@ class Api extends CI_Controller {
 				"message" => "token inválido",
 				"data"=>[]
 			);
-		}*/
+		}
 		
 		echo json_encode($results);
 	}
 
-	public function ordenTrabajoListarPorHacer()
+	public function ordenTrabajoListarTodoMovil()
 	{
 		$token = $_POST["token"];
 
@@ -469,11 +469,32 @@ class Api extends CI_Controller {
 		
 		if($rpta["data"]!="")
 		{
-			$rpta = $this->data_model->selectOrdenesTrabajo($rpta["data"], "No Finalizado");
+			$rpta = $this->data_model->selectOrdenesTrabajo($rpta["data"], "movil");
+			$usuarios = $this->data_model->selectUsuarios();
+
+
+			foreach ($rpta as $unaOT) 
+			{
+				$idsUsu = explode(",", $unaOT->responsable);
+				$nombres = [];
+				foreach ($idsUsu as $idUsu) 
+				{
+					foreach ($usuarios as $usuario) 
+					{
+						if($usuario->id == $idUsu)
+						{
+							array_push($nombres, array("id"=>$usuario->id, "nombre"=>$usuario->nombre, "apellido"=>$usuario->apellido, "imagen"=>$usuario->imagen));
+							break;
+						}
+					}
+				}
+				$unaOT->responsable = $nombres;
+			}
+
 			$results = array(
 				"status" => "success",
 				"code" => "200",
-				"message" => "listado de OT por hacer",
+				"message" => "listado de OTs",
 				"data"=>$rpta
 			);
 		}
@@ -490,35 +511,6 @@ class Api extends CI_Controller {
 		echo json_encode($results);
 	}
 
-	public function ordenTrabajoListarFinalizadas()
-	{
-		$token = $_POST["token"];
-
-		$this->load->model('data_model');
-		$rpta = $this->data_model->selectUsuarioToken($token);
-		
-		if($rpta["data"]!="")
-		{
-			$rpta = $this->data_model->selectOrdenesTrabajo($rpta["data"], "Finalizado");
-			$results = array(
-				"status" => "success",
-				"code" => "200",
-				"message" => "listado de OT finalizadas",
-				"data"=>$rpta
-			);
-		}
-		else
-		{
-			$results = array(
-				"status" => "error",
-				"code" => "400",
-				"message" => "token inválido",
-				"data"=>[]
-			);
-		}
-		
-		echo json_encode($results);
-	}
 
 	public function ordenTrabajoEditar()
 	{
