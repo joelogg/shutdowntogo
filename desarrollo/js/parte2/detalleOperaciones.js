@@ -42,7 +42,7 @@ function fechaBDToWeb(fecha)
 
 function cargarComentarios(idOp)
 {
-    //document.getElementById('sectionComentariosOpe').innerHTML = "";
+    document.getElementById('sectionComentariosOpe').innerHTML = "";
     
     $.ajax(
     {
@@ -112,7 +112,7 @@ function cargarComentarios(idOp)
                             </div>\
                         </div>';
                 }
-                //document.getElementById('sectionComentariosOpe').innerHTML = txt;
+                document.getElementById('sectionComentariosOpe').innerHTML = txt;
             }
             else if(rpta.status == "error")
             { 

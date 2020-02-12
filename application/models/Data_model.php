@@ -253,9 +253,9 @@ class Data_model extends CI_Model
                 $where = "estadoot.descripcion!='Finalizada' AND 
                 estadoot.descripcion!='Reprogramada' AND
                 ( estadoot.descripcion='Atrazada' OR ordenestrabajo.fechafin<=CURDATE() )";
+                $this->db->where($where);
                 
             }
-            $this->db->where($where);
 
             $this->db->join('prioridad', 'ordenestrabajo.prioridad_id=prioridad.id', 'left');
             $this->db->join('equipo', 'ordenestrabajo.equipo_id=equipo.id', 'left');

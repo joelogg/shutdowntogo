@@ -62,7 +62,7 @@
         <!-- Seccion General --> 
         <div id="sectionComentariosOpe" class="seccionOpcionesDetalles" style="border: 0;">
 
-            
+            <!--
             <div class="card car-chat">
                 <div class="card-body">
                     <div class="media">
@@ -136,7 +136,7 @@
                     </div>
                 </div>
             </div>
-            
+            -->
 
 
             
