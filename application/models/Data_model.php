@@ -236,7 +236,7 @@ class Data_model extends CI_Model
         
         //if($perfil=="Propietario")
         {
-            $this->db->select('ordenestrabajo.id as id, ordentrabajo, ordenestrabajo.descripcion, 
+            $this->db->select('ordenestrabajo.id as id, ordentrabajo, ordenestrabajo.descripcion, atrasado, 
                             ordenestrabajo.visible AS visible, responsable, ordenestrabajo.fechainicio, ordenestrabajo.fechafin,
                             estadoOT_id, estadoot.descripcion as estado, estadoot.color as estadoOT_color,
                             prioridad.id as prioridad_id, prioridad.descripcion as descripcionPrioridad, prioridad.color as colorPrioridad,
@@ -252,7 +252,8 @@ class Data_model extends CI_Model
             {   
                 $where = "estadoot.descripcion!='Finalizada' AND 
                 estadoot.descripcion!='Reprogramada' AND
-                ( estadoot.descripcion='Atrazada' OR ordenestrabajo.fechafin<=CURDATE() )";
+                ( ordenestrabajo.atrasado='1' OR ordenestrabajo.fechafin<=CURDATE() )";
+
                 $this->db->where($where);
                 
             }
@@ -324,6 +325,48 @@ class Data_model extends CI_Model
         return $rpta;
     }
 
+    public function updateEstadoOTsiguiente($data, $token)
+    {
+        $this->load->library('encryption');
+        $idModificador = $this->encryption->decrypt($token);
+
+        
+
+        $this->db->set('modificadopor', $idModificador);
+
+        if($data["accion"]=="R")
+        {
+            $this->db->set('estadoOT_id', 4);
+        }
+        else
+        {
+            $this->db->select('estadoOT_id');
+            $this->db->from('ordenestrabajo');
+            $this->db->where('id =', $data["idOT"]);
+            $rpta = $this->db->get();
+            $row = $rpta->row();
+            $estadoOT_id =  $row->estadoOT_id;
+
+            if( (int)$estadoOT_id + 1 < 4)
+            {
+                $this->db->set('estadoOT_id', (int)$estadoOT_id + 1);
+            }
+
+        }
+
+        $this->db->where('id', $data["idOT"]);
+        $this->db->update('ordenestrabajo'); 
+
+        if($this->db->affected_rows() > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     //------------------ Operaciones -----------------
     public function insertOperacion($dataOp, $token)
     {//ordenestrabajo_id, numerooperacion, descripcion) 
@@ -383,6 +426,20 @@ class Data_model extends CI_Model
            
     }
 
+    public function updateEstadoOperacion($idOp, $token)
+    {
+        $this->load->library('encryption');
+        $idModificador = $this->encryption->decrypt($token);
+
+        $this->db->set('modificadopor', $idModificador);
+        $this->db->set('finalizada', 1);
+
+        $this->db->where('id', $idOp);
+        $rpta = $this->db->update('operaciones'); 
+
+        return $rpta;
+    }
+
     //------------------ Comentarios -----------------
     public function insertComentario($dataComentario, $token)
     {
@@ -397,6 +454,35 @@ class Data_model extends CI_Model
         return $idComentario;
     }
     
+    public function updateImagenComentario($infoImg, $idModificador)
+    {
+        //Insert adjunto
+        $this->db->insert('adjunto', $infoImg); 
+        $idAdj = $this->db->insert_id();
+
+        return $idAdj;
+    }
+
+    public function selecComentario($idCom)
+    {
+        $this->db->select('operaciones_id');
+        $this->db->from('comentarios');
+        $this->db->where('id=', $idCom);
+        $rpta = $this->db->get();
+        if($rpta->num_rows() > 0)
+        {
+            $row = $rpta->row();
+            $operaciones_id =  $row->operaciones_id;
+
+            return $operaciones_id;
+        }
+        else
+        {
+            return 0;
+        }
+           
+    }
+
     public function selectComentarios($idOp)
     {
         $this->db->select('comentarios.id as idComentario, creadopor, fechacreacion, mensaje, chat,
@@ -411,6 +497,7 @@ class Data_model extends CI_Model
         return $rpta->result();
            
     }
+
 
     /*
     $valE = $this->encryption->decrypt($valE);

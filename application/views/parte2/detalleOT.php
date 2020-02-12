@@ -55,19 +55,19 @@
 
             <div class="card-body">
                 <h6 class="font-weight-semibold mb-4">General</h6>
-                <table id="tablaDatosGenerales" class="table product-item-table">
+                <table class="table product-item-table">
                 <tbody>
                     <tr>
                         <td>Responsable:</td>
-                        <td>Juan Benavides</td>
+                        <td><div id="txtResponsableOT"></div></td>
                     </tr>
                     <tr>
                         <td>Fecha Inicio:</td>
-                        <td>20/02/2020</td>
+                        <td><span id="txtFechaInicioOT">20/02/2020</span></td>
                     </tr>
                     <tr>
                         <td>Fecha Vencimiento:</td>
-                        <td>20/02/2020</td>
+                        <td><span id="txtFechaVencimientoOT">20/02/2020</span></td>
                     </tr>
                 </tbody>
                 </table>

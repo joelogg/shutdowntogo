@@ -6,6 +6,7 @@ txtMeses = [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct
 
 perfiles = "";
 
+
 var usuariosLista = [];
 var ordenesTrabajoLista = []
 var operacionesLista = []

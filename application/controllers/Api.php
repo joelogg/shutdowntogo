@@ -494,7 +494,7 @@ class Api extends CI_Controller {
 			$results = array(
 				"status" => "success",
 				"code" => "200",
-				"message" => "listado de OTs",
+				"message" => "listado de OTs Movil",
 				"data"=>$rpta
 			);
 		}
@@ -531,6 +531,51 @@ class Api extends CI_Controller {
 				"message" => "OT modificada",
 				"data"=>$rpta
 			);
+		}
+		else
+		{
+			$results = array(
+				"status" => "error",
+				"code" => "400",
+				"message" => "token inválido",
+				"data"=>[]
+			);
+		}
+		
+        echo json_encode($results); 
+	}
+
+	public function ordeTrabajoCambiarEstado()
+	{
+		$data = $_POST['json'];
+		$token = $_POST['token'];
+		$data = json_decode($data, true);
+
+		$this->load->model('data_model');
+		$rpta = $this->data_model->selectUsuarioToken($token);
+		
+		
+		if($rpta["data"]!="")
+		{
+			$rpta = $this->data_model->updateEstadoOTsiguiente($data, $token);
+			if($rpta)
+			{
+				$results = array(
+					"status" => "success",
+					"code" => "200",
+					"message" => "Estado cambaido",
+					"data"=>$rpta
+				);
+			}
+			else
+			{
+				$results = array(
+					"status" => "error",
+					"code" => "400",
+					"message" => "No ha cambiado",
+					"data"=>$rpta
+				);
+			}
 		}
 		else
 		{
@@ -631,6 +676,39 @@ class Api extends CI_Controller {
 		echo json_encode($results);
 	}
 
+	public function operacionesFinalizar()
+	{
+		$idOp = $_POST['idOp'];
+		$token = $_POST['token'];
+
+		$this->load->model('data_model');
+		$rpta = $this->data_model->selectUsuarioToken($token);
+		
+		
+		if($rpta["data"]!="")
+		{
+			$rpta = $this->data_model->updateEstadoOperacion($idOp, $token);
+			$results = array(
+				"status" => "success",
+				"code" => "200",
+				"message" => "Estado cambaido",
+				"data"=>$rpta
+			);
+		}
+		else
+		{
+			$results = array(
+				"status" => "error",
+				"code" => "400",
+				"message" => "token inválido",
+				"data"=>[]
+			);
+		}
+		
+        echo json_encode($results); 
+	}
+
+
 //------------------ Comentarios -----------------
 	public function comentariosCrear()
     {
@@ -662,6 +740,95 @@ class Api extends CI_Controller {
         }
         
         echo json_encode($results);
+	}
+
+	public function subirImagenComentario()
+	{
+		$idCom = $_POST['idCom'];
+		$token = $_POST['token'];
+
+		$this->load->model('data_model');
+		$rpta = $this->data_model->selectUsuarioToken($token);
+		
+		
+		if($rpta["data"]!="")
+		{
+			$this->load->model('data_model');
+			$idOp = $this->data_model->selecComentario($idCom);
+
+			$idCreador = $rpta["data"]->idUsuario;
+			//SI EL ARCHIVO SE ENVIÓ Y ADEMÁS SE SUBIO CORRECTAMENTE
+			if ($idOp!=0 && isset($_FILES["imagen"]) && is_uploaded_file($_FILES['imagen']['tmp_name'])) 
+			{
+				$carpeta = 'adjuntos/comentarios/'.$idOp.'/';
+				if (!file_exists($carpeta)) {
+					mkdir($carpeta, 0755, true);
+				}
+
+				
+				$config['upload_path'] = $carpeta;
+				$config['allowed_types'] = 'gif|jpg|png|jpeg';
+				$config['overwrite'] = TRUE;
+				$config['file_name'] = $idCom;
+
+				
+				
+				$this->load->library('upload', $config);
+				if (!$this->upload->do_upload('imagen')) 
+				{
+					$error = array('error' => $this->upload->display_errors());
+					echo json_encode($error);
+				}
+				else
+				{
+					$nombreImg = $_FILES['imagen']['name'];
+					$extension = explode(".", $nombreImg);
+					$extension = $extension[ sizeof($extension)-1];
+
+					$nombreImg = $config['upload_path'].$idCom.".".$extension;
+
+					$infoImg = array('comentarios_id'=>$idCom, 'nombre'=>$nombreImg,'tamano' => $_FILES['imagen']['size'], 'extension'=>$extension);
+
+					$rpta = $this->data_model->updateImagenComentario($infoImg, $idCreador);
+					$results = array(
+						"status" => "success",
+						"code" => "200",
+						"message" => "Imagen subida",
+						"data"=>$infoImg
+					);
+					echo json_encode($results);
+				}
+				
+			}
+			else
+			{
+				$results = array(
+					"status" => "error",
+					"code" => "400",
+					"message" => "Imagen no cargada"
+				);
+				   
+				echo json_encode($results); 
+			}
+
+
+			
+		}
+		else
+		{
+			$results = array(
+				"status" => "error",
+				"code" => "400",
+				"message" => "token inválido",
+				"data"=>[]
+			);
+			echo json_encode($results); 
+		}
+		
+
+
+
+
 	}
 	
 	public function comentariosPorIdOpe()

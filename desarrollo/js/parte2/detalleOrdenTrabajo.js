@@ -40,25 +40,21 @@ function colocarDatosOTDetalle(idOT)
             
 
             var responsables = ordenesTrabajoLista[i].responsable;
+            responsablesIds = "" ;
             txtResponsables = "";
+
             for(i=0; i<responsables.length; i++)
             {
                 txtResponsables += responsables[i].nombre + " " + responsables[i].apellido + '<br>';
+                responsablesIds += responsables[i].id + ",";
             }
-
-            document.getElementById('tablaDatosGenerales').innerHTML = '\
-                            <tr>\
-                                <td>Responsable(s):</td>\
-                                <td>'+txtResponsables+'</td>\
-                            </tr>\
-                            <tr>\
-                                <td>Fecha Inicio:</td>\
-                                <td>'+ordenesTrabajoLista[i].fechainicio+'</td>\
-                            </tr>\
-                            <tr>\
-                                <td>Fecha Vencimiento:</td>\
-                                <td>'+ordenesTrabajoLista[i].fechafin+'</td>\
-                            </tr>';
+            
+            console.log(responsablesIds);
+            //document.getElementById('txtResponsableOT').innerHTML = '<span ondblclick="editarResponsableOT('+idOT+',`'+responsablesIds+'`)" style="background-color: red">'+txtResponsables+'</span>';
+            document.getElementById('txtResponsableOT').innerHTML = '<span ondblclick="editarResponsableOT('+idOT+',`'+responsablesIds+'`)">'+txtResponsables+'</span>';
+            document.getElementById('txtFechaInicioOT').innerHTML = ordenesTrabajoLista[i].fechainicio;
+            document.getElementById('txtFechaVencimientoOT').innerHTML = ordenesTrabajoLista[i].fechafin;
+            
             colocarOperacionesListaIdOT(idOT)
             return;
         }
@@ -93,6 +89,18 @@ function colocarOperacionesListaIdOT(idOT)
 
 
     document.getElementById('tablaOperaciones').innerHTML = bodyTablaOp;
+}
+
+function editarResponsableOT(idOT, responsablesIds)
+{
+    responsablesIds = responsablesIds.split(",");
+    if(responsablesIds[responsablesIds.length-1]=="")//para eliminar el ulltimo elemento
+        responsablesIds.splice(responsablesIds.length-1,1)
+
+    console.log(idOT);
+    console.log(responsablesIds);
+
+    document.getElementById('txtResponsableOT').innerHTML = "dfdjs dskjd hjdh s<br>ss<br>ds";
 }
 
 

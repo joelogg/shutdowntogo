@@ -90,7 +90,7 @@ function cargarComentarios(idOp)
                     }
                     else
                     {
-                        adjuntoNombre = '<img src="'+base_del_url+'adjuntos/comentarios/'+idOp+'/'+adjuntoNombre+adjuntoExtension+'" alt class="imgAdjuComentarios">';
+                        adjuntoNombre = '<img src="'+base_del_url+adjuntoNombre+'" alt class="imgAdjuComentarios">';
                     }
 
                     txt += '\
