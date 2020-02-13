@@ -9,14 +9,15 @@ $(function()
     new PerfectScrollbar(document.getElementById('divOpcionesDetalleOpe'));
 
 });
-  
 
 function colocarDatosOTDetalle(idOT)
 {
+    idOTGeneral = idOT;
     for(var i=0; i<ordenesTrabajoLista.length; i++)
     {
         if(ordenesTrabajoLista[i].id==idOT)
         {
+            posOTGeneral = i;
             document.getElementById('descripcionOT').innerHTML = ordenesTrabajoLista[i].descripcion + "(" + ordenesTrabajoLista[i].ordentrabajo + ")";
             document.getElementById('tipoOT').innerHTML = ordenesTrabajoLista[i].descripcionTipo;
 
@@ -42,15 +43,18 @@ function colocarDatosOTDetalle(idOT)
             var responsables = ordenesTrabajoLista[i].responsable;
             responsablesIds = "" ;
             txtResponsables = "";
-
-            for(i=0; i<responsables.length; i++)
+            
+            for(var j=0; j<responsables.length; j++)
             {
-                txtResponsables += responsables[i].nombre + " " + responsables[i].apellido + '<br>';
-                responsablesIds += responsables[i].id + ",";
+                txtResponsables += responsables[j].nombre + " " + responsables[j].apellido + '<br>';
+                responsablesIds += responsables[j].id + ",";
+            }
+
+            if(txtResponsables=="")
+            {
+                txtResponsables = "Sin asignar"
             }
             
-            console.log(responsablesIds);
-            //document.getElementById('txtResponsableOT').innerHTML = '<span ondblclick="editarResponsableOT('+idOT+',`'+responsablesIds+'`)" style="background-color: red">'+txtResponsables+'</span>';
             document.getElementById('txtResponsableOT').innerHTML = '<span ondblclick="editarResponsableOT('+idOT+',`'+responsablesIds+'`)">'+txtResponsables+'</span>';
             document.getElementById('txtFechaInicioOT').innerHTML = ordenesTrabajoLista[i].fechainicio;
             document.getElementById('txtFechaVencimientoOT').innerHTML = ordenesTrabajoLista[i].fechafin;
@@ -93,18 +97,130 @@ function colocarOperacionesListaIdOT(idOT)
 
 function editarResponsableOT(idOT, responsablesIds)
 {
+    //pasando los ids a array
     responsablesIds = responsablesIds.split(",");
     if(responsablesIds[responsablesIds.length-1]=="")//para eliminar el ulltimo elemento
-        responsablesIds.splice(responsablesIds.length-1,1)
+    {
+        responsablesIds.splice(responsablesIds.length-1,1);
+    }
 
-    console.log(idOT);
-    console.log(responsablesIds);
+    //creando el select con los datos de los usuarios
+    var txt = "";
+    for (let i = 0; i < usuariosLista.length; i++) 
+    {
+        txt += '<option value="'+usuariosLista[i].id+'">'+usuariosLista[i].nombre+' '+usuariosLista[i].apellido+'</option> '
+    }    
+    document.getElementById('txtResponsableOT').innerHTML = '<select id="selectResponsable" class="select2-demo form-control" multiple style="width: 100%">'+txt+'</select>';
 
-    document.getElementById('txtResponsableOT').innerHTML = "dfdjs dskjd hjdh s<br>ss<br>ds";
+    //accionando el select de los usarios ya asisgnados
+    for (let i = 0; i < responsablesIds.length; i++) 
+    {
+        $("#selectResponsable option[value='"+responsablesIds[i]+"']").prop("selected",true);
+    }
+
+    //activando el select
+    //$('#selectResponsable').select2();
+    $('#selectResponsable').each(function() {
+        $(this)
+          .wrap('<div id="divSelectResponsable" ondblclick="salirEdicionResponsables('+idOT+')" class="position-relative"></div>')
+          .select2({
+            placeholder: 'Select value',
+            dropdownParent: $(this).parent()
+          });
+    })
+
+    
+    //funcion de change del select
+    $("#selectResponsable").on("change", cambiarResponsablesBD);
+      
 }
+    
+function salirEdicionResponsables(idOT)
+{
+    //var values = $('#selectResponsable').val();
+    //console.log(values);
+    var select  = document.getElementById("selectResponsable");
+    var responsablesIds = "";
+    var txtResponsables = "";
 
+    var options = select && select.options;
+    var opt;
 
+    for (var i=0, iLen=options.length; i<iLen; i++) 
+    {
+        opt = options[i];
+        if (opt.selected) 
+        {
+            responsablesIds += opt.value + ",";
+            txtResponsables += opt.text + "<br>";
+        }
+    }
 
+    document.getElementById('txtResponsableOT').innerHTML = '<span ondblclick="editarResponsableOT('+idOT+',`'+responsablesIds+'`)">'+txtResponsables+'</span>';
+}
+    
+    
+/*    
+$(".select2-demo").on("select2:open", function (e) { console.log("open"); });
+$(".select2-demo").on("select2:close", function (e) { console.log("close"); });
+$(".select2-demo").on("select2:select", function (e) { console.log("select"); });
+$(".select2-demo").on("select2:unselect", function (e) { console.log("unselec"); });
+*/
 
+function cambiarResponsablesBD()
+{
+    var valuesId = $('#selectResponsable').val();
+    var valuesIdTxt = valuesId.join(",")
 
+    var tarea = {"id":idOTGeneral, "responsable":valuesIdTxt};
+    tarea = JSON.stringify(tarea);
 
+    $.ajax(
+    {
+        async: true,
+        crossDomain: true,
+        type:'POST',
+        url: base_del_url_miApi+"api/ordenTrabajoEditar",
+        data: {
+            "token": token,
+            "json": tarea
+          },
+        success:function(rpta)
+        {
+            rpta = JSON.parse(rpta);
+            
+            if(rpta.status == "success")
+            {
+                nuevosResponsables = [];
+                for (let i = 0; i < valuesId.length; i++) 
+                {
+                    for (let j = 0; j < usuariosLista.length; j++) 
+                    {
+                        if(usuariosLista[j].id == valuesId[i])
+                        {
+                            nuevosResponsables.push(usuariosLista[j]);
+                        }
+                    }
+                }
+                ordenesTrabajoLista[posOTGeneral].responsable = nuevosResponsables;
+                cargarListaOrdenTrabajo();
+            }
+            else if(rpta.status == "error")
+            {
+                if(rpta.message == "token inválido")
+                {
+                    mensajeAmarillo("Su cuenta ha sido iniciada en otro dispositivo");
+                    setTimeout(function() { location.replace(base_del_url); },4000);
+                }
+                else
+                {
+                    mensajeAmarillo("Error cambiando responsables");
+                }
+            }
+        },
+        error: function(rpta)
+        {
+            mensajeAmarillo("Error de conexión");
+        }
+    });
+}

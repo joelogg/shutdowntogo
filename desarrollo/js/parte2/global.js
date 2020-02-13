@@ -10,3 +10,6 @@ perfiles = "";
 var usuariosLista = [];
 var ordenesTrabajoLista = []
 var operacionesLista = []
+
+var idOTGeneral = 0;
+var posOTGeneral = -1;

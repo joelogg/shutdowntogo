@@ -63,11 +63,11 @@
                     </tr>
                     <tr>
                         <td>Fecha Inicio:</td>
-                        <td><span id="txtFechaInicioOT">20/02/2020</span></td>
+                        <td><span id="txtFechaInicioOT"></span></td>
                     </tr>
                     <tr>
                         <td>Fecha Vencimiento:</td>
-                        <td><span id="txtFechaVencimientoOT">20/02/2020</span></td>
+                        <td><span id="txtFechaVencimientoOT"></span></td>
                     </tr>
                 </tbody>
                 </table>

@@ -44,6 +44,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- chat -->
     <link rel="stylesheet" href=<?php echo $_SESSION["base_del_url"]."assets/vendor/css/rtl/uikit.css"; ?>>
 
+    <!-- select -->
+    <link rel="stylesheet" href=<?php echo $_SESSION["base_del_url"]."assets/vendor/libs/select2/select2.css"; ?>>
+
+
 
 
     
@@ -175,6 +179,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <!-- chat -->
     <script src=<?php echo $_SESSION["base_del_url"]."assets/js/pages_chat.js"; ?> ></script>
+
+    <!-- select -->
+    <script src=<?php echo $_SESSION["base_del_url"]."assets/vendor/libs/select2/select2.js"; ?> ></script>
 
   
 
