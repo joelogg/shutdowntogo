@@ -253,27 +253,54 @@ class Home extends CI_Controller {
 		//---- Lista de Operaciones---
 		
 		//---- Lista de Operaciones---
-			$rpta = $this->data_model->selectOperaciones($usuarioAux, $idOT);
+			$operacionesList = $this->data_model->selectOperaciones($usuarioAux, $idOT);
 			
 			$pdf->SetFont('Arial','',10);
 			//Table with 20 rows and 4 columns
 			$pdf->SetWidths(array(100,30,20,40));
 			
 			$pdf->RowListOpe(array('Operaciones', 'Especialidad', 'Trabajo', 'Fecha Vencimiento'), true, "FD", 8);
-			foreach ($rpta as $operacion)
+			foreach ($operacionesList as $operacion)
 			{ 
 				$pdf->RowListOpe(array($operacion->descripcion." (".$operacion->numerooperacion.")", $operacion->descripcionEspecialidad, $operacion->work, $operacion->fechafin), false, "D", 6);
-				//$pdf->Row(array("Removedor de Particulas Atomicas de la <br>maquine en cuestion para los treabajos de (54sd5s)", "s", "d", "d"));
 			}
 			
 		//---- Fin Lista de Operaciones---	
 			
 			$pdf->ChapterTitle('Detalle de Operaciones');
 			
+			foreach ($operacionesList as $operacion)
+			{
+				$dataDetalleOP = array();
+				$txt = iconv('utf-8', 'cp1252', 'Descripción:' );
 
-			$pdf->SetFont('Times','',12);
-			for($i=1;$i<=40;$i++)
-				$pdf->Cell(0,10,'Detalle de Operaciones'.$i,0,1);
+				array_push ($dataDetalleOP, array($txt, $operacion->descripcion) );
+				//array_push ($dataDetalleOP, array($txt, $rpta[0]->descripcion) );
+				array_push ($dataDetalleOP, array("Numero orden de trabajo:", $rpta[0]->descripcion, $rpta[0]->ordentrabajo) );
+				array_push ($dataDetalleOP, array("Tipo:", $rpta[0]->descripcionTipo) );
+				array_push ($dataDetalleOP, array("Estado", $rpta[0]->estado) );
+				array_push ($dataDetalleOP, array("Prioridad:", $rpta[0]->descripcionPrioridad) );
+
+				$max = sizeof($nombres);
+				for ($i=0; $i < $max; $i++) 
+				{ 
+					if($i==0)
+					{
+						array_push ($dataDetalleOP, array("Responsables:", $nombres[$i]["nombre"]." ".$nombres[$i]["apellido"] ) );
+					}
+					else
+					{
+						array_push ($dataDetalleOP, array("", $nombres[$i]["nombre"]." ".$nombres[$i]["apellido"] ) );
+					}
+				}
+				array_push ($dataDetalleOP, array("Fecha inicio:", $rpta[0]->fechainicio) );
+				array_push ($dataDetalleOP, array("Fecha vencimiento:", $rpta[0]->fechafin) );
+				$pdf->ImprovedTable($dataDetalleOP);
+				$pdf->Ln(4);
+				
+				//$rpta = $this->data_model->selectComentarios($operacion->id);
+				//break;
+			}
 			$pdf->Output();
 			
 
