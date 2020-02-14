@@ -417,7 +417,7 @@ class Api extends CI_Controller {
 		
 		if($rpta["data"]!="")
 		{
-			$rpta = $this->data_model->selectOrdenesTrabajo($rpta["data"], "web");
+			$rpta = $this->data_model->selectOrdenesTrabajo($rpta["data"], "web", -1);
 			//$rpta = $this->data_model->selectOrdenesTrabajo(1);
 			$usuarios = $this->data_model->selectUsuarios();
 
@@ -469,7 +469,7 @@ class Api extends CI_Controller {
 		
 		if($rpta["data"]!="")
 		{
-			$rpta = $this->data_model->selectOrdenesTrabajo($rpta["data"], "movil");
+			$rpta = $this->data_model->selectOrdenesTrabajo($rpta["data"], "movil", -1);
 			$usuarios = $this->data_model->selectUsuarios();
 
 
@@ -632,7 +632,7 @@ class Api extends CI_Controller {
 		
 		if($rpta["data"]!="")
 		{
-			$rpta = $this->data_model->selectOperaciones($rpta["data"]);
+			$rpta = $this->data_model->selectOperaciones($rpta["data"], -1);
 
 			$usuarios = $this->data_model->selectUsuarios();
 

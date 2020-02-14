@@ -228,7 +228,7 @@ class Data_model extends CI_Model
         return $idOT;
     }
 
-    public function selectOrdenesTrabajo($usuario, $webMovil)
+    public function selectOrdenesTrabajo($usuario, $webMovil, $idOT)
     {
         $rpta = [];
 
@@ -248,6 +248,11 @@ class Data_model extends CI_Model
 
             $this->db->where('ordenestrabajo.visible=1');
             $this->db->where('ordenestrabajo.estadoOT_id=estadoot.id');
+            if($idOT != -1)
+            {
+                $this->db->where('ordenestrabajo.id=', $idOT);
+            }
+
             if($webMovil=="movil")
             {   
                 $where = "estadoot.descripcion!='Finalizada' AND 
@@ -381,7 +386,7 @@ class Data_model extends CI_Model
         return $idOp;
     }
 
-    public function selectOperaciones($usuario)
+    public function selectOperaciones($usuario, $idOT)
     {
         
         $rpta = [];
@@ -394,6 +399,10 @@ class Data_model extends CI_Model
                             operaciones.fechainicio, operaciones.fechafin, work, resources, duracion, participantes, 
                             especialidad_id, especialidad.descripcion AS descripcionEspecialidad');
             $this->db->from('operaciones, ordenestrabajo');
+            if($idOT != -1)
+            {
+                $this->db->where('operaciones.ordenestrabajo_id=', $idOT);
+            }
             $this->db->where('operaciones.visible=1');
             $this->db->where('ordenestrabajo.visible=1');
             $this->db->where('operaciones.ordenestrabajo_id=ordenestrabajo.id');
