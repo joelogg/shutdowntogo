@@ -397,7 +397,7 @@ class Data_model extends CI_Model
         {
             $this->db->select('operaciones.id, ordenestrabajo_id, numerooperacion, operaciones.descripcion AS descripcion, 
                             operaciones.fechainicio, operaciones.fechafin, work, resources, duracion, participantes, 
-                            especialidad_id, especialidad.descripcion AS descripcionEspecialidad');
+                            especialidad_id, especialidad.descripcion AS descripcionEspecialidad, finalizada');
             $this->db->from('operaciones, ordenestrabajo');
             if($idOT != -1)
             {
@@ -435,18 +435,26 @@ class Data_model extends CI_Model
            
     }
 
-    public function updateEstadoOperacion($idOp, $token)
+    public function updateEstadoOperacion($idOp, $estado, $token)
     {
         $this->load->library('encryption');
         $idModificador = $this->encryption->decrypt($token);
 
         $this->db->set('modificadopor', $idModificador);
-        $this->db->set('finalizada', 1);
+        $this->db->set('finalizada', $estado);
 
         $this->db->where('id', $idOp);
-        $rpta = $this->db->update('operaciones'); 
+        $this->db->update('operaciones'); 
 
-        return $rpta;
+        if($this->db->affected_rows() > 0)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+
     }
 
     //------------------ Comentarios -----------------
@@ -506,6 +514,20 @@ class Data_model extends CI_Model
         return $rpta->result();
            
     }
+
+    //------------------ Proyecto -----------------
+    public function insertProyecto($revision, $fechainicio, $fechaFin)
+    {
+        $dataComentario['revision'] = $revision;
+        $dataComentario['fechainicio'] = $fechainicio;
+        $dataComentario['fechaFin'] = $fechaFin;
+        $this->db->insert('proyecto', $dataComentario); 
+        $idProy = $this->db->insert_id();
+
+        return $idProy;
+    }
+
+    
 
 
     /*

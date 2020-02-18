@@ -20,10 +20,12 @@ function v_seleccionarOrdenesTrabajo()
 
     v_seleccionarListaOT();
     cargarListaOrdenTrabajo();
-    setTimeout(function(){ v_seleccionarUnaOT(2); }, 500);
+    //setTimeout(function(){ v_seleccionarUnaOT(2); }, 500);
     //v_seleccionarUnaOT(2);
     //v_seleccionarUnOperacion(1);
     //cargarComentarios(1);
+
+    //$('#modalImportarOTs').modal('show')
 }
 
 

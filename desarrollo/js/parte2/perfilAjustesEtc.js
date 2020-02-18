@@ -268,7 +268,7 @@ function selectUsuarios()
                     }
                     else
                     {
-                        imagen = '<img src="'+base_del_url+'desarrollo/img/usuarios/' + imagen + '" height="40" width="40" class="ui-w-40 rounded-circle" alt="">';
+                        imagen = '<img src="'+base_del_url+'adjuntos/usuarios/' + imagen + '" height="40" width="40" class="ui-w-40 rounded-circle" alt="">';
                     }
 
                     txtTabla += '<tr>';

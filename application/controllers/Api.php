@@ -590,6 +590,64 @@ class Api extends CI_Controller {
         echo json_encode($results); 
 	}
 
+
+	public function subirOTsExcel()
+	{
+		$data = $_POST['json'];
+		$token = $_POST['token'];
+		$data = json_decode($data, true);
+
+		$this->load->model('data_model');
+		$rpta = $this->data_model->selectUsuarioToken($token);
+		
+		
+		if($rpta["data"]!="")
+		{
+			//$idProy = $this->data_model->insertProyecto($data["revision"], $data["fechaInicio"], $data["fechaFin"]);
+			$idProy = 7;
+			if($idProy >0)
+			{
+				$data = $data["dataOTs"];
+
+				//Insertando areas
+				$areas = [];
+				foreach($data as $fila)
+				{
+					array_push($areas, $fila["Area"]);
+				}
+				$rpta = $this->data_model->insertAreas($areas);
+			
+				$results = array(
+					"status" => "success",
+					"code" => "200",
+					"message" => "OT creada",
+					"data"=>$rpta
+				);
+			}
+			else
+			{
+				$results = array(
+					"status" => "error",
+					"code" => "400",
+					"message" => "Error al crear semana",
+					"data"=>[]
+				);
+			}
+
+		}
+		else
+		{
+			$results = array(
+				"status" => "error",
+				"code" => "400",
+				"message" => "token inválido",
+				"data"=>[]
+			);
+		}
+		
+        echo json_encode($results);
+	}
+
 //------------------ Operaciones -----------------
 	public function operacionCrear()
     {
@@ -676,10 +734,11 @@ class Api extends CI_Controller {
 		echo json_encode($results);
 	}
 
-	public function operacionesFinalizar()
+	public function operacionesCambiarEstado()
 	{
-		$idOp = $_POST['idOp'];
-		$token = $_POST['token'];
+		$data = $_POST['json'];
+        $token = $_POST['token'];
+        $data = json_decode($data, true);
 
 		$this->load->model('data_model');
 		$rpta = $this->data_model->selectUsuarioToken($token);
@@ -687,13 +746,25 @@ class Api extends CI_Controller {
 		
 		if($rpta["data"]!="")
 		{
-			$rpta = $this->data_model->updateEstadoOperacion($idOp, $token);
-			$results = array(
-				"status" => "success",
-				"code" => "200",
-				"message" => "Estado cambaido",
-				"data"=>$rpta
-			);
+			$rpta = $this->data_model->updateEstadoOperacion($data["idOp"], $data["estado"], $token);
+			if($rpta)
+			{
+				$results = array(
+					"status" => "success",
+					"code" => "200",
+					"message" => "Estado cambaido",
+					"data"=>$rpta
+				);
+			}
+			else
+			{
+				$results = array(
+					"status" => "error",
+					"code" => "400",
+					"message" => "No ha cambiado",
+					"data"=>$rpta
+				);
+			}
 		}
 		else
 		{

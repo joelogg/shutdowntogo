@@ -7,6 +7,14 @@
             <i class="lnr lnr-menu"></i>
         </button>
         
+        <div class="dropdown">
+            <button id="dropdownMenuButton" class="btnAdd btn" data-toggle="dropdown"><i class="ion ion-md-add"></i></button>
+            <div class="dropdown-menu dropdown-menu-lg-left" aria-labelledby="dropdownMenuButton">
+                <button class="dropdown-item" type="button" data-toggle="modal" data-target="#modalImportarOTs" 
+                    onclick="limpiarVentandaSubirOTs()">Importar OTs por semana</button>
+            </div>
+        </div>
+
         <!-- btn toggle menu superior -->
         <a class="navbar-brand" href="#"></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">

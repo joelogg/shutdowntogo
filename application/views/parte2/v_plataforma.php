@@ -66,6 +66,47 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/parte2/global.js"; ?> ></script>
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <script src="http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.8.3.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/infragistics.core.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/infragistics.lob.js"></script>
+
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_core.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_collections.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_text.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_io.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_ui.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.documents.core_core.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_collectionsextended.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.excel_core.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_threading.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_web.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.xml.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.documents.core_openxml.js"></script>
+    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.excel_serialization_openxml.js"></script>
+
+
+
+
+
+
+
+
 </head>
 
 <body onload="isMobile(), verificarMostrarMenuLateral()"> 
@@ -184,8 +225,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src=<?php echo $_SESSION["base_del_url"]."assets/vendor/libs/select2/select2.js"; ?> ></script>
 
   
-
-
+    <!-- excel --
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
+-->
 
     <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/verificarInputCorrecto.js"; ?> ></script>
     <!-- Optional JavaScript -->
@@ -197,6 +240,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/parte2/detalleOrdenTrabajo.js"; ?> ></script>
     <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/parte2/detalleOperaciones.js"; ?> ></script>
     <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/parte2/dashboard.js"; ?> ></script>
+    <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/parte2/importarOTsSemana.js"; ?> ></script>
     
 	<script type="text/javascript">
         var base_del_url = '<?php echo $_SESSION["base_del_url"] ?>'; 

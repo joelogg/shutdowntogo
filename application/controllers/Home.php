@@ -266,35 +266,24 @@ class Home extends CI_Controller {
 			}
 			
 		//---- Fin Lista de Operaciones---	
-			
-			$pdf->ChapterTitle('Detalle de Operaciones');
-			
+		
 			foreach ($operacionesList as $operacion)
 			{
 				$dataDetalleOP = array();
+				$pdf->ChapterTitle('Detalle de Operaciones');
+				
 				$txt = iconv('utf-8', 'cp1252', 'Descripción:' );
-
 				array_push ($dataDetalleOP, array($txt, $operacion->descripcion) );
-				//array_push ($dataDetalleOP, array($txt, $rpta[0]->descripcion) );
-				array_push ($dataDetalleOP, array("Numero orden de trabajo:", $rpta[0]->descripcion, $rpta[0]->ordentrabajo) );
-				array_push ($dataDetalleOP, array("Tipo:", $rpta[0]->descripcionTipo) );
-				array_push ($dataDetalleOP, array("Estado", $rpta[0]->estado) );
-				array_push ($dataDetalleOP, array("Prioridad:", $rpta[0]->descripcionPrioridad) );
+				$txt = iconv('utf-8', 'cp1252', 'Número orden operación:' );
+				array_push ($dataDetalleOP, array($txt, $operacion->numerooperacion) );
 
-				$max = sizeof($nombres);
-				for ($i=0; $i < $max; $i++) 
-				{ 
-					if($i==0)
-					{
-						array_push ($dataDetalleOP, array("Responsables:", $nombres[$i]["nombre"]." ".$nombres[$i]["apellido"] ) );
-					}
-					else
-					{
-						array_push ($dataDetalleOP, array("", $nombres[$i]["nombre"]." ".$nombres[$i]["apellido"] ) );
-					}
-				}
-				array_push ($dataDetalleOP, array("Fecha inicio:", $rpta[0]->fechainicio) );
-				array_push ($dataDetalleOP, array("Fecha vencimiento:", $rpta[0]->fechafin) );
+				array_push ($dataDetalleOP, array("Trabajo:", $operacion->work) );
+				array_push ($dataDetalleOP, array("Recursos:", $operacion->resources) );
+				$txt = iconv('utf-8', 'cp1252', 'Duración:' );
+				array_push ($dataDetalleOP, array($txt, $operacion->duracion) );
+				
+				array_push ($dataDetalleOP, array("Fecha inicio:", $operacion->fechainicio) );
+				array_push ($dataDetalleOP, array("Fecha vencimiento:", $operacion->fechafin) );
 				$pdf->ImprovedTable($dataDetalleOP);
 				$pdf->Ln(4);
 				

@@ -338,3 +338,51 @@
         </div>
     </div>
 </div>
+
+
+<!-- Modal Importar OTs semana -->
+<div class="modal fade" id="modalImportarOTs" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg tamModal">
+        <div class="modal-content" style="min-height: 681px;">
+        
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <p class="modal-title">Importar OTs por semana</p>
+                <button type="button" class="close" data-dismiss="modal"><i class="ion ion-ios-close-circle-outline aclarar"></i></button>
+            </div>
+            
+            <!-- Modal body -->
+            <div class="modal-body">
+                
+                <div class="card-body pb-0">
+                    <button id="btnImportarOTsSemana" class="btnImportarExportar" onclick="clickSubirOTsSemana()">
+                        <img src=<?php echo $_SESSION["base_del_url"]."desarrollo/img/csv.svg"; ?>>
+                        <p class="txtImportarExportar pt-3">Seleccione un archivo XLS para subir OTs</p>
+                    </button>
+                    <form action="javascript:subirOTsSemana()">
+                        <input type="file" id="inputExcelOTs" accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" style="display:none">
+                    </form>
+                    <p id="nomExcelImportOTs"></p>
+
+                </div>
+                
+                <div class="card-body py-0" style="margin-bottom: 94px;">
+                    <div id="encabezadoExcelOTs"></div>
+                    <div class="table-responsive" style="max-height: 400px">
+                        <table id="tablaExcelOTs" class="table table-hover table-sm"></table>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+            <div class="modal-footer-personalizado">
+                <button id="btnSubirExcelOts" class="btnsPopUp" onclick="subirOTsSemana()" disabled>Importar</button>
+            </div>
+
+
+            
+        </div>
+    </div>
+</div>
