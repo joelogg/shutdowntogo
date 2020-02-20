@@ -148,9 +148,7 @@ function limpiarVentandaSubirOTs()
 }
 function subirOTsSemana()
 {
-    console.log(dataSemana);
     var dataSemanaSubir = JSON.stringify(dataSemana);
-    //dataSemanaSubir = JSON.parse(dataSemanaSubir);
     limpiarVentandaSubirOTs();
     
     
@@ -162,7 +160,7 @@ function subirOTsSemana()
         url: base_del_url_miApi+"api/subirOTsExcel",
         data: {
             "token": token,
-            "json": dataSemanaSubir
+            "datos": dataSemanaSubir
           },
         success:function(rpta)
         {
@@ -170,7 +168,8 @@ function subirOTsSemana()
             
             if(rpta.status == "success")
             {
-                console.log(rpta);
+                mensajeAmarillo("Datos importados");
+                cargarListaOrdenTrabajo();
             }
             else if(rpta.status == "error")
             {
@@ -181,7 +180,7 @@ function subirOTsSemana()
                 }
                 else
                 {
-                    mensajeAmarillo("Error de creación de tarea");
+                    mensajeAmarillo("Error al insertar Excel con lista de OTs");
                 }
             }
         },

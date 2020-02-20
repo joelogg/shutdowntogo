@@ -216,15 +216,75 @@ class Data_model extends CI_Model
     }
     
 //------------------ Orden Trabajo -----------------
+
+    public function actualizarFechasProyecto($dataOT)
+    {
+        //Select proyecto
+        if (isset($dataOT['proyecto_id']))
+        {
+            $idProy = $dataOT['proyecto_id'];
+
+            $this->db->select('fechainicio, fechafin');
+            $this->db->from('proyecto');
+            $this->db->where('id=', $idProy);
+            $rpta = $this->db->get();
+
+            if($rpta->num_rows() > 0)
+            {
+                $row = $rpta->row();
+                $fechaIniPro =  $row->fechainicio;
+                $fechaFinPro =  $row->fechafin;
+
+                $dataUpdateProyecto['fechainicio'] = $fechaIniPro;
+                $dataUpdateProyecto['fechafin'] = $fechaFinPro;
+
+                //actualizando fecha inicio
+                if(isset($dataOT['fechainicio']))
+                {
+                    if($fechaIniPro=="" || $fechaIniPro == NULL)
+                    {
+                        $dataUpdateProyecto['fechainicio'] = $dataOT['fechainicio'];
+                    }
+                    else if($fechaIniPro>$dataOT['fechainicio'])
+                    {
+                        $dataUpdateProyecto['fechainicio'] = $dataOT['fechainicio'];
+                    }
+                }
+
+                //actualizando fecha fin
+                if(isset($dataOT['fechafin']))
+                {
+                    if($fechaFinPro=="" || $fechaFinPro == NULL)
+                    {
+                        $dataUpdateProyecto['fechafin'] = $dataOT['fechafin'];
+                    }
+                    else if($fechaFinPro<$dataOT['fechafin'])
+                    {
+                        $dataUpdateProyecto['fechafin'] = $dataOT['fechafin'];
+                    }
+                }
+
+                $this->db->where('id', $idProy);
+                $this->db->update('proyecto', $dataUpdateProyecto); 
+            }
+        }
+    }
+
     public function insertOrdenTrabajo($dataOT, $token)
     {
         $this->load->library('encryption');
         $idCreador = $this->encryption->decrypt($token);
+        
         //Insert OT
         $dataOT['creadopor'] = $idCreador;
         $this->db->insert('ordenestrabajo', $dataOT); 
         $idOT = $this->db->insert_id();
 
+        //-----Actualizar fechas ----
+        $this->actualizarFechasProyecto($dataOT);
+        
+
+        
         return $idOT;
     }
 
@@ -241,7 +301,7 @@ class Data_model extends CI_Model
                             estadoOT_id, estadoot.descripcion as estado, estadoot.color as estadoOT_color,
                             prioridad.id as prioridad_id, prioridad.descripcion as descripcionPrioridad, prioridad.color as colorPrioridad,
                             equipo.id as equipo_id, equipo.descripcion as descripcionEquipo, equipo.codigo as codigoEquipo, 
-                            area.id as area_id, area.descripcion as descripcionArea,
+                            area.id as area_id, area.descripcion as descripcionArea, area.codigo as codigoArea,
                             proyecto.id as proyecto_id, proyecto.revision as revisionProyecto,
                             tipo.id as tipo_id, tipo.descripcion as descripcionTipo, tipo.tag as tagTipo');
             $this->db->from('ordenestrabajo, estadoot');
@@ -327,6 +387,8 @@ class Data_model extends CI_Model
         $this->db->where('id', $dataOT["id"]);
         $rpta = $this->db->update('ordenestrabajo', $dataOT); 
 
+        $this->actualizarFechasProyecto($dataOT);
+
         return $rpta;
     }
 
@@ -373,8 +435,66 @@ class Data_model extends CI_Model
     }
 
     //------------------ Operaciones -----------------
+    public function actualizarFechasOT($dataOp)
+    {
+        
+        //Select proyecto
+        if (isset($dataOp['ordenestrabajo_id']))
+        {
+            $idOp = $dataOp['ordenestrabajo_id'];
+
+            $this->db->select('proyecto_id, fechainicio, fechafin');
+            $this->db->from('ordenestrabajo');
+            $this->db->where('id=', $idOp);
+            $rpta = $this->db->get();
+
+            if($rpta->num_rows() > 0)
+            {
+                $row = $rpta->row();
+                $fechaIniOT =  $row->fechainicio;
+                $fechaFinOT =  $row->fechafin;
+
+                $dataUpdateOT['fechainicio'] = $fechaIniOT;
+                $dataUpdateOT['fechafin'] = $fechaFinOT;
+
+                //actualizando fecha inicio
+                if(isset($dataOp['fechainicio']))
+                {
+                    if($fechaIniOT=="" || $fechaIniOT == NULL)
+                    {
+                        $dataUpdateOT['fechainicio'] = $dataOp['fechainicio'];
+                    }
+                    else if($fechaIniOT>$dataOp['fechainicio'])
+                    {
+                        $dataUpdateOT['fechainicio'] = $dataOp['fechainicio'];
+                    }
+                }
+
+                //actualizando fecha fin
+                if(isset($dataOp['fechafin']))
+                {
+                    if($fechaFinOT=="" || $fechaFinOT == NULL)
+                    {
+                        $dataUpdateOT['fechafin'] = $dataOp['fechafin'];
+                    }
+                    else if($fechaFinOT<$dataOp['fechafin'])
+                    {
+                        $dataUpdateOT['fechafin'] = $dataOp['fechafin'];
+                    }
+                }
+
+                $this->db->where('id', $idOp);
+                $this->db->update('ordenestrabajo', $dataUpdateOT); 
+
+
+                $dataUpdateOT["proyecto_id"] = $row->proyecto_id;
+                $this->actualizarFechasProyecto($dataUpdateOT);
+            }
+        }
+    }
+
     public function insertOperacion($dataOp, $token)
-    {//ordenestrabajo_id, numerooperacion, descripcion) 
+    {
         $this->load->library('encryption');
         $idCreador = $this->encryption->decrypt($token);
         //Insert operacion
@@ -382,6 +502,8 @@ class Data_model extends CI_Model
         $dataOp['modificadopor'] = $idCreador;
         $this->db->insert('operaciones', $dataOp); 
         $idOp = $this->db->insert_id();
+
+        $this->actualizarFechasOT($dataOp);
 
         return $idOp;
     }
@@ -454,7 +576,6 @@ class Data_model extends CI_Model
         {
             return false;
         }
-
     }
 
     //------------------ Comentarios -----------------
@@ -527,454 +648,126 @@ class Data_model extends CI_Model
         return $idProy;
     }
 
-    
-
-
-    /*
-    $valE = $this->encryption->decrypt($valE);
-    if(sizeof( $rpta->result() )>=1)
-        {
-            foreach ($rpta->result() as $row)
-            {
-                $this->db->set('token', $row->id);
-                $this->db->where('id', $row->id);
-                $rpta = $this->db->update('usuario'); 
-
-                return $row->id;
-            }
-
-        }
-    */
-
-    /*
-    // Funcion de inicio de sesion
-	public function inicio($user,$pass){
-		$this->db->where('email',$user);
-        $this->db->where('clave',$pass);
-        $this->db->select('id, nombres, apellidos, imagen, email');
-        $rpta = $this->db->get('tbUsuario');
-        return $rpta->row();
-    }
-    
-
-    // select tabla de tarea
-    public function selectTareaIdP($idP)
+    //------------------ Area -----------------
+    public function insertArea($area)
     {
-        $this->db->select('*');
-        $this->db->from('tarea');
-        $this->db->where('tarea.proyecto_id =', $idP);
-        $rpta = $this->db->get();
-        return $rpta->result();
-    }
-
-    // select tabla de actividad
-    public function selectActividadesIdP($idP)
-    {
-        //$this->db->select('actividad.*,
-        //actividad.id AS porcentaje, actividad.id AS alertas, actividad.id AS mensajes');
-        $this->db->select('actividad.id, actividad.tarea_id, actividad.modificadopor, actividad.descripcion, 
-            actividad.ordentrabajo, actividad.responsables, actividad.seguidores, actividad.especialidad_id, actividad.requerimiento_id, actividad.grupo,
-            actividad.fechainicioplanificada, actividad.fechafinplanificada, actividad.fechainicioreal, actividad.fechafinreal, actividad.status,
-            actividad.avance, disciplina, actividad.id AS alertas, actividad.id AS mensajes');
-        //$this->db->select('actividad.id, actividad.tarea_id, actividad.modificadopor, actividad.descripcion, 
-        //    actividad.ordentrabajo, actividad.responsables, actividad.seguidores, actividad.especialidad_id, actividad.requerimiento_id, actividad.grupo,
-        //    actividad.fechainicioplanificada, actividad.fechafinplanificada, actividad.fechainicioreal, actividad.fechafinreal, actividad.status');
-        $this->db->from('actividad, tarea');
-        $this->db->where('tarea.proyecto_id =', $idP);
-        $this->db->where('actividad.tarea_id=tarea.id');
-        $this->db->order_by('actividad.tarea_id', 'ASC');
-        $rpta = $this->db->get();
-        
-        return $rpta->result();
-    }
-
-    // select contador de alertas pendientes
-    public function selectAlertasPendientesIdP($idP)
-    {
-        date_default_timezone_set('America/Santiago');
-        $fechaActual = date("Y-m-d H:i:s");
-
-        $consulta = 'SELECT alerta.actividad_id, COUNT(*) AS sinAtender FROM alerta, actividad, tarea 
-            WHERE alerta.actividad_id=actividad.id AND actividad.tarea_id=tarea.id AND tarea.proyecto_id='.$idP.' AND 
-            alerta.fechadeinicio<="'.$fechaActual.'" AND 
-            alerta.fechafin is null GROUP BY alerta.actividad_id ORDER BY alerta.actividad_id ASC';
-        $rpta = $this->db->query($consulta);
-        //$rpta = $this->db->get();
-        
-        return $rpta->result();
-    }
-
-    public function selectEquiposIdArea($idA)
-    {
-        
-        $this->db->select('equipo.id, equipo.area_id, equipo.codigo, equipo.descripcion');
-        $this->db->from('equipo, area');
-        $this->db->where('area.id=', $idA);
-        $this->db->where('equipo.area_id=area.id');
-        $rpta = $this->db->get();
-        
-        return $rpta->result();
-    }
-
-    
-
-    public function registrarMensajeChat($mensaje, $mencion, $actividad, $creadopor)
-    {
-        date_default_timezone_set('America/Santiago');
-        $fechaActual = date("Y-m-d H:i:s");
-        $data['mensaje'] = $mensaje;
-        $data['mencion'] = $mencion;
-        $data['actividad_id'] = $actividad;
-        $data['creadopor'] = $creadopor;
-        $data['modificadopor'] = $creadopor;
-        $data['fechacreacion'] = $fechaActual;
-        $data['fechamodificacion'] = $fechaActual;
-        $this->db->insert('chat', $data); 
-        $idChat = $this->db->insert_id();
-        return $idChat;
-    }
-
-
-    public function registrarAcances($id_actividad, $modificadopor, $avance)
-    {
-        date_default_timezone_set('America/Santiago');
-        $fechaActual = date("Y-m-d H:i:s");
-        
-        //creacion de un avance
-        $data['actividad_id'] = $id_actividad;
-        $data['creadopor'] = $modificadopor;
-        $data['modificadopor'] = $modificadopor;
-        $data['fechacreacion'] = $fechaActual;
-        $data['fechamodificacion'] = $fechaActual;
-        $data['porcentajeavance'] = $avance;
-        $rpta = $this->db->insert('avances', $data); 
-
-        //modificacion en actividad
-        if($rpta=="1")
-        {
-            $this->db->set('modificadopor', $modificadopor);
-            $this->db->set('avance', $avance);
-            $this->db->set('fechamodificacion', $fechaActual);
-            $this->db->where('id', $id_actividad);
-            $rpta = $this->db->update('actividad'); 
-        }
-        
-        return $rpta;
-
-    }
-
-    public function registrarAcancesManual($id_actividad, $modificadopor, $avance, $fecha)
-    {
-        date_default_timezone_set('America/Santiago');
-        $fechaActual = $fecha;
-        
-        //creacion de un avance
-        $data['actividad_id'] = $id_actividad;
-        $data['creadopor'] = $modificadopor;
-        $data['modificadopor'] = $modificadopor;
-        $data['fechacreacion'] = $fechaActual;
-        $data['fechamodificacion'] = $fechaActual;
-        $data['porcentajeavance'] = $avance;
-        $rpta = $this->db->insert('avances', $data); 
-
-        //modificacion en actividad
-        if($rpta=="1")
-        {
-            $this->db->set('modificadopor', $modificadopor);
-            $this->db->set('avance', $avance);
-            $this->db->set('fechamodificacion', $fechaActual);
-            $this->db->where('id', $id_actividad);
-            $rpta = $this->db->update('actividad'); 
-        }
-        
-        return $rpta;
-
-    }
-
-    //Seleccionar datos para los graficos de todo un proyecto sin tabla de cada avance
-    public function selectActividadesGraficaIdP($idP)
-    {
-        $this->db->select('actividad.tarea_id, 
-        DATE_FORMAT(actividad.fechainicioplanificada, "%m/%d/%Y %H:%i:%s") AS fechainicioplanificada, 
-        DATE_FORMAT(actividad.fechafinplanificada, "%m/%d/%Y %H:%i:%s") AS fechafinplanificada, 
-        DATE_FORMAT(actividad.fechainicioreal, "%m/%d/%Y %H:%i:%s") AS fechainicioreal, 
-        avance, tarea.descripcion as nomTarea');
-        $this->db->from('actividad, tarea');
-        $this->db->where('tarea.proyecto_id =', $idP);
-        $this->db->where('actividad.tarea_id=tarea.id');
-        $this->db->order_by('actividad.tarea_id', 'ASC');
-        $this->db->order_by('actividad.id', 'ASC');
-        $rpta = $this->db->get();
-        
-        return $rpta->result();
-    }
-
-    public function selectAvancesIdP($idP)
-    {
-        $this->db->select('actividad.id as idActividad, porcentajeavance, avances.fechacreacion, TIMESTAMPDIFF(SECOND, fechainicioplanificada, fechafinplanificada) as duracionActividad');
-        $this->db->from('avances, actividad, tarea');
-        $this->db->where('tarea.proyecto_id =', $idP);
-        $this->db->where('actividad.tarea_id=tarea.id');
-        $this->db->where('avances.actividad_id=actividad.id');
-        $this->db->order_by('avances.actividad_id', 'ASC');
-        $this->db->order_by('avances.id', 'ASC');
-        $rpta = $this->db->get();
-        
-        return $rpta->result();
-    }
-
-
-
-    public function updateInicioRealActividad($id_actividad)
-    {
-        date_default_timezone_set('America/Santiago');
-        $fechaActual = date("Y-m-d H:i:s");
-        $this->db->set('fechainicioreal', $fechaActual);
-        $this->db->set('status', 'Progreso');
-        $this->db->where('id', $id_actividad);
-        $rpta = $this->db->update('actividad'); 
-        return $rpta;
-    }
-
-    public function updateFinRealActividad($id_actividad)
-    {
-        date_default_timezone_set('America/Santiago');
-        $fechaActual = date("Y-m-d H:i:s");
-        $this->db->set('fechafinreal', $fechaActual);
-        $this->db->set('status', 'Finalizado');
-        $this->db->where('id', $id_actividad);
-        $rpta = $this->db->update('actividad'); 
-        return $rpta;
-    }
-
-    
-    public function selectAvanceIdActividad($idA)
-    {
-        
-        $this->db->select('avance');
-        $this->db->from('actividad');
-        $this->db->where('actividad.id=', $idA);
-        $rpta = $this->db->get();
-        
-        return $rpta->result();
-    }
-
-    
-
-    public function selectUsuarios()
-    {
-        
-        $this->db->select('usuario.id, usuario.nombre, apellido, usuario.imagen, empresa_id, empresa.nombre AS nomEmpresa');
-        $this->db->from('usuario, empresa');
-        $this->db->where('usuario.empresa_id=empresa.id');
-        $rpta = $this->db->get();
-        
-        return $rpta->result();
-    }
-
-
-
-
-    public function selectIdAreaConIdEquipo($idEquipo)
-    {
-        
-        $this->db->select('area_id');
-        $this->db->from('equipo');
-        $this->db->where('id=', $idEquipo);
-        $rpta = $this->db->get();
-        
-        return $rpta->result();
-    }
-
-
-    
-
-
-    public function insertAlerta($id_actividad, $descripcion, $creadopor, $categoria)
-    {
-        date_default_timezone_set('America/Santiago');
-        $fechainicio = date("Y-m-d H:i:s");
-        
-        $data['actividad_id'] = $id_actividad;
-        $data['descripcion'] = $descripcion;
-        $data['creadopor'] = $creadopor;
-        $data['categoria'] = $categoria;
-        $data['fechacreacion'] = $fechainicio;
-        $data['fechadeinicio'] = $fechainicio;
-        $this->db->insert('alerta', $data); 
-        $idAlerta = $this->db->insert_id();
-        
-        return $idAlerta;
-
-    }
-    
-
-
-    // select tabla de alerta
-    public function selectAlerta($idA)
-    {
-        $this->db->select('descripcion, categoria, alertacerradapor, leido');
-        $this->db->from('alerta');
-        $this->db->where('id=', $idA);
-        $rpta = $this->db->get();
-        return $rpta->result();
-    }
-
-    public function selectAdjuntoAlerta($idA)
-    {
-        $this->db->select('nombre, tamano, extension');
-        $this->db->from('adjuntoalerta');
-        $this->db->where('alerta_id=', $idA);
-        $rpta = $this->db->get();
-        return $rpta->result();
-    }
-
-
-    public function selectAlertaGrafica($idP)
-    {
-        $this->db->select('categoria, COUNT(*) AS cantidad');
-        $this->db->from('alerta, actividad, tarea');
-        $this->db->where('alerta.actividad_id=actividad.id');
-        $this->db->where('actividad.tarea_id=tarea.id');
-        $this->db->where('tarea.proyecto_id=', $idP);
-        $this->db->group_by("categoria");
-        $this->db->order_by('categoria', 'ASC');
-        $rpta = $this->db->get();
-        return $rpta->result();
-    }
-
-    //------------------------------- creando los enpoints pasados -----------------------
-    
-    
-    public function selectUsuario($correo)
-    {
-        $this->db->select('*');
-        $this->db->from('usuario');
-        $this->db->where('correo=', $correo);
-        $rpta = $this->db->get();
-        return $rpta->result();
-    }
-
-    public function selectProyecto($idP)
-    {
-        $this->db->select('*');
-        $this->db->from('proyecto');
-        $this->db->where('id=', $idP);
-        $rpta = $this->db->get();
-        return $rpta->result();
-    }   
-    
-    public function selectAreas()
-    {
-        $this->db->select('*');
+        $this->db->select('id');
         $this->db->from('area');
+        $this->db->where('codigo=', $area);
         $rpta = $this->db->get();
-        return $rpta->result();
-    } 
 
-    public function selectEquipos()
+        if($rpta->num_rows() > 0)
+        {
+            $row = $rpta->row();
+            $idArea =  $row->id;
+            return $idArea;
+        }
+        else
+        {
+            $dataInsert['codigo'] = $area;
+            $dataInsert['descripcion'] = $area;
+            $this->db->insert('area', $dataInsert); 
+            $id = $this->db->insert_id();
+            return $id;
+        }
+    }
+
+    //------------------ equipo -----------------
+    public function insertEquipo($codigo, $descripcion, $idArea)
     {
-        $this->db->select('*');
+        $this->db->select('id');
         $this->db->from('equipo');
+        $this->db->where('codigo=', $codigo);
         $rpta = $this->db->get();
-        return $rpta->result();
-    } 
-    
-    public function selectPrioridades()
+
+        if($rpta->num_rows() > 0)
+        {
+            $row = $rpta->row();
+            $id =  $row->id;
+            return $id;
+        }
+        else
+        {
+            $dataInsert['codigo'] = $codigo;
+            $dataInsert['descripcion'] = $descripcion;
+            $dataInsert['area_id'] = $idArea;
+            $this->db->insert('equipo', $dataInsert); 
+            $id = $this->db->insert_id();
+            return $id;
+        }
+    }
+
+    //------------------ prioridad -----------------
+    public function selectPrioridad($idPrioridad)
     {
-        $this->db->select('*');
+        $this->db->select('id');
         $this->db->from('prioridad');
+        $this->db->where('id=', $idPrioridad);
         $rpta = $this->db->get();
-        return $rpta->result();
-    } 
-    
-    public function selectEspecialidades()
+
+        if($rpta->num_rows() > 0)
+        {
+            $row = $rpta->row();
+            $id =  $row->id;
+            return $id;
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+
+    //------------------ equipo -----------------
+    public function insertTipoOT($tag)
     {
-        $this->db->select('*');
+        $this->db->select('id');
+        $this->db->from('tipo');
+        $this->db->where('tag=', $tag);
+        $rpta = $this->db->get();
+
+        if($rpta->num_rows() > 0)
+        {
+            $row = $rpta->row();
+            $id =  $row->id;
+            return $id;
+        }
+        else
+        {
+            $dataInsert['tag'] = $tag;
+            $dataInsert['descripcion'] = $tag;
+            $this->db->insert('tipo', $dataInsert); 
+            $id = $this->db->insert_id();
+            return $id;
+        }
+    }
+
+    //------------------ especialidad -----------------
+    public function insertEspecialidad($especialidad)
+    {
+        $this->db->select('id');
         $this->db->from('especialidad');
+        $this->db->where('descripcion=', $especialidad);
         $rpta = $this->db->get();
-        return $rpta->result();
-    } 
-    
-    public function selectRequerimientos()
-    {
-        $this->db->select('*');
-        $this->db->from('requerimiento');
-        $rpta = $this->db->get();
-        return $rpta->result();
-    }
-    
-    public function selectGruposTrabajo()
-    {
-        $this->db->select('*');
-        $this->db->from('grupo_trabajo');
-        $rpta = $this->db->get();
-        return $rpta->result();
+
+        if($rpta->num_rows() > 0)
+        {
+            $row = $rpta->row();
+            $id =  $row->id;
+            return $id;
+        }
+        else
+        {
+            $dataInsert['descripcion'] = $especialidad;
+            $this->db->insert('especialidad', $dataInsert); 
+            $id = $this->db->insert_id();
+            return $id;
+        }
     }
 
-    public function updateTarea($tareaId, $modificadopor, $proyecto_id, $descripcion, 
-                                $equipo_id, $prioridad_id, $tipotarea, $disciplina)
-    {
-        $this->db->set('proyecto_id', $proyecto_id);
-        $this->db->set('equipo_id', $equipo_id);
-        $this->db->set('prioridad_id', $prioridad_id);
-        $this->db->set('modificadopor', $modificadopor);
-        $this->db->set('descripcion', $descripcion);
-        $this->db->set('tipotarea', $tipotarea);
-        $this->db->set('disciplina', $disciplina);
-        $this->db->where('id', $tareaId);
-        $rpta = $this->db->update('tarea'); 
-        return $rpta;
-    }
     
-    public function updateActividad($id_actividad, $id_tarea, $mofificadopor, $especialidad_id,
-                                    $requerimiento_id, $descripcion, $ordentrabajo, $fechainicioplanificada, 
-                                    $fechafinplanificada, $fechainicioreal, $fechafinreal, $estado, 
-                                    $responsables, $seguidores, $grupo)
-    {
-        $this->db->set('tarea_id', $id_tarea);
-        $this->db->set('modificadopor', $mofificadopor);
-        $this->db->set('especialidad_id', $especialidad_id);
-        $this->db->set('requerimiento_id', $requerimiento_id);
-        $this->db->set('descripcion', $descripcion);
-        $this->db->set('ordentrabajo', $ordentrabajo);
-        $this->db->set('fechainicioplanificada', $fechainicioplanificada);
-        $this->db->set('fechafinplanificada', $fechafinplanificada);
-        $this->db->set('fechainicioreal', $fechainicioreal);
-        $this->db->set('fechafinreal', $fechafinreal);
-        $this->db->set('status', $estado);
-        $this->db->set('responsables', $responsables);
-        $this->db->set('seguidores', $seguidores);
-        $this->db->set('grupo', $grupo);
-        $this->db->where('id', $id_actividad);
-        $rpta = $this->db->update('actividad'); 
-        return $rpta;
-    }
 
-    public function insertTarea($creadopor, $proyecto_id, $descripcion, $equipo_id, 
-                                $prioridad_id, $tipotarea, $disciplina)
-    {        
-        $data['creadopor'] = $creadopor;
-        $data['proyecto_id'] = $proyecto_id;
-        $data['descripcion'] = $descripcion;
-        $data['equipo_id'] = $equipo_id;
-        $data['prioridad_id'] = $prioridad_id;
-        $data['tipotarea'] = $tipotarea;
-        $data['disciplina'] = $disciplina;
-        $this->db->insert('tarea', $data); 
-        $idTarea = $this->db->insert_id();
-        
-        return $idTarea;
-    }
 
-    public function deleteTarea($id_tarea)
-    {
-        $this->db->where('id', $id_tarea);
-        $rpta = $this->db->delete('tarea');
-        
-        return $rpta;
-    }
-    */
+    
     
 
 }

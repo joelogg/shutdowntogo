@@ -593,36 +593,88 @@ class Api extends CI_Controller {
 
 	public function subirOTsExcel()
 	{
-		$data = $_POST['json'];
+		$data = $_POST['datos'];
 		$token = $_POST['token'];
+		
 		$data = json_decode($data, true);
-
+		
 		$this->load->model('data_model');
 		$rpta = $this->data_model->selectUsuarioToken($token);
 		
 		
 		if($rpta["data"]!="")
 		{
-			//$idProy = $this->data_model->insertProyecto($data["revision"], $data["fechaInicio"], $data["fechaFin"]);
-			$idProy = 7;
+			$idProy = $this->data_model->insertProyecto($data["revision"], $data["fechaInicio"], $data["fechaFin"]);
+			
 			if($idProy >0)
 			{
 				$data = $data["dataOTs"];
 
-				//Insertando areas
-				$areas = [];
+				$rpta = "";
+				//Insertando fila
+				$cantDatosInsertados = 0;
+				$numOTAnterior = -1;
 				foreach($data as $fila)
 				{
-					array_push($areas, $fila["Area"]);
+					$area = $fila["Area"];
+					$codEquipo = $fila["Codigo equipo"];
+					$descEquipo = $fila["Descripcion Equipo"];
+					$prioridad = $fila["Prioridad OT"];
+					$tipoOT = $fila["Tipo OT"];
+
+					$especialidad = $fila["Especialidad"];
+
+					$numOT = $fila["Orden de trabajo"];
+					$desOT = $fila["Descripcion OT"];
+
+					$numOpe = $fila["Operacion numero"];
+					$desOpe = $fila["Descripcion Operacion"];
+					$fechaIniOpe = $fila["Fecha inicio"];
+					$fechaFinOpe = $fila["Fecha fin"];
+					$duracion = $fila["Duracion"];
+					$resources = $fila["Resources"];
+					$work = $fila["Work"];
+
+										
+					$idArea = $this->data_model->insertArea($area);
+					$idEquipo = $this->data_model->insertEquipo($codEquipo, $descEquipo, $idArea);
+					$idPrioridad = $this->data_model->selectPrioridad($prioridad);
+					$idTipoOT = $this->data_model->insertTipoOT($tipoOT);
+					$idEspecialidad = $this->data_model->insertEspecialidad($especialidad);
+
+					$dataOT['ordentrabajo'] = $numOT;
+					$dataOT['descripcion'] = $desOT;
+					$dataOT['prioridad_id'] = $idPrioridad;
+					$dataOT['equipo_id'] = $idEquipo;
+					$dataOT['proyecto_id'] = $idProy;
+					$dataOT['tipo_id'] = $idTipoOT;
+					if($numOTAnterior!=$numOT)
+					{
+						$idOT = $this->data_model->insertOrdenTrabajo($dataOT, $token);
+						$numOTAnterior = $numOT;
+					}
+					
+					$dataOP['ordenestrabajo_id'] = $idOT;
+					$dataOP['especialidad_id'] = $idEspecialidad;
+					$dataOP['numerooperacion'] = $numOpe;
+					$dataOP['descripcion'] = $desOpe;
+					$dataOP['fechainicio'] = $fechaIniOpe;
+					$dataOP['fechafin'] = $fechaFinOpe;
+					$dataOP['work'] = $work;
+					$dataOP['resources'] = $resources;
+					$dataOP['duracion'] = $duracion;
+					$idOp = $this->data_model->insertOperacion($dataOP, $token);
+
+					$cantDatosInsertados++;
 				}
-				$rpta = $this->data_model->insertAreas($areas);
 			
 				$results = array(
 					"status" => "success",
 					"code" => "200",
 					"message" => "OT creada",
-					"data"=>$rpta
+					"data"=>"Datos insertados: ".$cantDatosInsertados
 				);
+				echo json_encode($results);
 			}
 			else
 			{
@@ -632,6 +684,7 @@ class Api extends CI_Controller {
 					"message" => "Error al crear semana",
 					"data"=>[]
 				);
+				echo json_encode($results);
 			}
 
 		}
@@ -643,9 +696,10 @@ class Api extends CI_Controller {
 				"message" => "token inválido",
 				"data"=>[]
 			);
+			echo json_encode($results);
 		}
 		
-        echo json_encode($results);
+		//echo $data;
 	}
 
 //------------------ Operaciones -----------------

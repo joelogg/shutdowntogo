@@ -78,28 +78,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-    
-    <script src="http://ajax.aspnetcdn.com/ajax/modernizr/modernizr-2.8.3.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script src="http://code.jquery.com/ui/1.11.1/jquery-ui.min.js"></script>
+    <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/modernizr-2.8.3.js"; ?> ></script>
+    <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/jquery-1.11.3.min.js"; ?> ></script>
+    <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/jquery-ui.min.js"; ?> ></script>
 
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/infragistics.core.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/infragistics.lob.js"></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.core.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.lob.js"; ?> ></script>
 
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_core.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_collections.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_text.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_io.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_ui.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.documents.core_core.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_collectionsextended.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.excel_core.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_threading.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.ext_web.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.xml.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.documents.core_openxml.js"></script>
-    <script type="text/javascript" src="http://cdn-na.infragistics.com/igniteui/2019.2/latest/js/modules/infragistics.excel_serialization_openxml.js"></script>
-
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_core.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_collections.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_text.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_io.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_ui.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.documents.core_core.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_collectionsextended.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.excel_core.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_threading.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_web.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.xml.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.documents.core_openxml.js"; ?> ></script>
+    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.excel_serialization_openxml.js"; ?> ></script>
 
 
 

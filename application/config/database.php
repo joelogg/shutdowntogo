@@ -76,9 +76,11 @@ $query_builder = TRUE;
 $db['default'] = array(
 	'dsn'	=> '',
 	'hostname' => 'localhost',
-	'username' => 'luis', //'username' => 'innovadi_luis',
+	'username' => 'luis',
+	//'username' => 'innovadi_luis',
 	'password' => 'J6t0JlwyAbHk3mdaIySe',
-	'database' => 'ib01db', //'database' => 'innovadi_ib01db',
+	'database' => 'ib01db',
+	//'database' => 'innovadi_ib01db_v2',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
