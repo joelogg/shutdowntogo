@@ -59,7 +59,11 @@
                 <tbody>
                     <tr>
                         <td>Responsable:</td>
-                        <td><div id="txtResponsableOT"></div></td>
+                        <td>
+                            <div id="txtResponsableOT">
+                                
+                            </div>
+                        </td>
                     </tr>
                     <tr>
                         <td>Fecha Inicio:</td>

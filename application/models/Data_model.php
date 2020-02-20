@@ -270,6 +270,26 @@ class Data_model extends CI_Model
         }
     }
 
+    public function insertTipoOTExcel($dataOT, $token)
+    {
+        $this->db->select('id');
+        $this->db->from('ordenestrabajo');
+        $this->db->where('ordentrabajo=', $dataOT['ordentrabajo']);
+        $this->db->where('proyecto_id=', $dataOT['proyecto_id']);
+        $rpta = $this->db->get();
+
+        if($rpta->num_rows() > 0)
+        {
+            $row = $rpta->row();
+            $id =  $row->id;
+            return $id;
+        }
+        else
+        {
+            return $this->insertOrdenTrabajo($dataOT, $token);
+        }
+    }
+    
     public function insertOrdenTrabajo($dataOT, $token)
     {
         $this->load->library('encryption');

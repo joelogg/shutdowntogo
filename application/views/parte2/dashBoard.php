@@ -1,14 +1,14 @@
-<div class="row">
+<div class="row px-3">
         <div class="col-md-12 col-lg-6 col-xl-4 divGrafDashBoard">
-            <span class="titGraficasDashBoard">OT por tipo</span>
+            <span class="titGraficasDashBoard">% COMPLETADO</span>
             <div class="divUnGrafDashBoard">
 
-                <div id="donut_g1" style="height: 250px;"></div>
+                <div id="gauge_g1" style="height: 250px;"></div>
             </div>
         </div>
 
         <div class="col-md-12 col-lg-6 col-xl-4 divGrafDashBoard">
-            <span class="titGraficasDashBoard">OT por estado</span>
+            <span class="titGraficasDashBoard">ESTATUS</span>
             <div class="divUnGrafDashBoard">
                 
                 <div id="donut_g2" style="height: 250px;"></div>
@@ -16,27 +16,20 @@
         </div>
 
         <div class="col-md-12 col-lg-6 col-xl-4 divGrafDashBoard">
-            <span class="titGraficasDashBoard">OT por prioridad</span>
+            <span class="titGraficasDashBoard">PRIORIDAD</span>
             <div class="divUnGrafDashBoard">
 
-                <div id="donut_g3" style="height: 250px;"></div>
+                <div id="bar_g3" style="height: 250px;"></div>
             </div>
         </div>
 
         <div class="col-md-12 col-lg-6 col-xl-4 divGrafDashBoard">
-            <span class="titGraficasDashBoard">OT por condición</span>
+            <span class="titGraficasDashBoard">ÁREAS</span>
             <div class="divUnGrafDashBoard">
 
                 <div id="bar_g4" style="height: 250px;"></div>
             </div>
         </div>
 
-        <div class="col-md-12 col-lg-6 col-xl-4 divGrafDashBoard">
-            <span class="titGraficasDashBoard">OT por area</span>
-            <div class="divUnGrafDashBoard">
-
-                <div id="bar_g5" style="height: 250px;"></div>
-            </div>
-        </div>
 
 </div>

@@ -9,6 +9,7 @@ function clickSubirOTsSemana()
 }
 
 var dataSemana = [];
+//precargar Excel
 $(function () 
 {
     $("#inputExcelOTs").on("change", function () 
@@ -170,6 +171,8 @@ function subirOTsSemana()
             {
                 mensajeAmarillo("Datos importados");
                 cargarListaOrdenTrabajo();
+                cargarOTsBD();
+                cargarOpBD();
             }
             else if(rpta.status == "error")
             {

@@ -55,7 +55,8 @@ function colocarDatosOTDetalle(idOT)
                 txtResponsables = "Sin asignar"
             }
             
-            document.getElementById('txtResponsableOT').innerHTML = '<span ondblclick="editarResponsableOT('+idOT+',`'+responsablesIds+'`)">'+txtResponsables+'</span>';
+            //document.getElementById('txtResponsableOT').innerHTML = '<span ondblclick="editarResponsableOT('+idOT+',`'+responsablesIds+'`)">'+txtResponsables+'</span>';
+            editarResponsableOT(idOT, responsablesIds);
             document.getElementById('txtFechaInicioOT').innerHTML = ordenesTrabajoLista[i].fechainicio;
             document.getElementById('txtFechaVencimientoOT').innerHTML = ordenesTrabajoLista[i].fechafin;
             
@@ -68,9 +69,9 @@ function colocarDatosOTDetalle(idOT)
 function colocarOperacionesListaIdOT(idOT)
 {
     bodyTablaOp = "";
-
+    
     for(i=0; i<operacionesLista.length; i++)
-    {
+    {   
         if(operacionesLista[i].ordenestrabajo_id==idOT)
         {
             idO = operacionesLista[i].id;
@@ -122,9 +123,10 @@ function editarResponsableOT(idOT, responsablesIds)
     //$('#selectResponsable').select2();
     $('#selectResponsable').each(function() {
         $(this)
-          .wrap('<div id="divSelectResponsable" ondblclick="salirEdicionResponsables('+idOT+')" class="position-relative"></div>')
+          //.wrap('<div id="divSelectResponsable" ondblclick="salirEdicionResponsables('+idOT+')" class="position-relative"></div>')
+          .wrap('<div id="divSelectResponsable" class="position-relative"></div>')
           .select2({
-            placeholder: 'Select value',
+            placeholder: 'Seleccione',
             dropdownParent: $(this).parent()
           });
     })
@@ -170,8 +172,17 @@ $(".select2-demo").on("select2:unselect", function (e) { console.log("unselec");
 function cambiarResponsablesBD()
 {
     var valuesId = $('#selectResponsable').val();
-    var valuesIdTxt = valuesId.join(",")
 
+    var valuesIdTxt = "";
+    if(valuesId==null || valuesId=="") 
+    {
+        valuesId = [];
+    }
+    else
+    {
+        valuesIdTxt = valuesId.join(",");
+    }
+    
     var tarea = {"id":idOTGeneral, "responsable":valuesIdTxt};
     tarea = JSON.stringify(tarea);
 

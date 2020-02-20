@@ -605,7 +605,7 @@ class Api extends CI_Controller {
 		if($rpta["data"]!="")
 		{
 			$idProy = $this->data_model->insertProyecto($data["revision"], $data["fechaInicio"], $data["fechaFin"]);
-			
+			//$idProy = 1;
 			if($idProy >0)
 			{
 				$data = $data["dataOTs"];
@@ -613,7 +613,6 @@ class Api extends CI_Controller {
 				$rpta = "";
 				//Insertando fila
 				$cantDatosInsertados = 0;
-				$numOTAnterior = -1;
 				foreach($data as $fila)
 				{
 					$area = $fila["Area"];
@@ -648,11 +647,7 @@ class Api extends CI_Controller {
 					$dataOT['equipo_id'] = $idEquipo;
 					$dataOT['proyecto_id'] = $idProy;
 					$dataOT['tipo_id'] = $idTipoOT;
-					if($numOTAnterior!=$numOT)
-					{
-						$idOT = $this->data_model->insertOrdenTrabajo($dataOT, $token);
-						$numOTAnterior = $numOT;
-					}
+					$idOT = $this->data_model->insertTipoOTExcel($dataOT, $token);
 					
 					$dataOP['ordenestrabajo_id'] = $idOT;
 					$dataOP['especialidad_id'] = $idEspecialidad;
@@ -666,6 +661,7 @@ class Api extends CI_Controller {
 					$idOp = $this->data_model->insertOperacion($dataOP, $token);
 
 					$cantDatosInsertados++;
+					
 				}
 			
 				$results = array(

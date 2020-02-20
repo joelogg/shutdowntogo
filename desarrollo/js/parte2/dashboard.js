@@ -1,81 +1,87 @@
 function mostrarGraficaDashBoard()
 {
 
-    c3.generate({
-      bindto: '#donut_g1',
-      data: {
-        columns: [
-          [ 'data1', 79 ],
-          [ 'data2', 91 ],
-          [ 'data3', 71 ],
-          [ 'data4', 85 ],
-          [ 'data5', 57 ]
-        ],
-        type : 'donut',
-      },
-      donut: { title: 'Tiempos muertos' },
+    c3.generate(
+    {
+        bindto: '#gauge_g1',
+        data: 
+        {
+            columns: 
+            [
+                ['Finalizdo/Total', 67]
+            ],
+            type: 'gauge'
+        },
+        color: 
+        {
+            //pattern: ['#2222AA']
+        }
+    });
+    
+
+    c3.generate(
+    {
+        bindto: '#donut_g2',
+        data: 
+        {
+            columns: 
+            [
+                [ 'Abiertas', 12 ],
+                [ 'En progreso', 4 ],
+                [ 'Finalizadas', 9 ],
+                [ 'Atrazadas', 3 ],
+                [ 'Reprogramadas', 7 ]
+            ],
+            type : 'donut',
+        },
+        donut: { title: '35 OT' },
     });
 
 
-    c3.generate({
-        bindto: '#donut_g2',
-        data: {
-          columns: [
-            [ 'data1', 79 ],
-            [ 'data2', 91 ],
-            [ 'data3', 71 ],
-            [ 'data4', 85 ],
-            [ 'data5', 57 ]
-          ],
-          type : 'donut',
+    c3.generate(
+    {
+        bindto: '#bar_g3',
+        color: { pattern: [ '#FF5722', '#4CAF50' ] },
+        data: 
+        {
+            columns: 
+            [
+                [ 'Abiertas', 118, 124, 332, 262, 182 ],
+                [ 'En progreso', 118, 124, 332, 262, 182 ],
+                [ 'Abiertas', 118, 124, 332, 262, 182 ],
+                [ 'Finalizadas', 118, 124, 332, 262, 182 ],
+                [ 'Reprogramadas', 138, 164, 474, 244, 216 ]
+            ],
+            type: 'bar',
+            groups: 
+            [
+                ['data1','data2']
+            ],
         },
-        donut: { title: 'Tiempos muertos' },
-      });
-
-      c3.generate({
-        bindto: '#donut_g3',
-        data: {
-          columns: [
-            [ 'data1', 79 ],
-            [ 'data2', 91 ],
-            [ 'data3', 71 ],
-            [ 'data4', 85 ],
-            [ 'data5', 57 ]
-          ],
-          type : 'donut',
+        bar: 
+        {
+            width: { ratio: 0.5 },
         },
-        donut: { title: 'Tiempos muertos' },
-      });
+    });
 
-      c3.generate({
+    c3.generate(
+    {
         bindto: '#bar_g4',
         color: { pattern: [ '#FF5722', '#4CAF50' ] },
-        data: {
-          columns: [
-            [ 'data1', 492, 118, 124, 332, 262, 182 ],
-            [ 'data2', 205, 138, 164, 474, 244, 216 ]
-          ],
-          type: 'bar',
+        data: 
+        {
+            columns: 
+            [
+                [ 'data1', 492, 118, 124, 332, 262, 182 ],
+                [ 'data2', 205, 138, 164, 474, 244, 216 ]
+            ],
+            type: 'bar',
         },
-        bar: {
-          width: { ratio: 0.5 },
+        bar: 
+        {
+            width: { ratio: 0.5 },
         },
-      });
-
-      c3.generate({
-        bindto: '#bar_g5',
-        color: { pattern: [ '#FF5722', '#4CAF50' ] },
-        data: {
-          columns: [
-            [ 'data1', 492, 118, 124, 332, 262, 182 ],
-            [ 'data2', 205, 138, 164, 474, 244, 216 ]
-          ],
-          type: 'bar',
-        },
-        bar: {
-          width: { ratio: 0.5 },
-        },
-      });
+    });
 
     
 }

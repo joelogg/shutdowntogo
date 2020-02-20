@@ -180,8 +180,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         }
         //else
         {
-            //v_seleccionarDashBoard();           
-            v_seleccionarOrdenesTrabajo();
+            v_seleccionarDashBoard();           
+            //v_seleccionarOrdenesTrabajo();
             
         }
         
