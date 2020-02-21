@@ -24,12 +24,71 @@ function colocarDatosOperacionesDetalle(idOp)
 
             document.getElementById('EspecialdiadOperacion').innerHTML = especialidad;
             
+            //participantes
+            var participantes = operacionesLista[i].participantes;
+            console.log(participantes);
+            participantesIds = "" ;
+            txtParticipantes = "";
             
+            for(var j=0; j<participantes.length; j++)
+            {
+                txtParticipantes += participantes[j].nombre + " " + participantes[j].apellido + '<br>';
+                participantesIds += participantes[j].id + ",";
+            }
+
+            if(txtParticipantes=="")
+            {
+                txtParticipantes = "Sin asignar"
+            }
+            editarParticipantesOp(participantesIds);
+
             cargarComentarios(idOp);
             return;
         }
     }
 }
+
+function editarParticipantesOp( participantesIds)
+{
+    
+    //pasando los ids a array
+    participantesIds = participantesIds.split(",");
+    if(participantesIds[participantesIds.length-1]=="")//para eliminar el ulltimo elemento
+    {
+        participantesIds.splice(participantesIds.length-1,1);
+    }
+
+    //creando el select con los datos de los usuarios
+    var txt = "";
+    for (let i = 0; i < usuariosLista.length; i++) 
+    {
+        txt += '<option value="'+usuariosLista[i].id+'">'+usuariosLista[i].nombre+' '+usuariosLista[i].apellido+'</option> '
+    }    
+    document.getElementById('txtParticipantesOp').innerHTML = '<select id="selectParticipantes" class="select2-demo form-control" multiple style="width: 100%">'+txt+'</select>';
+
+    //accionando el select de los usarios ya asisgnados
+    for (let i = 0; i < participantesIds.length; i++) 
+    {
+        $("#selectParticipantes option[value='"+participantesIds[i]+"']").prop("selected",true);
+    }
+
+    //activando el select
+    $('#selectParticipantes').each(function() {
+        $(this)
+          .wrap('<div id="divSelectParticipantes" class="position-relative" style"background-color:red;"></div>')
+          .select2({
+            placeholder: 'Seleccione',
+            dropdownParent: $(this).parent()
+          });
+    })
+
+    
+    //funcion de change del select
+    //$("#selectParticipantes").on("change", cambiarResponsablesBD);
+    
+}
+
+
 
 // ----------- comentarios --------------
 function fechaBDToWeb(fecha)

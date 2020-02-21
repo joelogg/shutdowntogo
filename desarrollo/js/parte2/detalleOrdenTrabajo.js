@@ -59,6 +59,8 @@ function colocarDatosOTDetalle(idOT)
             editarResponsableOT(idOT, responsablesIds);
             document.getElementById('txtFechaInicioOT').innerHTML = ordenesTrabajoLista[i].fechainicio;
             document.getElementById('txtFechaVencimientoOT').innerHTML = ordenesTrabajoLista[i].fechafin;
+            document.getElementById('txtAreaOT').innerHTML = ordenesTrabajoLista[i].descripcionArea;
+            document.getElementById('txtEquipoOT').innerHTML = "(" + ordenesTrabajoLista[i].codigoEquipo + ") " + ordenesTrabajoLista[i].descripcionEquipo;
             
             colocarOperacionesListaIdOT(idOT)
             return;
@@ -80,6 +82,13 @@ function colocarOperacionesListaIdOT(idOT)
             especialidad = operacionesLista[i].descripcionEspecialidad;
             work = operacionesLista[i].work;
             fechafin = operacionesLista[i].fechafin;
+            finalizada = operacionesLista[i].finalizada;
+            console.log(operacionesLista[i]);
+            checkFinalizada = '';
+            if(finalizada==1)
+            {
+                checkFinalizada = '<i class="fas fa-check"></i>';
+            }
 
             bodyTablaOp += '\
                     <tr>\
@@ -87,6 +96,7 @@ function colocarOperacionesListaIdOT(idOT)
                         <td>'+especialidad+'</td>\
                         <td>'+work+' HH</td>\
                         <td>'+fechafin+'</td>\
+                        <td>'+checkFinalizada+'</td>\
                         <td class="text-right"><button class="btn" onclick="v_seleccionarUnOperacion('+idO+')"><i class="ion ion-ios-arrow-forward" ></i></button></td>\
                     </tr>';
         }

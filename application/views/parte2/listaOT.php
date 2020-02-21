@@ -1,31 +1,61 @@
 
+<!-- Titulo -->
 <div class="divTituloCabeceraDetalle pt-2">
     Ordenes de trabajo (S1)
 </div>
+<!-- Fin Titulo -->
 
-    
+<!-- Filtros -->
 <div class="divCabeceraDetalle col-12 pt-3">
     
     <div class="input-group pb-3 d-flex justify-content-center" style="text-align: center">
-        <select class="form-control" style="max-width: 250px;">
-            <option value="">Estado</option>
-            <option value="">Prioridad</option>
-            <option value="">Fecha</option>
-            <option value="">Copiar</option>
-        </select>
-        <select class="form-control" style="max-width: 250px;">
-            <option value="">Estado 1</option>
-            <option value="">Estado 2</option>
-            <option value="">Estado 3</option>
-            <option value="">Estado 4</option>
-        </select>
-        <div class="input-group-append">
-            <button class="btnsPopUp" style="height: auto">Buscar</button>
+        
+        <div>
+            <label class="mr-1 text-left" style="width: 150px;">Responsables:</label>
+            <select class="form-control mr-1" style="max-width: 150px;">
+                <option value="0">SELECCIONAR</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="mr-1 text-left" style="width: 150px;">Prioridad:</label>
+            <select class="form-control mr-1" style="max-width: 150px;">
+                <option value="0">SELECCIONAR</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="mr-1 text-left" style="width: 150px;">Estatus:</label>
+            <select class="form-control mr-1" style="max-width: 150px;">
+                <option value="0">SELECCIONAR</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="mr-1 text-left" style="width: 150px;">Área:</label>
+            <select class="form-control mr-1" style="max-width: 150px;">
+                <option value="0">SELECCIONAR</option>
+            </select>
+        </div>
+
+        <div>
+            <label class="mr-1 text-left" style="width: 150px;">Fecha:</label>
+            <select class="form-control mr-1" style="max-width: 150px;">
+                <option value="0">SELECCIONAR</option>
+            </select>
+        </div>
+
+        <div class="">
+            <label class="mr-1 text-left" style="min-height: 17px;"></label>
+            <button class="form-control btnsPopUp" style="height: auto; width: 100px">Filtrar</button>
         </div>
     </div>
+
     
 </div>
+<!-- Fin Filtros -->
 
+<!-- Tabla de OTs -->
 <div  class="table-responsive p-3 pb-0 bg-white" >
     <table id="tablaOT" class="datatables-demo table table-striped table-bordered">
         <thead>
@@ -59,4 +89,4 @@
         -->
     </table>
 </div>
-
+<!-- Fin Tabla de OTs -->

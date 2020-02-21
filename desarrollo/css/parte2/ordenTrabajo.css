@@ -6,7 +6,7 @@
 
 .dataTables_scrollBody
 {
-    height: calc(100vh - 326px)  !important;
+    height: calc(100vh - 355px)  !important;
 }
 #divListaOT
 {
@@ -208,7 +208,16 @@
     border-bottom: 2px solid #4D7CFE;
 }
 
+#sectionGeneralOT
+{
+    /*height:inherit;*/
+    margin-bottom: 50px;
+}
 
+#sectionOperaciones
+{
+    height:inherit;
+}
 
 /* ------- detalles de una Operaciones ------*/
 #navOpcionesDetallesOpe

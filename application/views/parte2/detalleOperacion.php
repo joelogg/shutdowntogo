@@ -21,6 +21,8 @@
                 <div class="col-md">
                     <p><span class="text-muted">Fecha inicio:</span>&nbsp; <span id="fechaIniOperacion">20/02/2020</span></p>
                     <p><span class="text-muted">Fecha fin:</span>&nbsp; <span id="fechaFinOperacion"> 20/02/2020</span></p>
+                    <div class="btn-group"><span class="text-muted">Participantes:</span>&nbsp; <div id="txtParticipantesOp">s</div></div>
+
                 </div>
 
                 <div class="col-md">

@@ -73,6 +73,14 @@
                         <td>Fecha Vencimiento:</td>
                         <td><span id="txtFechaVencimientoOT"></span></td>
                     </tr>
+                    <tr>
+                        <td>Área:</td>
+                        <td><span id="txtAreaOT"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Equipo:</td>
+                        <td><span id="txtEquipoOT"></span></td>
+                    </tr>
                 </tbody>
                 </table>
             </div>
@@ -93,6 +101,7 @@
                             <td>Especialidad</td>
                             <td>2HH</td>
                             <td>18/01/2020 20:00:00</td>
+                            <td></td>
                             <td class="text-right"><button class="btn" onclick="v_seleccionarUnOperacion(1)"><i class="ion ion-ios-arrow-forward" ></i></button></td>
                         </tr>
                         <tr>
@@ -100,6 +109,7 @@
                             <td>Especialidad</td>
                             <td>2HH</td>
                             <td>18/01/2020 20:00:00</td>
+                            <td><i class="fas fa-check"></i></td>
                             <td class="text-right"><button class="btn " onclick="v_seleccionarUnOperacion(1)"><i class="ion ion-ios-arrow-forward" ></i></button></td>
                         </tr>
 

@@ -36,3 +36,27 @@
     border-bottom: 1px solid #EEE;
     width: 100%;
 }
+
+.divOTCritica
+{
+    background-color: white;
+    margin-top: 0.5rem;
+    border-radius: 10px;
+    border-right: 1px solid #EEE;
+    border-bottom: 1px solid #EEE;
+    width: 100%;
+    min-height: 50px;
+    padding: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+}
+
+.titTareaCriticaDashboard
+{
+    width: 100%;
+    /*white-space: nowrap;*/
+    text-overflow: ellipsis;
+    overflow: hidden;
+    cursor: pointer;
+    font-weight: bold;
+}
