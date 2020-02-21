@@ -34,7 +34,7 @@ $(function()
                 sortDescending: ": activer pour trier la colonne par ordre décroissant"
             }
         },
-        "order": [[ 3, 'asc' ]],
+        "order": [[ 3, 'asc' ], [ 4, 'desc' ]],
     } );  
 
 });

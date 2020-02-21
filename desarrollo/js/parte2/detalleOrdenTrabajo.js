@@ -83,7 +83,7 @@ function colocarOperacionesListaIdOT(idOT)
             work = operacionesLista[i].work;
             fechafin = operacionesLista[i].fechafin;
             finalizada = operacionesLista[i].finalizada;
-            console.log(operacionesLista[i]);
+            
             checkFinalizada = '';
             if(finalizada==1)
             {

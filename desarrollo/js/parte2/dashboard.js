@@ -26,9 +26,9 @@ function mostrarGraficaDashBoard()
         {
             columns: 
             [
+                [ 'Finalizadas', 9 ],
                 [ 'Abiertas', 12 ],
                 [ 'En progreso', 4 ],
-                [ 'Finalizadas', 9 ],
                 [ 'Atrazadas', 3 ],
                 [ 'Reprogramadas', 7 ]
             ],
@@ -50,9 +50,9 @@ function mostrarGraficaDashBoard()
             columns: 
             [
                 ['x', 'Muy alta', 'Alta', 'Media', 'Baja'],
+                [ 'Finalizadas', 118, 124, 332, 262 ],
                 [ 'Abiertas', 118, 124, 332, 262 ],
                 [ 'En progreso', 118, 124, 332, 262 ],
-                [ 'Finalizadas', 118, 124, 332, 262 ],
                 [ 'Atrazadas', 118, 124, 332, 262 ],
                 [ 'Reprogramadas', 138, 164, 474, 244 ]
             ],
@@ -89,9 +89,9 @@ function mostrarGraficaDashBoard()
                 columns: 
                 [
                     ['x', 'Area1', 'Area2', 'Area3', 'Area4'],
+                    [ 'Finalizadas', 118, 124, 332, 262 ],
                     [ 'Abiertas', 118, 124, 332, 262 ],
                     [ 'En progreso', 118, 124, 332, 262 ],
-                    [ 'Finalizadas', 118, 124, 332, 262 ],
                     [ 'Atrazadas', 118, 124, 332, 262 ],
                     [ 'Reprogramadas', 138, 164, 474, 244 ]
                 ],
@@ -137,3 +137,10 @@ chart.unload({
         ids: 'data1'
     });
 */
+
+
+function filtrarDatosGrafico()
+{
+    //document.getElementById('divListaOT')
+    console.log("hola");
+}

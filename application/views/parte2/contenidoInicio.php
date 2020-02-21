@@ -15,16 +15,16 @@
                     <button type="button" class="btn btnMenuDashBoard">RESUMEN</button>
 
                     <div class="btn-group pr-2 pt-2">
-                        <select class="form-control mr-1" style="min-width: 150px">
+                        <select id="selectFechaGrafios" class="form-control mr-1" style="min-width: 150px">
                             <option value="0">Fecha</option>
                         </select>
 
-                        <select class="form-control mr-1" style="min-width: 150px">
+                        <select id="selectSemanaGrafios" class="form-control mr-1" style="min-width: 150px">
                             <option value="0">Semana</option>
                         </select>
 
                         <div class="input-group-append">
-                            <button class="form-control btnsPopUp" style="height: auto; width: 100px">Filtrar</button>
+                            <button class="form-control btnsPopUp" style="height: auto; width: 100px" onclick="filtrarDatosGrafico()">Filtrar</button>
                         </div>
                     </div>
 

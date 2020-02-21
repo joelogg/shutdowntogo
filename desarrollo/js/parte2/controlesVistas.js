@@ -12,6 +12,13 @@ function v_seleccionarDashBoard()
 
 function v_seleccionarOrdenesTrabajo()
 {
+    //Lista OT
+    cargarOTsBD();
+    //Lista Operaciones
+    cargarOpBD();
+    //Lista Usuarios
+    cargarUsuariosBD()
+
     document.getElementById("btnPanelIzqDashBoard").classList.remove('btnMenuIzquirdoActivo');
     document.getElementById("btnPanelIzqOrdTrabajo").classList.add('btnMenuIzquirdoActivo');
 

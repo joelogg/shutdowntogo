@@ -1,10 +1,11 @@
 function colocarDatosOperacionesDetalle(idOp)
 {
-
+    idOpGeneral = idOp;
     for(i=0; i<operacionesLista.length; i++)
     {
         if(operacionesLista[i].id==idOp)
         {
+            posOpGeneral = i;
             descripcion = operacionesLista[i].descripcion;
             numerooperacion = operacionesLista[i].numerooperacion;
             especialidad = operacionesLista[i].descripcionEspecialidad;
@@ -26,7 +27,6 @@ function colocarDatosOperacionesDetalle(idOp)
             
             //participantes
             var participantes = operacionesLista[i].participantes;
-            console.log(participantes);
             participantesIds = "" ;
             txtParticipantes = "";
             
@@ -84,11 +84,76 @@ function editarParticipantesOp( participantesIds)
 
     
     //funcion de change del select
-    //$("#selectParticipantes").on("change", cambiarResponsablesBD);
+    $("#selectParticipantes").on("change", cambiarParticipantesBD);
     
 }
 
+function cambiarParticipantesBD()
+{
+    var valuesId = $('#selectParticipantes').val();
 
+    var valuesIdTxt = "";
+    if(valuesId==null || valuesId=="") 
+    {
+        valuesId = [];
+    }
+    else
+    {
+        valuesIdTxt = valuesId.join(",");
+    }
+    
+    var tarea = {"id":idOpGeneral, "participantes":valuesIdTxt};
+    tarea = JSON.stringify(tarea);
+
+    $.ajax(
+    {
+        async: true,
+        crossDomain: true,
+        type:'POST',
+        url: base_del_url_miApi+"api/operacionEditar",
+        data: {
+            "token": token,
+            "json": tarea
+          },
+        success:function(rpta)
+        {
+            rpta = JSON.parse(rpta);
+            
+            if(rpta.status == "success")
+            {
+                nuevosParticipantes = [];
+                for (let i = 0; i < valuesId.length; i++) 
+                {
+                    for (let j = 0; j < usuariosLista.length; j++) 
+                    {
+                        if(usuariosLista[j].id == valuesId[i])
+                        {
+                            nuevosParticipantes.push(usuariosLista[j]);
+                        }
+                    }
+                }
+                operacionesLista[posOpGeneral].participantes = nuevosParticipantes;
+                
+            }
+            else if(rpta.status == "error")
+            {
+                if(rpta.message == "token inválido")
+                {
+                    mensajeAmarillo("Su cuenta ha sido iniciada en otro dispositivo");
+                    setTimeout(function() { location.replace(base_del_url); },4000);
+                }
+                else
+                {
+                    mensajeAmarillo("Error cambiando participantes");
+                }
+            }
+        },
+        error: function(rpta)
+        {
+            mensajeAmarillo("Error de conexión");
+        }
+    });
+}
 
 // ----------- comentarios --------------
 function fechaBDToWeb(fecha)

@@ -43,7 +43,7 @@ else
         $status = "";
         if($status = $valor['atrasado']==1)
         {
-            $status = '<span style="color:red">Atrazada</span>';
+            $status = '<span style="color:red">Atrasada</span>';
         }
         else
         {

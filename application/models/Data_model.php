@@ -598,6 +598,20 @@ class Data_model extends CI_Model
         }
     }
 
+    public function updateOperacion($dataOp, $token)
+    {
+        $this->load->library('encryption');
+        $idCreador = $this->encryption->decrypt($token);
+        $dataOp['modificadopor'] = $idCreador;
+
+        $this->db->where('id', $dataOp["id"]);
+        $rpta = $this->db->update('operaciones', $dataOp); 
+
+        $this->actualizarFechasProyecto($dataOp);
+
+        return $rpta;
+    }
+
     //------------------ Comentarios -----------------
     public function insertComentario($dataComentario, $token)
     {
@@ -626,6 +640,7 @@ class Data_model extends CI_Model
         $this->db->select('operaciones_id');
         $this->db->from('comentarios');
         $this->db->where('id=', $idCom);
+        $this->db->order_by('id', 'DESC');
         $rpta = $this->db->get();
         if($rpta->num_rows() > 0)
         {

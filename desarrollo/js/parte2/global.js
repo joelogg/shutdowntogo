@@ -13,3 +13,5 @@ var operacionesLista = []
 
 var idOTGeneral = 0;
 var posOTGeneral = -1;
+var idOpGeneral = 0;
+var posOpGeneral = -1;
