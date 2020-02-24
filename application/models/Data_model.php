@@ -664,7 +664,7 @@ class Data_model extends CI_Model
         $this->db->where('chat=1');
         $this->db->where('operaciones_id=', $idOp);
         $this->db->join('adjunto', 'adjunto.comentarios_id=comentarios.id', 'left');
-        $this->db->order_by('fechacreacion', 'ASC');
+        $this->db->order_by('fechacreacion', 'DESC');
 
         $rpta = $this->db->get();
         return $rpta->result();
@@ -797,6 +797,51 @@ class Data_model extends CI_Model
             $id = $this->db->insert_id();
             return $id;
         }
+    }
+
+    //------------------ Dasboard -----------------
+    public function selectOrdenesTrabajoGrafica($fechaIni, $fechaFin, $selectSemana)
+    {
+        if($selectSemana=="2")
+        {
+            $this->db->select('revision');
+            $this->db->from('proyecto');
+            $this->db->order_by('fechainicio', 'DESC');
+            $this->db->order_by('id', 'DESC');
+
+            $rpta = $this->db->get();
+            $selectSemana = $rpta->result()[0]->revision;
+        }
+
+
+        $this->db->select('estadoOT_id, estadoot.descripcion as estado, atrasado, 
+                            prioridad.id as prioridad_id, 
+                            area.codigo as codigoArea');
+                            
+        $this->db->from('ordenestrabajo, estadoot, proyecto');
+        
+        $this->db->where('ordenestrabajo.visible=1');
+        $this->db->where('ordenestrabajo.estadoOT_id=estadoot.id');
+        $this->db->where('ordenestrabajo.proyecto_id=proyecto.id');
+        
+        if($fechaIni!="" && $fechaFin!="")
+        {
+            $this->db->where('ordenestrabajo.fechainicio>=', $fechaIni);
+            $this->db->where('ordenestrabajo.fechafin<=', $fechaFin);
+        }
+        else
+        {
+            $this->db->where('proyecto.revision=', $selectSemana);
+        }
+
+        $this->db->join('prioridad', 'ordenestrabajo.prioridad_id=prioridad.id', 'left');
+        $this->db->join('equipo', 'ordenestrabajo.equipo_id=equipo.id', 'left');
+        $this->db->join('area', 'equipo.area_id=area.id', 'left');
+
+
+
+        $rpta = $this->db->get();
+        return $rpta->result();
     }
 
     

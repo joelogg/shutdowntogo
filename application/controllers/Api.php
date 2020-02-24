@@ -1037,6 +1037,40 @@ class Api extends CI_Controller {
         echo json_encode($results); 
 	}
 
+
+	//------------------ Dasboard -----------------
+	public function datosGrafica()
+	{
+		$data = $_POST['json'];
+		$token = $_POST['token'];
+		$data = json_decode($data, true);
+
+		$this->load->model('data_model');
+		$rpta = $this->data_model->selectUsuarioToken($token);
+		
+		if($rpta["data"]!="")
+		{
+			$rpta = $this->data_model->selectOrdenesTrabajoGrafica($data["fechaIni"], $data["fechaFin"], $data["selectSemana"]);
+			
+			$results = array(
+				"status" => "success",
+				"code" => "200",
+				"message" => "datos graficos",
+				"data"=>$rpta
+			);
+		}
+		else
+		{
+			$results = array(
+				"status" => "error",
+				"code" => "400",
+				"message" => "token inválido",
+				"data"=>[]
+			);
+		}
+		
+		echo json_encode($results);
+	}
 	
 	/*
 

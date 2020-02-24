@@ -47,8 +47,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- select -->
     <link rel="stylesheet" href=<?php echo $_SESSION["base_del_url"]."assets/vendor/libs/select2/select2.css"; ?>>
 
-
-
+    <!-- calendario -->
+    <link rel="stylesheet" href=<?php echo $_SESSION["base_del_url"]."assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.css"; ?>>   
+    <link rel="stylesheet" href=<?php echo $_SESSION["base_del_url"]."assets/vendor/libs/bootstrap-daterangepicker/daterangepicker.css";?>>
 
     
     <link rel="stylesheet" href=<?php echo $_SESSION["base_del_url"]."assets/vendor/css/rtl/bootstrap.css"; ?>>
@@ -222,11 +223,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- select -->
     <script src=<?php echo $_SESSION["base_del_url"]."assets/vendor/libs/select2/select2.js"; ?> ></script>
 
-  
-    <!-- excel --
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
--->
+    <!-- calendario  -->
+    <script src=<?php echo $_SESSION["base_del_url"]."assets/vendor/libs/moment/moment.js"; ?> ></script>
+    <script src=<?php echo $_SESSION["base_del_url"]."assets/vendor/libs/bootstrap-daterangepicker/bootstrap-daterangepicker.js"; ?> ></script>
+    <script src=<?php echo $_SESSION["base_del_url"]."assets/vendor/libs/bootstrap-daterangepicker/daterangepicker.js"?> ></script>
+    
+ 
 
     <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/verificarInputCorrecto.js"; ?> ></script>
     <!-- Optional JavaScript -->

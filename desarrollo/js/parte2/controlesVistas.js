@@ -7,7 +7,7 @@ function v_seleccionarDashBoard()
     document.getElementById("divDashBoard").style.display  = 'block';
     document.getElementById("divOrdenesTrabajo").style.display  = 'none';
 
-    mostrarGraficaDashBoard();
+    mostrarGraficaDashBoard("", "", 2);//indica q se lecciona semana actual
 }
 
 function v_seleccionarOrdenesTrabajo()

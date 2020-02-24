@@ -1,17 +1,4 @@
-$(function() 
-{
-    //Lista OT
-    cargarOTsBD();
-    
-
-    //Lista Operaciones
-    cargarOpBD();
-
-    //Lista Usuarios
-    cargarUsuariosBD()
-    
-});
-
+//---------Datos para menu OT
 function cargarOTsBD()
 {
     $.ajax(
@@ -134,3 +121,4 @@ function cargarUsuariosBD()
         }
     });
 }
+
