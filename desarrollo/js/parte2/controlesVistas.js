@@ -1,6 +1,9 @@
 //------ menu izquierdo -------
 function v_seleccionarDashBoard()
 {
+    //Lista OT
+    cargarOTsBD();
+    
     document.getElementById("btnPanelIzqDashBoard").classList.add('btnMenuIzquirdoActivo');
     document.getElementById("btnPanelIzqOrdTrabajo").classList.remove('btnMenuIzquirdoActivo');
 

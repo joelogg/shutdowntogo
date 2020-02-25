@@ -814,7 +814,8 @@ class Data_model extends CI_Model
         }
 
 
-        $this->db->select('estadoOT_id, estadoot.descripcion as estado, atrasado, 
+        $this->db->select('ordenestrabajo.id as idOT, ordenestrabajo.descripcion as descripcionOT, ordenestrabajo.ordentrabajo,
+                            estadoOT_id, estadoot.descripcion as estado, atrasado, 
                             prioridad.id as prioridad_id, 
                             area.codigo as codigoArea');
                             
@@ -827,7 +828,7 @@ class Data_model extends CI_Model
         if($fechaIni!="" && $fechaFin!="")
         {
             $this->db->where('ordenestrabajo.fechainicio>=', $fechaIni);
-            $this->db->where('ordenestrabajo.fechafin<=', $fechaFin);
+            $this->db->where('ordenestrabajo.fechainicio<=', $fechaFin);
         }
         else
         {

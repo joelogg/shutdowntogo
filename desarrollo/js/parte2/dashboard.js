@@ -2,12 +2,12 @@ $(function()
 {
     $('#calendarioFiltroGraficas').daterangepicker(
     {
-        //autoApply: true,
+        autoApply: true,
         autoUpdateInput: false,
         locale: 
         {
             cancelLabel: 'Clear',
-            format: "DD-MM-YYYY",
+            format: "YYYY-MM-DD",
             applyLabel: "Aplicar",
             cancelLabel: "Cancelar",
             fromLabel: "De",
@@ -42,7 +42,7 @@ $(function()
 
     $('#calendarioFiltroGraficas').on('apply.daterangepicker', function(ev, picker) 
     {
-        $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format('DD-MM-YYYY'));
+        $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format('YYYY-MM-DD'));
         document.getElementById('selectSemanaGrafios').value = "0";
     });
   
@@ -55,7 +55,7 @@ $(function()
 
 
 
- function cambiarSemanaGrafico()
+function cambiarSemanaGrafico()
 {
     document.getElementById('calendarioFiltroGraficas').value = "";
 }
@@ -67,13 +67,12 @@ function filtrarDatosGrafico()
 
     var fechaIni = ""
     var fechaFin = ""
-    var semanaRevision = "";
 
     if(fechaDesdeHasta!="")
     {
         var fechas = fechaDesdeHasta.split(" ");
-        fechaIni = fechas[0];
-        fechaFin = fechas[2];
+        fechaIni = fechas[0] + " 00:00:00";
+        fechaFin = fechas[2] + " 23:59:59";
     }
     else if(selectSemana!="0")
     {
@@ -83,8 +82,8 @@ function filtrarDatosGrafico()
             var dd = hoy.getDate();
             var mm = hoy.getMonth()+1;
             var yyyy = hoy.getFullYear();
-            fechaIni = dd + "-" + mm + "-" + yyyy;
-            fechaFin = dd + "-" + mm + "-" + yyyy;
+            fechaIni = yyyy + "-" + mm + "-" + dd + " 00:00:00";
+            fechaFin = yyyy + "-" + mm + "-" + dd + " 23:59:59";
         }
     }
     else
@@ -98,6 +97,12 @@ function filtrarDatosGrafico()
 
 function mostrarGraficaDashBoard(fechaIni, fechaFin, selectSemana)
 {
+    listOTsFinalizadas = [];
+    listOTsAbiertas = [];
+    listOTsEnProgreso = [];
+    listOTsAtrasadas = [];
+    listOTsReprogramadas = [];
+
     var dataEnviar = {"fechaIni":fechaIni , "fechaFin": fechaFin, "selectSemana":selectSemana};
     dataEnviar = JSON.stringify(dataEnviar);
 
@@ -122,6 +127,7 @@ function mostrarGraficaDashBoard(fechaIni, fechaFin, selectSemana)
                 crearGraficoEstatus(data);
                 crearGraficoPrioridad(data);
                 crearGraficoAreas(data);
+                separarOTGrafica(data);
 
             }
             else if(rpta.status == "error")
@@ -144,6 +150,7 @@ function mostrarGraficaDashBoard(fechaIni, fechaFin, selectSemana)
     });
 
 }
+
 
 function crearGraficoCompletado(data)
 {
@@ -186,6 +193,7 @@ function crearGraficoCompletado(data)
     });
 }
 
+var grafica2;
 function crearGraficoEstatus(data)
 {
     var numFinalizados  = 0;
@@ -218,7 +226,7 @@ function crearGraficoEstatus(data)
     }
 
 
-    c3.generate(
+    grafica2 = c3.generate(
     {
         bindto: '#donut_g2',
         data: 
@@ -232,9 +240,9 @@ function crearGraficoEstatus(data)
                 [ 'Reprogramadas', numReprogramadas ]
             ],
             type : 'donut',
-            onclick: function (d, i) { console.log("onclick", d.index); },
-            //onmouseover: function (d, i) { console.log("onmouseover", d, i); },
-            //onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+            onclick: function (d, i) { mostrarOTGraficosSelect(d.index, data); realacionarGraficas(d.name, data); },
+            //onmouseover: function (d, i) { resaltarGraficosSelect(d.index, data); },
+            //onmouseout: function (d, i) { restarurarGraficosSelect(d.index, data); }
         },
         donut: { title: data.length+' OT' },
         tooltip: {
@@ -248,6 +256,7 @@ function crearGraficoEstatus(data)
     });
 }
 
+var grafica3;
 function crearGraficoPrioridad(data)
 {
     var finalizados  = ['Finalizadas', 0, 0, 0, 0];
@@ -281,7 +290,7 @@ function crearGraficoPrioridad(data)
     }
 
 
-    c3.generate(
+    grafica3 = c3.generate(
     {
         bindto: '#bar_g3',
         data: 
@@ -321,6 +330,7 @@ function crearGraficoPrioridad(data)
     });
 }
 
+var grafica4;
 function crearGraficoAreas(data)
 {
     var areas = new Array();
@@ -384,7 +394,7 @@ function crearGraficoAreas(data)
     }
 
 
-    c3.generate(
+    grafica4 = c3.generate(
         {
             bindto: '#bar_g4',
             data: 
@@ -425,21 +435,147 @@ function crearGraficoAreas(data)
     
 }
 
+function separarOTGrafica(data)
+{
+    listOTsFinalizadas = [];
+    listOTsAbiertas = [];
+    listOTsEnProgreso = [];
+    listOTsAtrasadas = [];
+    listOTsReprogramadas = [];
+
+    for (let i = 0; i < data.length; i++) 
+    {
+        if(data[i].atrasado==1)//atrasadas
+        {
+            listOTsAtrasadas.push( [data[i].idOT, "(" + data[i].ordentrabajo + ") " + data[i].descripcionOT] );
+        }
+        else if(data[i].estadoOT_id==1)//abiertas
+        {
+            listOTsAbiertas.push( [data[i].idOT, "(" + data[i].ordentrabajo + ") " + data[i].descripcionOT] );
+        }
+        else if(data[i].estadoOT_id==2)//en progreso
+        {
+            listOTsEnProgreso.push( [data[i].idOT, "(" + data[i].ordentrabajo + ") " + data[i].descripcionOT] );
+        }
+        else if(data[i].estadoOT_id==3)//finalizadas
+        {
+            listOTsFinalizadas.push(  [data[i].idOT, "(" + data[i].ordentrabajo + ") " + data[i].descripcionOT] );
+        }
+        else if(data[i].estadoOT_id==4)//reprogramadas
+        {
+            listOTsReprogramadas.push( [data[i].idOT, "(" + data[i].ordentrabajo + ") " + data[i].descripcionOT] );
+        }
+    }
+    mostrarOTGraficosSelect(3);
+}
 
 
-/*
-chart.load({
-        columns: [
-            ["setosa", 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.2, 0.1, 0.1, 0.2, 0.4, 0.4, 0.3, 0.3, 0.3, 0.2, 0.4, 0.2, 0.5, 0.2, 0.2, 0.4, 0.2, 0.2, 0.2, 0.2, 0.4, 0.1, 0.2, 0.2, 0.2, 0.2, 0.1, 0.2, 0.2, 0.3, 0.3, 0.2, 0.6, 0.4, 0.3, 0.2, 0.2, 0.2, 0.2],
-            ["versicolor", 1.4, 1.5, 1.5, 1.3, 1.5, 1.3, 1.6, 1.0, 1.3, 1.4, 1.0, 1.5, 1.0, 1.4, 1.3, 1.4, 1.5, 1.0, 1.5, 1.1, 1.8, 1.3, 1.5, 1.2, 1.3, 1.4, 1.4, 1.7, 1.5, 1.0, 1.1, 1.0, 1.2, 1.6, 1.5, 1.6, 1.5, 1.3, 1.3, 1.3, 1.2, 1.4, 1.2, 1.0, 1.3, 1.2, 1.3, 1.3, 1.1, 1.3],
-            ["virginica", 2.5, 1.9, 2.1, 1.8, 2.2, 2.1, 1.7, 1.8, 1.8, 2.5, 2.0, 1.9, 2.1, 2.0, 2.4, 2.3, 1.8, 2.2, 2.3, 1.5, 2.3, 2.0, 2.0, 1.8, 2.1, 1.8, 1.8, 1.8, 2.1, 1.6, 1.9, 2.0, 2.2, 1.5, 1.4, 2.3, 2.4, 1.8, 1.8, 2.1, 2.4, 2.3, 1.9, 2.3, 2.5, 2.3, 1.9, 2.0, 2.3, 1.8],
-        ]
-    });
+function mostrarOTGraficosSelect(index)
+{
+    var ordenesActual = [];
+    if(index==0)//Finalizadas
+    {
+        document.getElementById('titOTsGraficasDashBoard').innerHTML = "ORDENES DE TRABAJO FINALIZADAS";
+        ordenesActual = listOTsFinalizadas;
+    }
+    else if(index==1)//Abiertas
+    {
+        document.getElementById('titOTsGraficasDashBoard').innerHTML = "ORDENES DE TRABAJO ABIERTAS";
+        ordenesActual = listOTsAbiertas;
+    }
+    else if(index==2)//En progreso
+    {
+        document.getElementById('titOTsGraficasDashBoard').innerHTML = "ORDENES DE TRABAJO EN PROGRESO";
+        ordenesActual = listOTsEnProgreso;
+    }
+    else if(index==3)//Atrasadas
+    {
+        document.getElementById('titOTsGraficasDashBoard').innerHTML = "ORDENES DE TRABAJO ATRASADAS";
+        ordenesActual = listOTsAtrasadas;
+    }
+    else if(index==4)//Reprogramadas
+    {
+        document.getElementById('titOTsGraficasDashBoard').innerHTML = "ORDENES DE TRABAJO REPROGRAMADAS";
+        ordenesActual = listOTsReprogramadas;
+    }
+    
+
+    var txt = "";
+    for (let i = 0; i < ordenesActual.length; i++) 
+    {
+        txt += '<div class="divOTCritica" >\
+                    <div class="titTareaCriticaDashboard" title="'+ordenesActual[i][1]+'" onclick="selectOTdesdeGraficas('+ordenesActual[i][0]+')">'+ordenesActual[i][1]+'</div>\
+                    <div></div>\
+                </div>';
+    }
+
+    document.getElementById('divOTsDashboard').innerHTML = txt;
+}
+
+var clickIdDona = "";
+function realacionarGraficas(name, data)
+{
+    restarurarGraficosSelect(data);
+    if(clickIdDona!=name)
+    {
+        resaltarGraficosSelect(name);
+        clickIdDona = name;
+    }
+    else
+    {
+        clickIdDona = "";
+    }
+
+}
 
 
-chart.unload({
-        ids: 'data1'
-    });
-*/
+
+function selectOTdesdeGraficas(idOT)
+{
+    v_seleccionarOrdenesTrabajo();
+    v_seleccionarUnaOT(idOT);
+}
+
+function resaltarGraficosSelect(name)
+{
+    if(name=="Finalizadas")//Finalizadas
+    {
+        grafica3.unload({ids: ['Abiertas', 'En progreso', 'Atrasadas', 'Reprogramadas'] });
+        grafica4.unload({ids: ['Abiertas', 'En progreso', 'Atrasadas', 'Reprogramadas'] });
+    }
+    else if(name=="Abiertas")//Abiertas
+    {
+        grafica3.unload({ids: ['Finalizadas', 'En progreso', 'Atrasadas', 'Reprogramadas'] });
+        grafica4.unload({ids: ['Finalizadas', 'En progreso', 'Atrasadas', 'Reprogramadas'] });
+    }
+    else if(name=="En progreso")//En progreso
+    {
+        grafica3.unload({ids: ['Finalizadas', 'Abiertas', 'Atrasadas', 'Reprogramadas'] });
+        grafica4.unload({ids: ['Finalizadas', 'Abiertas', 'Atrasadas', 'Reprogramadas'] });
+    }
+    else if(name=="Atrasadas")//Atrasadas
+    {
+        grafica3.unload({ids: ['Finalizadas', 'Abiertas', 'En progreso', 'Reprogramadas'] });
+        grafica4.unload({ids: ['Finalizadas', 'Abiertas', 'En progreso', 'Reprogramadas'] });
+    }
+    else if(name=="Reprogramadas")//Reprogramadas
+    {
+        grafica3.unload({ids: ['Finalizadas', 'Abiertas', 'En progreso', 'Atrasadas'] });
+        grafica4.unload({ids: ['Finalizadas', 'Abiertas', 'En progreso', 'Atrasadas'] });
+    }
+    else
+    {
+        grafica3.unload({ids: ['Finalizadas', 'Abiertas', 'En progreso', 'Atrasadas', 'Reprogramadas'] });
+        grafica4.unload({ids: ['Finalizadas', 'Abiertas', 'En progreso', 'Atrasadas', 'Reprogramadas'] });
+    }
+
+}
+
+function restarurarGraficosSelect(data)
+{
+    crearGraficoPrioridad(data);
+    crearGraficoAreas(data);
+}
+
 
 

@@ -73,18 +73,16 @@
 
         <!-- div OT derecha -->
         <div class="col-12 col-lg-4 col-xl-3">
-            <span class="titGraficasDashBoard">
-                ORDENES DE TRABAJO CRÍTICAS
+            <span id="titOTsGraficasDashBoard" class="titGraficasDashBoard">
+                ORDENES DE TRABAJO
             </span>
             <div id="divOTsDashboard">
+                <!--
                 <div class="divOTCritica" >
                     <div class="titTareaCriticaDashboard" title="[LUB] LUBRICACIÓN CHANCADOR PRIMARIO" onclick="verTareaCritica(12)">[100659560] 1W Insp Apron Feeder</div>
                     <div></div>
                 </div>
-
-                <div class="divOTCritica">
-                    <div class="titTareaCriticaDashboard" title="[LUB] LUBRICACIÓN CHANCADOR PRIMARIO" onclick="verTareaCritica(12)">(100659560) 1W Insp Apron Feeder</div>
-                </div>
+                -->
             </div>
         </div>
 
