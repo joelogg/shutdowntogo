@@ -302,8 +302,26 @@ class Data_model extends CI_Model
 
         //-----Actualizar fechas ----
         $this->actualizarFechasProyecto($dataOT);
-        
 
+        //actualziar responsables
+        if(isset($dataOT['responsable']) && $dataOT['responsable']!="")
+        {
+            $idsResponsables = explode(",", $dataOT["responsable"]);
+            
+            $data = array();
+            foreach ($idsResponsables as $idRes) 
+            {
+                array_push($data, array( 'usuario_id' => $idRes, 'ordenestrabajo_id' => $idOT )  );
+            }
+
+            if( count($data)>0 )
+            {
+                $this->db->insert_batch('responsables', $data);
+            }
+        }
+
+        
+        
         
         return $idOT;
     }
@@ -339,10 +357,25 @@ class Data_model extends CI_Model
                             area.id as area_id, area.descripcion as descripcionArea, area.codigo as codigoArea,
                             proyecto.id as proyecto_id, proyecto.revision as revisionProyecto,
                             tipo.id as tipo_id, tipo.descripcion as descripcionTipo, tipo.tag as tagTipo');
-            $this->db->from('ordenestrabajo, estadoot');
+            
+            //filtro responsables
+            if($responsablesId == -1)
+            {
+                $this->db->from('ordenestrabajo, estadoot');
+                $this->db->where('ordenestrabajo.visible=1');
+                $this->db->where('ordenestrabajo.estadoOT_id=estadoot.id');
+            }
+            else 
+            {
+                $this->db->from('ordenestrabajo, responsables, usuario, estadoot');
+                $this->db->where('ordenestrabajo.visible=1');
+                $this->db->where('ordenestrabajo.id=responsables.ordenestrabajo_id');
+                $this->db->where('responsables.usuario_id=usuario.id');
+                $this->db->where('ordenestrabajo.estadoOT_id=estadoot.id');
+                $this->db->where('usuario.id', $responsablesId);
+            }
 
-            $this->db->where('ordenestrabajo.visible=1');
-            $this->db->where('ordenestrabajo.estadoOT_id=estadoot.id');
+            
             if($idOT != -1)
             {
                 $this->db->where('ordenestrabajo.id=', $idOT);
@@ -357,6 +390,8 @@ class Data_model extends CI_Model
                 $this->db->where($where);
                 
             }
+
+
 
             //filtro prioridad
             if($prioridadId != -1)
@@ -554,9 +589,38 @@ class Data_model extends CI_Model
         $dataOT['modificadopor'] = $idCreador;
 
         $this->db->where('id', $dataOT["id"]);
-        $rpta = $this->db->update('ordenestrabajo', $dataOT); 
+        $this->db->update('ordenestrabajo', $dataOT); 
 
+        $rpta = false;
+        if($this->db->affected_rows() > 0)
+        {
+            $rpta = true;
+        }
+
+        //actualziar fechas
         $this->actualizarFechasProyecto($dataOT);
+
+        //actualziar responsables
+        if(isset($dataOT['responsable']))
+        {
+            $this->db->delete('responsables', array('ordenestrabajo_id' => $dataOT["id"]));
+
+            if($dataOT['responsable']!="")
+            {
+                $idsResponsables = explode(",", $dataOT["responsable"]);
+                
+                $data = array();
+                foreach ($idsResponsables as $idRes) 
+                {
+                    array_push($data, array( 'usuario_id' => $idRes, 'ordenestrabajo_id' => $dataOT["id"] )  );
+                }
+
+                if( count($data)>0 )
+                {
+                    $this->db->insert_batch('responsables', $data);
+                }
+            }
+        }
 
         return $rpta;
     }
@@ -684,6 +748,23 @@ class Data_model extends CI_Model
 
         $this->actualizarFechasOT($dataOp);
 
+        //actualziar participantes
+        if(isset($dataOp['participantes']) && $dataOp['participantes']!="")
+        {
+            $idsParticipantes = explode(",", $dataOp["participantes"]);
+            
+            $data = array();
+            foreach ($idsParticipantes as $idRes) 
+            {
+                array_push($data, array( 'usuario_id' => $idRes, 'operaciones_id' => $idOp )  );
+            }
+
+            if( count($data)>0 )
+            {
+                $this->db->insert_batch('usuario_operaciones', $data);
+            }
+        }
+
         return $idOp;
     }
 
@@ -764,9 +845,38 @@ class Data_model extends CI_Model
         $dataOp['modificadopor'] = $idCreador;
 
         $this->db->where('id', $dataOp["id"]);
-        $rpta = $this->db->update('operaciones', $dataOp); 
+        $this->db->update('operaciones', $dataOp); 
 
+        $rpta = false;
+        if($this->db->affected_rows() > 0)
+        {
+            $rpta = true;
+        }
+
+        //actualziar fechas
         $this->actualizarFechasProyecto($dataOp);
+
+        //actualziar participantes
+        if(isset($dataOp['participantes']))
+        {
+            $this->db->delete('usuario_operaciones', array('operaciones_id' => $dataOp["id"]));
+
+            if($dataOp['participantes']!="")
+            {
+                $idsParticipantes = explode(",", $dataOp["participantes"]);
+                
+                $data = array();
+                foreach ($idsParticipantes as $idRes) 
+                {
+                    array_push($data, array( 'usuario_id' => $idRes, 'operaciones_id' => $dataOp["id"] )  );
+                }
+
+                if( count($data)>0 )
+                {
+                    $this->db->insert_batch('usuario_operaciones', $data);
+                }
+            }
+        }
 
         return $rpta;
     }

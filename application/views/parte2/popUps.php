@@ -5,8 +5,32 @@
         
             <!-- Modal Header -->
             <div class="modal-header">
-                <p class="modal-title">Configura tu perfil</p>
-                <button type="button" class="close" data-dismiss="modal"><i class="ion ion-ios-close-circle-outline aclarar"></i></button>
+                <div>
+                    <div class="pb-2 btn-group">
+                        <?php
+                            if($usuarioActual->imagen==null || $usuarioActual->imagen=="")
+                            {
+                                if($usuarioActual->nombre==null || $usuarioActual->nombre=="" || $usuarioActual->apellido==null || $usuarioActual->apellido=="")
+                                {
+                                    echo '<div class="modal-title txtFotoPerfilPopUp">'.substr($usuarioActual->correo, 0, 2).'</div>';
+                                }
+                                else
+                                {
+                                    echo '<div class="modal-title txtFotoPerfilPopUp">'.substr($usuarioActual->nombre, 0, 1).substr($usuarioActual->apellido, 0, 1).'</div>';
+                                }
+                            }
+                            else
+                            {
+                                echo '<img class="txtFotoPerfilPopUp" src="'.$_SESSION["base_del_url"].$usuarioActual->imagen.'" alt="">';
+
+                            }
+                        ?>
+                        <span class="ml-3 modal-title pt-4"><?php echo $usuarioActual->nombre." ".$usuarioActual->apellido; ?></span>
+                    </div>
+                    <div> <?php echo $usuarioActual->perfil; ?> </div>
+                    
+                    <button type="button" class="close" data-dismiss="modal" style="top:20%;"><i class="ion ion-ios-close-circle-outline aclarar"></i></button>
+                </div>
             </div>
             
             <!-- Modal body -->
@@ -17,27 +41,31 @@
                         <li class="nav-item">
                             <a class="nav-link active" data-toggle="tab" href="#navs-general">GENERAL</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#navs-seguridad">SEGURIDAD</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#navs-notificaciones">NOTIFICACIONES</a>
-                        </li>
                     </ul>
                     <div class="tab-content">
                         <div class="tab-pane fade show active" id="navs-general">
                             <div class="card-body">
-                                <p>Raw denim you probably haven't heard of them jean shorts Austin. Nesciunt tofu stumptown aliqua, retro synth master cleanse. Mustache cliche tempor, williamsburg carles vegan helvetica. Reprehenderit butcher retro keffiyeh dreamcatcher synth. Cosby sweater eu banh mi, qui irure terry richardson ex squid. Aliquip placeat salvia cillum iphone. Seitan aliquip quis cardigan american apparel, butcher voluptate nisi qui.</p>
+                                <div>
+                                <div class="row">
+                                    <div class="col-md">
+                                        <p><b>Correos:</b></p>
+                                        <p>
+                                            <span class="text-muted">Actual:</span><br>
+                                            <?php echo $usuarioActual->correo; ?>
+                                        </p>
+                                    </div>
+
+                                    <div class="col-md">
+                                        <p><b>Número Telefónico</b></p>
+                                        <p>
+                                            <span class="text-muted">Móvil:</span><br>
+                                            <?php echo $usuarioActual->movil; ?>
+                                        </p>
+                                    </div>
+                                
+                                </div>
                             </div>
-                        </div>
-                        <div class="tab-pane fade" id="navs-seguridad">
-                            <div class="card-body">
-                                <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
-                            </div>
-                        </div>
-                        <div class="tab-pane fade" id="navs-notificaciones">
-                            <div class="card-body">
-                                <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+                                
                             </div>
                         </div>
                     </div>
@@ -47,12 +75,12 @@
                
             
             </div>
-
+            <!--
             <div class="modal-footer footerPerfil" style="border-top: 0;">
                 <button class="btnsPopUp">Actualizar</button>
                 
             </div>
-            
+            -->
             
         </div>
     </div>

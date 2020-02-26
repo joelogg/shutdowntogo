@@ -116,6 +116,7 @@ class Home extends CI_Controller {
 			$estatusLista = $this->data_model->selectEstadosOT();
 			$areaLista = $this->data_model->selectAreas();
 			$proyectosLista = $this->data_model->selectProyectos();
+			$usuarioActual = $this->data_model->selectUsuarioToken($_SESSION["token"])["data"];
 
 			if( $_SESSION["message"] == "sesion iniciada")
 			{				
@@ -125,6 +126,7 @@ class Home extends CI_Controller {
 				$data['estatusLista'] = $estatusLista;
 				$data['areaLista'] = $areaLista;
 				$data['proyectosLista'] = $proyectosLista;
+				$data['usuarioActual'] = $usuarioActual;
 				$this->load->view('parte2/v_plataforma', $data);
 			}
 			else

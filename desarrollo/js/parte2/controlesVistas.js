@@ -11,6 +11,9 @@ function v_seleccionarDashBoard()
     document.getElementById("divOrdenesTrabajo").style.display  = 'none';
 
     mostrarGraficaDashBoard("", "", 2);//indica q selecciona semana actual
+
+    //$('#modalMiperfil').modal('show');
+    //setTimeout(function(){ $('#modalMiperfil').modal('show'); }, 500);
 }
 
 function v_seleccionarOrdenesTrabajo()
@@ -36,7 +39,7 @@ function v_seleccionarOrdenesTrabajo()
     //v_seleccionarUnOperacion(1);
     //cargarComentarios(1);
 
-    //$('#modalImportarOTs').modal('show')
+//    $('#modalMiperfil').modal('show');
 }
 
 
