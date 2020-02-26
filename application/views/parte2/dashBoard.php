@@ -11,11 +11,23 @@
                 
                 <input type="text" id="calendarioFiltroGraficas" value="" class="form-control" style="width: 200px">
 
-
                 <select id="selectSemanaGrafios" class="form-control mr-1" style="min-width: 150px" onchange="cambiarSemanaGrafico()">
                     <option value="0"></option>    
                     <option value="1">Hoy</option>
-                    <option value="2" selected>Semana actual</option>
+                    <?php 
+                        $i=0;
+                        foreach ($proyectosLista as $item):
+                            if($i==0)
+                            {
+                                echo '<option value="'.($i+2).'" selected>'.$item->revision.'</option>';
+                            }
+                            else
+                            {
+                                echo '<option value="'.($i+2).'">'.$item->revision.'</option>';
+                            }
+                            $i++;
+                        endforeach;
+                    ?>
                 </select>
 
                 <div class="input-group-append">

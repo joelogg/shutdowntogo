@@ -408,6 +408,136 @@ class Api extends CI_Controller {
         echo json_encode($results);
 	}
 
+	public function ordenTrabajoListarTodoDataTable()
+	{
+		$token = $_POST["token"];
+		$filtros = $_POST["filtros"];
+		$filtros = json_decode($filtros, true);
+
+		$this->load->model('data_model');
+		$rpta = $this->data_model->selectUsuarioToken($token);
+		
+		if($rpta["data"]!="")
+		{
+			$rpta = $this->data_model->selectOrdenesTrabajoFiltros($rpta["data"], "web", -1, $filtros);
+			$usuarios = $this->data_model->selectUsuarios();
+
+
+			foreach ($rpta as $unaOT) 
+			{
+				$idsUsu = explode(",", $unaOT->responsable);
+				$nombres = [];
+				foreach ($idsUsu as $idUsu) 
+				{
+					foreach ($usuarios as $usuario) 
+					{
+						if($usuario->id == $idUsu)
+						{
+							array_push($nombres, array("id"=>$usuario->id, "nombre"=>$usuario->nombre, "apellido"=>$usuario->apellido, "imagen"=>$usuario->imagen));
+							break;
+						}
+					}
+				}
+				$unaOT->responsable = $nombres;
+			}
+
+			
+
+
+			
+			//generacion de arrar par ala tabla
+			$dataTabla = array();
+			foreach ($rpta as $valor) 
+			{
+				$descripcion = $valor->descripcion;
+				$ordentrabajo = '<span class="elementoListOT" onclick="v_seleccionarUnaOT('.$valor->id.')">'.$valor->ordentrabajo.'</span>' ;
+				
+				$status = "";
+				if($status = $valor->atrasado==1)
+				{
+					$status = '<span hidden>1</span><span style="color:red">Atrasada</span>';
+				}
+				else
+				{
+					if($valor->estado=="Abierta")
+					{
+						$status = '<span hidden>2</span>'.$valor->estado;
+					}
+					elseif($valor->estado=="En progreso")
+					{
+						$status = '<span hidden>3</span>'.$valor->estado;
+					}
+					elseif($valor->estado=="Reprogramada")
+					{
+						$status = '<span hidden>4</span>'.$valor->estado;
+					}
+					elseif($valor->estado=="Finalizada")
+					{
+						$status = '<span hidden>5</span>'.$valor->estado;
+					}
+					else 
+					{
+						$status = $valor->estado;
+					}
+				}
+
+
+				$prioridadColor = $valor->colorPrioridad;
+				$prioridadDescripcion = $valor->descripcionPrioridad;
+				$prioridad_id = $valor->prioridad_id;
+
+				if($prioridadDescripcion==null || $prioridadDescripcion=="")
+				{
+					$prioridadDescripcion = '-';
+				}
+				else
+				{
+					$prioridadDescripcion = '<span hidden>'.$prioridad_id.'</span><span style="color:#'.$prioridadColor.'">' .$prioridadDescripcion. '</span>';
+				}
+
+				$fechainicio = $valor->fechainicio;
+				if($fechainicio==null || $fechainicio=="")
+				{
+					$fechainicio = "-";
+				}
+
+				$fechafin = $valor->fechafin;
+				if($fechafin==null || $fechafin=="")
+				{
+					$fechafin = "-";
+				}
+
+				$responsables = $valor->responsable;
+
+				$nomResponsables = "";
+				foreach ($responsables as $responsable) 
+				{
+					$nombre = explode(" ", $responsable['nombre'])[0];
+					$apellido = explode(" ", $responsable['apellido'])[0];
+					$nomResponsables = $nomResponsables.$nombre." ".$apellido."<br>";
+				}
+
+				$arr1 = array($ordentrabajo, $descripcion, $fechainicio, $fechafin, $status, $prioridadDescripcion, $nomResponsables);
+				array_push($dataTabla, $arr1);
+			}
+
+
+			$dataTabla = array('data'=>$dataTabla);
+			$dataTabla = json_encode($dataTabla);
+			echo $dataTabla;
+
+
+		}
+		else
+		{
+			$dataTabla = array();
+
+			$dataTabla = array('data'=>$dataTabla);
+			$dataTabla = json_encode($dataTabla);
+			echo $dataTabla;
+		}
+	}
+
 	public function ordenTrabajoListarTodo()
 	{
 		$token = $_POST["token"];
@@ -418,7 +548,6 @@ class Api extends CI_Controller {
 		if($rpta["data"]!="")
 		{
 			$rpta = $this->data_model->selectOrdenesTrabajo($rpta["data"], "web", -1);
-			//$rpta = $this->data_model->selectOrdenesTrabajo(1);
 			$usuarios = $this->data_model->selectUsuarios();
 
 
@@ -1056,6 +1185,37 @@ class Api extends CI_Controller {
 				"status" => "success",
 				"code" => "200",
 				"message" => "datos graficos",
+				"data"=>$rpta
+			);
+		}
+		else
+		{
+			$results = array(
+				"status" => "error",
+				"code" => "400",
+				"message" => "token inválido",
+				"data"=>[]
+			);
+		}
+		
+		echo json_encode($results);
+	}
+
+	//------------------ Proyectos -----------------
+	public function proyectosListarTodo()
+	{
+		$token = $_POST["token"];
+
+		$this->load->model('data_model');
+		$rpta = $this->data_model->selectUsuarioToken($token);
+		
+		if($rpta["data"]!="")
+		{
+			$rpta = $this->data_model->selectProyectos();
+			$results = array(
+				"status" => "success",
+				"code" => "200",
+				"message" => "listado de proyectos",
 				"data"=>$rpta
 			);
 		}

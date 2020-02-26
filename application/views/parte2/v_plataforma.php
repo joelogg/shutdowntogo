@@ -12,7 +12,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
-    <title>Plataforma</title>
+    <title><?php echo $tituloP; ?> </title>
 
 
     <!-- Icon fonts -->
@@ -110,15 +110,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 <body onload="isMobile(), verificarMostrarMenuLateral()"> 
 
-
-
-
-
-
-
-
-
-
     <div id="ventana" class="h-100">
         <?php $this->load->view('mensajeNaranja.php'); ?> 
         <div id="fondoOscuro"></div>
@@ -142,7 +133,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     </div>
 
-
+    
 
     <!--panelDerecho-->
     <?php $this->load->view('parte2/popUps.php'); ?> 
@@ -181,8 +172,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         }
         //else
         {
-            v_seleccionarDashBoard();           
-            //v_seleccionarOrdenesTrabajo();
+            //v_seleccionarDashBoard();           
+            v_seleccionarOrdenesTrabajo();
             
         }
         
@@ -246,7 +237,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         var base_del_url = '<?php echo $_SESSION["base_del_url"] ?>'; 
         var base_del_url_miApi = '<?php echo $_SESSION["base_del_url_miApi"] ?>';
         var token = '<?php echo $_SESSION["token"] ?>';
-
 
         
     </script>

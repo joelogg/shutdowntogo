@@ -110,9 +110,21 @@ class Home extends CI_Controller {
 		}
 		else
 		{
+			$this->load->model('data_model');
+			$responsablesLista = $this->data_model->selectUsuarios();
+			$prioridadLista = $this->data_model->selectPrioridades();
+			$estatusLista = $this->data_model->selectEstadosOT();
+			$areaLista = $this->data_model->selectAreas();
+			$proyectosLista = $this->data_model->selectProyectos();
+
 			if( $_SESSION["message"] == "sesion iniciada")
 			{				
 				$data['tituloP'] = 'Plataforma';
+				$data['responsablesLista'] = $responsablesLista;
+				$data['prioridadLista'] = $prioridadLista;
+				$data['estatusLista'] = $estatusLista;
+				$data['areaLista'] = $areaLista;
+				$data['proyectosLista'] = $proyectosLista;
 				$this->load->view('parte2/v_plataforma', $data);
 			}
 			else

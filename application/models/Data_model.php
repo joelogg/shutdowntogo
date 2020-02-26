@@ -308,6 +308,155 @@ class Data_model extends CI_Model
         return $idOT;
     }
 
+    public function selectOrdenesTrabajoFiltros($usuario, $webMovil, $idOT, $filtros)
+    {
+        $responsablesId = -1;
+        $prioridadId = -1;
+        $estatusId = -1;
+        $areaId = -1;
+        $fechaCod = -1;
+
+        if(isset($filtros['responsablesId']))
+        {
+            $responsablesId = $filtros["responsablesId"];
+            $prioridadId = $filtros["prioridadId"];
+            $estatusId = $filtros["estatusId"];
+            $areaId = $filtros["areaId"];
+            $fechaCod = $filtros["fechaCod"];
+        }
+
+        $rpta = [];
+
+        //$perfil = $usuario->perfil;
+        
+        //if($perfil=="Propietario")
+        {
+            $this->db->select('ordenestrabajo.id as id, ordentrabajo, ordenestrabajo.descripcion, atrasado, 
+                            ordenestrabajo.visible AS visible, responsable, ordenestrabajo.fechainicio, ordenestrabajo.fechafin,
+                            estadoOT_id, estadoot.descripcion as estado, estadoot.color as estadoOT_color,
+                            prioridad.id as prioridad_id, prioridad.descripcion as descripcionPrioridad, prioridad.color as colorPrioridad,
+                            equipo.id as equipo_id, equipo.descripcion as descripcionEquipo, equipo.codigo as codigoEquipo, 
+                            area.id as area_id, area.descripcion as descripcionArea, area.codigo as codigoArea,
+                            proyecto.id as proyecto_id, proyecto.revision as revisionProyecto,
+                            tipo.id as tipo_id, tipo.descripcion as descripcionTipo, tipo.tag as tagTipo');
+            $this->db->from('ordenestrabajo, estadoot');
+
+            $this->db->where('ordenestrabajo.visible=1');
+            $this->db->where('ordenestrabajo.estadoOT_id=estadoot.id');
+            if($idOT != -1)
+            {
+                $this->db->where('ordenestrabajo.id=', $idOT);
+            }
+
+            if($webMovil=="movil")
+            {   
+                $where = "estadoot.descripcion!='Finalizada' AND 
+                estadoot.descripcion!='Reprogramada' AND
+                ( ordenestrabajo.atrasado='1' OR ordenestrabajo.fechafin<=CURDATE() )";
+
+                $this->db->where($where);
+                
+            }
+
+            //filtro prioridad
+            if($prioridadId != -1)
+            {
+                $this->db->where('prioridad.id=', $prioridadId);
+            }
+
+            //filtro prioridad
+            if($estatusId != -1)
+            {
+                if($estatusId > 0)
+                {
+                    $this->db->where('estadoot.id=', $estatusId);
+                    $this->db->where('ordenestrabajo.atrasado=0');
+                }
+                elseif($estatusId == -2)//Atrasada
+                {
+                    $this->db->where('ordenestrabajo.atrasado=1');
+                }
+            }
+
+            //filtro area
+            if($areaId != -1)
+            {
+                $this->db->where('area.id=', $areaId);
+            }
+
+            //filtro fecha
+            if($fechaCod != -1)
+            {
+                if($fechaCod == -2)//hoy
+                {
+                    $this->db->where('DATE_FORMAT(ordenestrabajo.fechainicio, "%Y-%m-%d")=CURDATE()');
+                }
+                elseif($fechaCod == -3)//mañana
+                {
+                    $this->db->where('DATE_FORMAT(ordenestrabajo.fechainicio, "%Y-%m-%d")=DATE_ADD(CURDATE(), INTERVAL 1 DAY)');
+                }
+                else//revision de proyecto
+                {
+                    $this->db->where('proyecto.revision=', $fechaCod);
+                }
+            }
+            
+
+
+            $this->db->join('prioridad', 'ordenestrabajo.prioridad_id=prioridad.id', 'left');
+            $this->db->join('equipo', 'ordenestrabajo.equipo_id=equipo.id', 'left');
+            $this->db->join('proyecto', 'ordenestrabajo.proyecto_id=proyecto.id', 'left');
+            $this->db->join('tipo', 'ordenestrabajo.tipo_id=tipo.id', 'left');
+            $this->db->join('area', 'equipo.area_id=area.id', 'left');
+
+
+            $this->db->order_by('estadoot.id', 'ASC');
+            $this->db->order_by('ordenestrabajo.fechafin', 'ASC');
+            $this->db->order_by('ordenestrabajo.id', 'ASC');
+        }
+        /*else
+        {
+            $this->db->select('ordenestrabajo.id as id, ordentrabajo, ordenestrabajo.descripcion, 
+                            ordenestrabajo.visible AS visible, responsable, ordenestrabajo.fechainicio, ordenestrabajo.fechafin,
+                            estadoOT_id, estadoot.descripcion as estado, 
+                            prioridad.id as prioridad_id, prioridad.descripcion as descripcionPrioridad, prioridad.color as colorPrioridad,
+                            equipo.id as equipo_id, equipo.descripcion as descripcionEquipo,
+                            area.id as area_id, area.descripcion as descripcionArea,
+                            proyecto.id as proyecto_id, proyecto.revision as revisionProyecto,
+                            tipo.id as tipo_id, tipo.descripcion as descripcionTipo, tipo.tag as tagTipo');
+            $this->db->from('ordenestrabajo, responsables, usuario, estadoot');
+            $this->db->where('ordenestrabajo.visible=1');
+            $this->db->where('ordenestrabajo.id=responsables.ordenestrabajo_id');
+            $this->db->where('responsables.usuario_id=usuario.id');
+            $this->db->where('ordenestrabajo.estadoOT_id=estadoot.id');
+            $this->db->where('usuario.id', $usuario->idUsuario);
+
+            $this->db->join('prioridad', 'ordenestrabajo.prioridad_id=prioridad.id', 'left');
+            $this->db->join('equipo', 'ordenestrabajo.equipo_id=equipo.id', 'left');
+            $this->db->join('proyecto', 'ordenestrabajo.proyecto_id=proyecto.id', 'left');
+            $this->db->join('tipo', 'ordenestrabajo.tipo_id=tipo.id', 'left');
+            $this->db->join('area', 'equipo.area_id=area.id', 'left');
+
+            if($estado == "")
+            {
+            }
+            elseif($estado == "Finalizado")
+            {
+                $this->db->where('estadoot.descripcion="Finalizado"');
+            }
+            else
+            {
+                $this->db->where('estadoot.descripcion!="Finalizado"');
+            }
+
+            $this->db->order_by('fechafin', 'ASC');
+            $this->db->order_by('ordenestrabajo.id', 'ASC');
+        }*/
+
+        $rpta = $this->db->get();
+        return $rpta->result();
+    }
+
     public function selectOrdenesTrabajo($usuario, $webMovil, $idOT)
     {
         $rpta = [];
@@ -453,6 +602,16 @@ class Data_model extends CI_Model
             return false;
         }
     }
+
+     //------------------ estatus OT -----------------
+     public function selectEstadosOT()
+     {
+         $this->db->select('*');
+         $this->db->from('estadoot');
+         $rpta = $this->db->get();
+ 
+         return $rpta->result();
+     }
 
     //------------------ Operaciones -----------------
     public function actualizarFechasOT($dataOp)
@@ -683,6 +842,16 @@ class Data_model extends CI_Model
         return $idProy;
     }
 
+    public function selectProyectos()
+    {
+        $this->db->select('revision');
+        $this->db->from('proyecto');
+        $this->db->order_by('fechainicio', 'DESC');
+        $rpta = $this->db->get();
+
+        return $rpta->result();
+    }
+
     //------------------ Area -----------------
     public function insertArea($area)
     {
@@ -706,6 +875,15 @@ class Data_model extends CI_Model
             return $id;
         }
     }
+
+    public function selectAreas()
+     {
+         $this->db->select('*');
+         $this->db->from('area');
+         $rpta = $this->db->get();
+ 
+         return $rpta->result();
+     }
 
     //------------------ equipo -----------------
     public function insertEquipo($codigo, $descripcion, $idArea)
@@ -750,6 +928,16 @@ class Data_model extends CI_Model
         {
             return NULL;
         }
+    }
+
+    public function selectPrioridades()
+    {
+        $this->db->select('*');
+        $this->db->from('prioridad');
+        //$this->db->order_by('fechainicio', 'DESC');
+        $rpta = $this->db->get();
+
+        return $rpta->result();
     }
 
     //------------------ equipo -----------------
@@ -802,7 +990,7 @@ class Data_model extends CI_Model
     //------------------ Dasboard -----------------
     public function selectOrdenesTrabajoGrafica($fechaIni, $fechaFin, $selectSemana)
     {
-        if($selectSemana=="2")
+        if($selectSemana>="2")
         {
             $this->db->select('revision');
             $this->db->from('proyecto');
@@ -810,8 +998,9 @@ class Data_model extends CI_Model
             $this->db->order_by('id', 'DESC');
 
             $rpta = $this->db->get();
-            $selectSemana = $rpta->result()[0]->revision;
+            $selectSemana = $rpta->result()[$selectSemana-2]->revision;
         }
+
 
 
         $this->db->select('ordenestrabajo.id as idOT, ordenestrabajo.descripcion as descripcionOT, ordenestrabajo.ordentrabajo,

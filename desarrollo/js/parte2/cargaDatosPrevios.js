@@ -1,4 +1,7 @@
-//---------Datos para menu OT
+$(function() {
+});
+
+
 function cargarOTsBD()
 {
     $.ajax(
@@ -122,3 +125,43 @@ function cargarUsuariosBD()
     });
 }
 
+function cargarProyectos()
+{
+    $.ajax(
+    {
+        async: true,
+        crossDomain: true,
+        type:'POST',
+        url: base_del_url_miApi+"api/proyectosListarTodo",
+        data: {
+            "token": token
+          },
+        success:function(rpta)
+        {
+            rpta = JSON.parse(rpta);
+            
+            if(rpta.status == "success")
+            {
+                data = rpta.data;
+                proyectosLista = rpta.data;
+            }
+            else if(rpta.status == "error")
+            {
+                if(rpta.message == "token inválido")
+                {
+                    mensajeAmarillo("Su cuenta ha sido iniciada en otro dispositivo");
+                    setTimeout(function() { location.replace(base_del_url); },4000);
+                }
+                else
+                {
+                    mensajeAmarillo("Error en carga proyectos");
+                }
+            }
+        },
+        error: function(rpta)
+        {
+            //console.log(rpta);
+            mensajeAmarillo("Error de conexión");
+        }
+    });
+}
