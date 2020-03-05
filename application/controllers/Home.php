@@ -1,6 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once 'fpdf/fpdf.php';
+require_once 'dompdf/autoload.inc.php'; 
+use Dompdf\Dompdf; 
 
 
 
@@ -192,143 +194,140 @@ class Home extends CI_Controller {
 
 	public function descargarOT_PDF()
 	{
-		/*$data = $_POST['json'];
-        $token = $_POST['token'];
-		$data = json_decode($data, true);*/
-		$idOT = 2;
-
-        $this->load->model('data_model');
-        //$rpta = $this->data_model->selectUsuarioToken($token);
-        
-        //if($rpta["data"]!="")
-        {
-			$usuarioAux = array("perfil"=>"Propietario");
-			$usuarioAux = json_encode($usuarioAux);
-			$usuarioAux = json_decode($usuarioAux,0);
+		if(!isset($_POST['idOT']) || !isset($_POST['token']) )
+		{
+			echo "<h1>Datos de exportación no ingresados</h1>";
+		}
+		else
+		{
+			$idOT = $_POST['idOT'];
+			$token = $_POST['token'];
 
 			$this->load->model('data_model');
-
-			$title = 'Detalle orden de trabajo';
-			$pdf = new PDFdetalleOT('P','mm','A4');
-			$pdf->SetTitle($title);
-			$pdf->AliasNbPages();
+			$rpta = $this->data_model->selectUsuarioToken($token);
 			
-
-		//---- Detalles de la OT---
-			$pdf->ChapterTitle('General');
-			$rpta = $this->data_model->selectOrdenesTrabajo($usuarioAux, "web", $idOT);
-			$usuarios = $this->data_model->selectUsuarios();
-			$nombres = [];
-			foreach ($rpta as $unaOT) 
+			if($rpta["data"]!="")
 			{
-				$idsUsu = explode(",", $unaOT->responsable);
-				foreach ($idsUsu as $idUsu) 
-				{
-					foreach ($usuarios as $usuario) 
-					{
-						if($usuario->id == $idUsu)
-						{
-							array_push($nombres, array("nombre"=>$usuario->nombre, "apellido"=>$usuario->apellido));
-							break;
-						}
-					}
-				}
-			}
+				$usuarioAux = array("perfil"=>"Propietario");
+				$usuarioAux = json_encode($usuarioAux);
+				$usuarioAux = json_decode($usuarioAux,0);
 
-			$dataDetalleOt = array();
-			$txt = iconv('utf-8', 'cp1252', 'Descripción:' );
-			array_push ($dataDetalleOt, array($txt, $rpta[0]->descripcion) );
-			array_push ($dataDetalleOt, array("Numero orden de trabajo:", $rpta[0]->descripcion, $rpta[0]->ordentrabajo) );
-			array_push ($dataDetalleOt, array("Tipo:", $rpta[0]->descripcionTipo) );
-			array_push ($dataDetalleOt, array("Estado", $rpta[0]->estado) );
-			array_push ($dataDetalleOt, array("Prioridad:", $rpta[0]->descripcionPrioridad) );
+				$this->load->model('data_model');
 
-			$max = sizeof($nombres);
-			for ($i=0; $i < $max; $i++) 
-			{ 
-				if($i==0)
-				{
-					array_push ($dataDetalleOt, array("Responsables:", $nombres[$i]["nombre"]." ".$nombres[$i]["apellido"] ) );
-				}
-				else
-				{
-					array_push ($dataDetalleOt, array("", $nombres[$i]["nombre"]." ".$nombres[$i]["apellido"] ) );
-				}
-			}
-			array_push ($dataDetalleOt, array("Fecha inicio:", $rpta[0]->fechainicio) );
-			array_push ($dataDetalleOt, array("Fecha vencimiento:", $rpta[0]->fechafin) );
-			$pdf->ImprovedTable($dataDetalleOt);
-			
-			$pdf->Ln(4);
+				$title = 'Detalle orden de trabajo';
+				$pdf = new PDFdetalleOT('P','mm','A4');
+				$pdf->SetTitle($title);
+				$pdf->AliasNbPages();
+				
+
+			//---- Detalles de la OT---
+				$data = $this->data_model->selectOrdenesTrabajo($usuarioAux, "web", $idOT);
+				$usuarios = $this->data_model->selectUsuarios();
+				$pdf->ChapterCabeceraOT($data, $usuarios);
 			//---- Fin Detalles de la OT---
+				
+
+			//---- Lista de Operaciones---
+				$operacionesList = $this->data_model->selectOperaciones($usuarioAux, $idOT);
+				
+				$pdf->SetFont('Arial','',10);
+				//Table with 20 rows and 4 columns
+				$pdf->SetWidths(array(100,30,20,40));
+				
+				$pdf->RowListOpe(array('Operaciones', 'Especialidad', 'Trabajo', 'Fecha Vencimiento'), true, "FD", 8);
+				foreach ($operacionesList as $operacion)
+				{ 
+					$pdf->RowListOpe(array($operacion->descripcion." (".$operacion->numerooperacion.")", $operacion->descripcionEspecialidad, $operacion->work, $operacion->fechafin), false, "D", 6);
+				}
+				$pdf->Ln(10);
+				
+			//---- Fin Lista de Operaciones---	
 			
+				foreach ($operacionesList as $operacion)
+				{
+					$comentarios = $this->data_model->selectComentarios($operacion->id);
+					$pdf->ChapterOperaciones($operacion, $comentarios, $usuarios);
+				}
+				$pdf->Output();
+				
 
-
-		//---- Lista de Operaciones---
 		
-		//---- Lista de Operaciones---
-			$operacionesList = $this->data_model->selectOperaciones($usuarioAux, $idOT);
-			
-			$pdf->SetFont('Arial','',10);
-			//Table with 20 rows and 4 columns
-			$pdf->SetWidths(array(100,30,20,40));
-			
-			$pdf->RowListOpe(array('Operaciones', 'Especialidad', 'Trabajo', 'Fecha Vencimiento'), true, "FD", 8);
-			foreach ($operacionesList as $operacion)
-			{ 
-				$pdf->RowListOpe(array($operacion->descripcion." (".$operacion->numerooperacion.")", $operacion->descripcionEspecialidad, $operacion->work, $operacion->fechafin), false, "D", 6);
+
 			}
-			
-		//---- Fin Lista de Operaciones---	
-		
-			foreach ($operacionesList as $operacion)
+			else
 			{
-				$dataDetalleOP = array();
-				$pdf->ChapterTitle('Detalle de Operaciones');
-				
-				$txt = iconv('utf-8', 'cp1252', 'Descripción:' );
-				array_push ($dataDetalleOP, array($txt, $operacion->descripcion) );
-				$txt = iconv('utf-8', 'cp1252', 'Número orden operación:' );
-				array_push ($dataDetalleOP, array($txt, $operacion->numerooperacion) );
-
-				array_push ($dataDetalleOP, array("Trabajo:", $operacion->work) );
-				array_push ($dataDetalleOP, array("Recursos:", $operacion->resources) );
-				$txt = iconv('utf-8', 'cp1252', 'Duración:' );
-				array_push ($dataDetalleOP, array($txt, $operacion->duracion) );
-				
-				array_push ($dataDetalleOP, array("Fecha inicio:", $operacion->fechainicio) );
-				array_push ($dataDetalleOP, array("Fecha vencimiento:", $operacion->fechafin) );
-				$pdf->ImprovedTable($dataDetalleOP);
-				$pdf->Ln(4);
-				
-				//$rpta = $this->data_model->selectComentarios($operacion->id);
-				//break;
+				echo "<h1>Autorización no válidad</h1>";
 			}
-			$pdf->Output();
-			
-
-			
-			
-			
-
-        }
-        /*else
-        {
-            $results = array(
-                "status" => "error",
-                "code" => "400",
-                "message" => "token inválido",
-                "data"=>[]
-            );
-			echo json_encode($results);
-        }*/
-        
-	
-/*
-		
-		*/
+		}
 	}
-	
+
+
+		
+	public function descargarKPIs_PDF()
+	{
+		if(/*!isset($_POST['idOT']) ||*/ !isset($_POST['token']) )
+		{
+			echo "<h1>Datos de exportación no ingresados</h1>";
+		}
+		else
+		{
+			$token = $_POST['token'];
+			$imgKPI0 = $_POST['imgKPI0'];
+			$imgKPI01 = $_POST['imgKPI01'];
+			$imgKPI1 = $_POST['imgKPI1'];
+			$imgKPI2 = $_POST['imgKPI2'];
+			$imgKPI3 = $_POST['imgKPI3'];
+			$imgKPI4 = $_POST['imgKPI4'];
+
+
+			$this->load->model('data_model');
+			$rpta = $this->data_model->selectUsuarioToken($token);
+			
+			if($rpta["data"]!="")
+			{
+				//$dompdf = new Dompdf();
+				$dompdf = new Dompdf(array('enable_remote' => true));
+
+				$html = "
+				<!DOCTYPE html>
+				<html>
+				<head>
+					<meta charset='utf-8'>
+				</head>
+
+				<body> 
+					<h1>KPIs</h1>
+					<div><img src='$imgKPI0' alt='image' ></div>
+					<div style='background-color: orange'><img src='$imgKPI01' alt='image' ></div>
+					<div><img src='$imgKPI1' alt='image' ></div>
+					<div><img src='$imgKPI2' alt='image' ></div>
+					<div><img src='$imgKPI3' alt='image' ></div>
+					<div><img src='$imgKPI4' alt='image' ></div>
+				</body>
+				</html>";
+				
+				//echo $html;
+				
+				$dompdf->loadHtml($html); 
+				
+				//$dompdf->setPaper('A4', 'landscape'); 
+				$dompdf->setPaper('A4', 'portrait'); 
+				$dompdf->render(); 
+				//$dompdf->stream("codexworld", array("Attachment" => 0)); //(1 = download and 0 = preview) 
+				$dompdf->stream('document.pdf', array("Attachment" => 0));
+				
+				
+				
+
+		
+
+			}
+			else
+			{
+				echo "<h1>Autorización no válidad</h1>";
+			}
+		}
+	}
 }
 
 
@@ -339,44 +338,233 @@ class PDFdetalleOT extends FPDF
 	// Page header
 	function Header()
 	{
-		// Logo
-		
-		
-		$title = "PM Digital";
-		$this->Image('./desarrollo/img/chancadora.jpg',12,10,20);
-
-		// Arial bold 15
-		$this->SetFont('Arial','B',15);
-		// Calculate width of title and position
-		$w = $this->GetStringWidth($title)+6;
-		$this->SetX((210-$w)/2);
-		// Colors of frame, background and text
-		$this->SetDrawColor(0,80,180);
-		$this->SetFillColor(230,230,0);
-		$this->SetTextColor(220,50,50);
-		// Thickness of frame (1 mm)
-		$this->SetLineWidth(0.5);
-		// Title
-		$this->Cell($w,9,$title,1,1,'C',true);
-		// Line break
+		$hoy = date('F j\, Y');
+		$this->SetY(2);
+		$this->SetFont('Arial','B',10);
+		$this->SetTextColor(128); //color texto
+		// Page number
+		$txt = iconv('utf-8', 'cp1252', $hoy.'       Página '.$this->PageNo().'/{nb}' );
+		$this->Cell(0,10,$txt,0,0,'C');
 		$this->Ln(10);
 	}
 
-	// Page footer
-	function Footer()
+	
+	function ChapterCabeceraOT($data, $usuarios)
 	{
+		$this->AddPage();
+
+
+		$this->SetTextColor(0); //color text
+
+		//----Logo----
+		$this->SetFont('Arial','B',15);
+		$this->Cell(50,30,'PM DIGITAL',1, 0, 'C');
+		//$this->Image('./desarrollo/img/chancadora.jpg',12,14,30,26);
 		
-		// Position at 1.5 cm from bottom
-		$this->SetY(-15);
-		// Arial italic 8
-		$this->SetFont('Arial','I',8);
-		// Text color in gray
-		$this->SetTextColor(128);
-		// Page number
-		$txt = iconv('utf-8', 'cp1252', 'Página '.$this->PageNo().'/{nb}' );
-		$this->Cell(0,10,$txt,0,0,'C');
+		//----Titulo OT----
+		$txt0 = iconv('utf-8', 'cp1252', 'Numero Orden de trabajo: ');
+		$this->SetFont('Arial','B',14);
+		$txt1 = iconv('utf-8', 'cp1252', $data[0]->descripcion );
+		$txt2 = iconv('utf-8', 'cp1252', $data[0]->ordentrabajo );
+
+		$this->Cell(140,15,$txt1,1,0,'C');
+		$this->SetY(27);
+		$this->SetX(60);
+		$this->Cell(140,15,$txt0.$txt2,1,0,'C');
+
+		$this->Ln(17);
+		//----Mas datos OT----
+		
+		$nombres = [];
+		foreach ($data as $unaOT) 
+		{
+			$idsUsu = explode(",", $unaOT->responsable);
+			foreach ($idsUsu as $idUsu) 
+			{
+				foreach ($usuarios as $usuario) 
+				{
+					if($usuario->id == $idUsu)
+					{
+						array_push($nombres, array("nombre"=>$usuario->nombre, "apellido"=>$usuario->apellido));
+						break;
+					}
+				}
+			}
+		}
+	
+		$this->SetFont('Arial','',10);
+		$dataDetalleOt = array();
+		/*$txt = iconv('utf-8', 'cp1252', 'Descripción' );
+		$txt2 = iconv('utf-8', 'cp1252', ': '.$data[0]->descripcion );
+		array_push ($dataDetalleOt, array($txt, $txt2) );
+
+		$txt = iconv('utf-8', 'cp1252', 'Número orden de trabajo' );
+		$txt2 = iconv('utf-8', 'cp1252', ': '.$data[0]->ordentrabajo );
+		array_push ($dataDetalleOt, array($txt, $txt2) );*/
+
+		$txt2 = iconv('utf-8', 'cp1252', $data[0]->descripcionTipo );
+		array_push ($dataDetalleOt, array("Tipo", ': '.$txt2 ) );
+
+		$txt2 = iconv('utf-8', 'cp1252', $data[0]->estado );
+		array_push ($dataDetalleOt, array("Estado", ': '.$txt2) );
+
+		$txt2 = iconv('utf-8', 'cp1252', $data[0]->descripcionPrioridad );
+		array_push ($dataDetalleOt, array("Prioridad", ': '.$txt2) );
+
+		$max = sizeof($nombres);
+		for ($i=0; $i < $max; $i++) 
+		{ 
+			$txt = iconv('utf-8', 'cp1252', $nombres[$i]["nombre"]." ".$nombres[$i]["apellido"] );
+			if($i==0)
+			{
+				array_push ($dataDetalleOt, array("Responsables",  ': '.$txt) );
+			}
+			else
+			{
+				array_push ($dataDetalleOt, array("", '  '.$txt ) );
+			}
+		}
+		array_push ($dataDetalleOt, array("Fecha inicio", ': '.$data[0]->fechainicio) );
+		array_push ($dataDetalleOt, array("Fecha vencimiento", ': '.$data[0]->fechafin) );
+		$this->ImprovedTable($dataDetalleOt, 41, 149);
+		
+		$this->Ln(4);
+		
 	}
 
+	function ChapterOperaciones($operacion, $comentarios, $usuarios)
+	{
+		$dataDetalleOP = array();
+		$txt = iconv('utf-8', 'cp1252', $operacion->descripcion );
+		$txt2 = iconv('utf-8', 'cp1252', $operacion->numerooperacion );
+		$this->ChapterTitle('Detalle de Operación: '. $txt);
+		
+		$this->SetFont('Arial','',10);
+
+		/*
+		$txt = iconv('utf-8', 'cp1252', 'Descripción' );
+		$txt2 = iconv('utf-8', 'cp1252', ': '.$operacion->descripcion );
+		array_push ($dataDetalleOP, array($txt, $txt2) );*/
+		$txt = iconv('utf-8', 'cp1252', 'Número de operación' );
+		$txt2 = iconv('utf-8', 'cp1252', $operacion->numerooperacion );
+		array_push ($dataDetalleOP, array($txt, ': '.$txt2) );
+		
+
+		array_push ($dataDetalleOP, array("Trabajo", ': '.$operacion->work) );
+		array_push ($dataDetalleOP, array("Recursos", ': '.$operacion->resources) );
+		$txt = iconv('utf-8', 'cp1252', 'Duración' );
+		array_push ($dataDetalleOP, array($txt, ': '.$operacion->duracion) );
+		
+		array_push ($dataDetalleOP, array("Fecha inicio", ': '.$operacion->fechainicio) );
+		array_push ($dataDetalleOP, array("Fecha vencimiento", ': '.$operacion->fechafin) );
+		$this->ImprovedTable($dataDetalleOP, 35, 155);
+		$this->Ln(4);
+		
+		$this->SetFont('Arial','B',14);
+		$txt = iconv('utf-8', 'cp1252', 'a' );
+		$this->Cell(190,10,"Comentarios");
+		$this->Ln(10);
+
+
+		$anT = 190;
+
+		$anImg = 10;
+		$padding = 2;
+		$celI = $anImg + $padding*2;
+		$celCabMen = $anT - $celI;
+
+		$espacioMensajes = 10;
+		
+		$i=0;
+
+		$this->SetDrawColor(130,130,130);
+    	$this->SetFillColor(230,230,0);
+    	
+		foreach ($comentarios as $comentario) 
+		{
+			$usuario = $this->buscarUsuario($usuarios, $comentario->creadopor);
+
+			$this->SetFont('Arial','',10);
+			$txtNom = iconv('utf-8', 'cp1252', $usuario->nombre.' '.$usuario->apellido );
+			$txtCom = iconv('utf-8', 'cp1252', $comentario->mensaje );
+			$txtFecha = iconv('utf-8', 'cp1252', $comentario->fechacreacion );
+
+
+			if($usuario->imagen!=null && $i%2==0)
+			{
+				//imagen
+				$this->Image($usuario->imagen,12,null, $anImg, $anImg);
+				$this->SetY($this->GetY()-$anImg-$padding);
+				$this->Cell($celI, $celI,"",'LTB');
+
+			}
+			else
+			{
+				if($usuario->nombre==null || $usuario->nombre=="" || $usuario->apellido==null || $usuario->apellido=="")
+				{
+					$this->Cell($celI, $celI, substr($usuario->correo, 0, 2),'LTB', 0, 'C');
+				}
+				else
+				{
+					$this->Cell($celI, $celI, substr($usuario->nombre, 0, 1).substr($usuario->apellido, 0, 1),'LTB', 0, 'C');
+				}
+				
+			}
+			
+			//Nombre
+			$this->SetTextColor(0,80,180);
+			$this->Cell($celCabMen,$celI/2,$txtNom,'TR');
+			$this->Ln($celI/2);
+			$this->SetTextColor(0, 0, 0);
+
+			//fecha
+			$this->SetTextColor(100, 100, 100);
+			$this->SetX($celI+$this->GetX());
+			$this->Cell($celCabMen,$celI/2,$txtFecha, 'RB');
+			$this->Ln($celI/2);
+			$this->SetTextColor(0, 0, 0);
+
+			//mensaje
+			if( !($txtCom=="" || $txtCom==null))
+			{
+				$this->MultiCell($anT,10,$txtCom, 'LR');
+			}
+
+			//adjunto imagen
+			if( !($comentario->adjuntoNombre=="" || $comentario->adjuntoNombre==null))
+			{
+				$this->Ln(2);
+				$anImgAdj = 35;
+				$this->Image($comentario->adjuntoNombre,12,null, 0, $anImgAdj);
+				$this->SetY($this->GetY()-$anImgAdj-2);
+				$this->Cell($anT,$anImgAdj+4,"",'LRB');
+				
+				$this->Ln($anImgAdj+$espacioMensajes);
+				
+			}
+			else
+			{
+				$this->Cell($anT,0,"",'B');
+				$this->Ln($espacioMensajes);
+			}
+			
+
+			$i++;
+		}
+		
+	}
+
+	function buscarUsuario($usuarios, $creadopor)
+	{
+		foreach ($usuarios as $usu) 
+		{
+			if($usu->id==$creadopor)
+			{
+				return $usu;
+			}
+		}
+		return null;
+	}
 
 	function ChapterTitle($label)
 	{
@@ -393,10 +581,10 @@ class PDFdetalleOT extends FPDF
 	}
 
 	// Better table
-	function ImprovedTable($data)
+	function ImprovedTable($data, $spacio1, $spacio2)
 	{
 		// Column widths
-		$w = array(95, 95);
+		$w = array($spacio1, $spacio2);
 		
 		// Data
 		foreach($data as $row)

@@ -111,6 +111,7 @@
                 <th>Estado</th>
                 <th>Prioridad</th>
                 <th>Responsables</th>
+                <th></th>
             </tr>
         </thead>
         <!--

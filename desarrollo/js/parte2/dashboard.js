@@ -355,7 +355,15 @@ function crearGraficoAreas(data)
     var ejeX = ['x']
     for(var clave in areas) 
     {
-        ejeX.push(clave);
+        if(clave=="null")
+        {
+            ejeX.push("Sin área");
+        }
+        else
+        {
+            ejeX.push(clave);
+        }
+
         finalizados.push(0);
         abiertas.push(0);
         enProgreso.push(0);
@@ -579,4 +587,242 @@ function restarurarGraficosSelect(data)
 }
 
 
+
+
+
+function eliminarEtiquetaSVG(txt)
+{
+    txt = txt.trim();
+    txt = txt.trim();
+    posMayorMenor = txt.indexOf(">");
+    txt = txt.substr(posMayorMenor+1)
+    posMayorMenor = txt.lastIndexOf("<");
+    txt = txt.substr(0, posMayorMenor)
+    return txt;
+}
+
+
+//transform="translate(10.5,4.5)"
+function moverGrafico(txt, mx, my)
+{
+    /*txt = cambiarPosCentro(txt, mx, 'x="', 0);
+    txt = cambiarPosCentro(txt, my, 'y="', 0);
+    
+    txt = cambiarPosCentro(txt, mx, 'cx="', 0);
+    txt = cambiarPosCentro(txt, my, 'cy="', 0);
+    
+    txt = cambiarPosCentro(txt, mx, 'x1="', 0);
+    txt = cambiarPosCentro(txt, my, 'y1="', 0);
+    
+    txt = cambiarPosCentro(txt, mx, 'x2="', 0);
+    txt = cambiarPosCentro(txt, my, 'y2="', 0);*/
+    
+    txt = '<g transform="translate('+mx+','+my+')">' + txt + '</g>'
+
+    return txt;
+}
+
+
+
+
+function svgToImg(divSVG, divCanvas, div)
+{
+    var doc1 = document.querySelector('#'+divSVG+' svg');   
+    var svgString = new XMLSerializer().serializeToString(doc1);
+    svgString = eliminarEtiquetaSVG(svgString);
+    svgString = '<svg xmlns="http://www.w3.org/2000/svg" width="500" height="400" style="overflow: hidden;">\
+    <g style="font-size: 14px; fill:#222;color: blue;fill-opacity:0.9;" >' 
+    + svgString + '</g></svg>';
+    
+    var canvas = document.getElementById(divCanvas);
+    canvas.innerHTML = "";
+    canvas.value = "";
+    var ctx = canvas.getContext("2d");
+    var DOMURL = self.URL || self.webkitURL || self;
+    var img = new Image();
+    var svg = new Blob([svgString], {type: "image/svg+xml"});
+    var url = DOMURL.createObjectURL(svg);
+
+    var pngReal = "";
+
+    img.onload = function() 
+    {
+        ctx.drawImage(img, 0, 0);
+        var png = canvas.toDataURL("image/png");
+        pngReal = canvas.toDataURL("image/png");
+        
+        var image = document.createElement('img');
+    image.src=pngReal;
+    image.width=100;
+    image.height=100;
+    image.alt="here should be some image";
+    document.body.appendChild(image);
+
+        document.querySelector('#'+div).innerHTML = '<img src="'+png+'"/>';
+        DOMURL.revokeObjectURL(png);
+    };
+    img.src = url;
+    
+    
+    return svg;
+}
+
+
+//convierte SVG a imagen
+function svgString2Image(nomDivSVG, width, height, format, callback) 
+{
+    var doc1 = document.querySelector('#'+nomDivSVG+' svg');   
+    var svgString = new XMLSerializer().serializeToString(doc1);
+    svgString = eliminarEtiquetaSVG(svgString);
+    svgString = '<svg xmlns="http://www.w3.org/2000/svg" width="500" height="400" style="overflow: hidden;">\
+    <g style="font-size: 14px; fill:#222;color: blue;fill-opacity:0.9;" >' 
+    + svgString + '</g></svg>';
+
+
+    // set default for format parameter
+    format = format ? format : 'png';
+    // SVG data URL from SVG string
+    var svgData = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
+    // create canvas in memory(not in DOM)
+    var canvas = document.createElement('canvas');
+    // get canvas context for drawing on canvas
+    var context = canvas.getContext('2d');
+    // set canvas size
+    canvas.width = width;
+    canvas.height = height;
+    // create image in memory(not in DOM)
+    var image = new Image();
+    // later when image loads run this
+    image.onload = function () 
+    { // async (happens later)
+        // clear canvas
+        context.clearRect(0, 0, width, height);
+        // draw image with SVG data to canvas
+        context.drawImage(image, 0, 0, width, height);
+        // snapshot canvas as png
+        var pngData = canvas.toDataURL('image/' + format);
+        // pass png data URL to callback
+        callback(pngData);
+    }; // end async
+    // start loading SVG data into in memory image
+    image.src = svgData;
+    return image;
+}
+
+
+
+function exportarKPIs()
+{
+    img0 = svgString2Image2("bar_g4", 400, 300, 'png', function (pngData) { });
+    img01 = svgString2Image2("bar_g4", 400, 300, 'png', function (pngData) { });
+    img1 = svgString2Image("gauge_g1", 400, 300, 'png', function (pngData) { });
+    img2 = svgString2Image("donut_g2", 400, 300, 'png', function (pngData) { });
+    img3 = svgString2Image("bar_g3", 400, 300, 'png', function (pngData) { });
+    img4 = svgString2Image("bar_g4", 400, 300, 'png', function (pngData) { });
+    
+
+
+    var f = document.getElementById('TheFormExportKPI');
+    f.token.value = token;
+    f.imgKPI0.value = img0.src;
+    f.imgKPI01.value = img0.src;
+    f.imgKPI1.value = img1.src;
+    f.imgKPI2.value = img2.src;
+    f.imgKPI3.value = img3.src;
+    f.imgKPI4.value = img4.src;
+    f.submit();
+
+    /*
+    divImgExportKipPrueba = document.getElementById("divImgExportKipPrueba");
+    
+    var image = document.createElement('img');
+    image.src=img0.src;
+    image.width=200;
+    image.height=200;
+    image.alt="here should be some image";
+    divImgExportKipPrueba.appendChild(image);
+
+    var image = document.createElement('img');
+    image.src=img01.src;
+    image.width=200;
+    image.height=200;
+    image.alt="here should be some image";
+    divImgExportKipPrueba.appendChild(image);
+
+    var image = document.createElement('img');
+    image.src=img1.src;
+    image.width=200;
+    image.height=200;
+    image.alt="here should be some image";
+    divImgExportKipPrueba.appendChild(image);
+
+    var image = document.createElement('img');
+    image.src=img2.src;
+    image.width=200;
+    image.height=200;
+    image.alt="here should be some image";
+    divImgExportKipPrueba.appendChild(image);
+
+    var image = document.createElement('img');
+    image.src=img3.src;
+    image.width=200;
+    image.height=200;
+    image.alt="here should be some image";
+    divImgExportKipPrueba.appendChild(image);
+
+    var image = document.createElement('img');
+    image.src=img4.src;
+    image.width=200;
+    image.height=200;
+    image.alt="here should be some image";
+    divImgExportKipPrueba.appendChild(image);
+    */
+}
+
+
+
+
+function svgString2Image2(nomDivSVG, width, height, format, callback) 
+{
+    var svgString = '\
+    <svg width="400" height="200">\
+        <g style="font-size: 14px; fill:#222;color: blue;fill-opacity:0.9;">\
+            <circle cx="26" cy="26" r="25" stroke="green" stroke-width="4" fill="yellow" />\
+        </g>\
+        \
+        <rect x="55" y="0" rx="0" ry="25" width="150" height="150"\
+        style="fill:red;stroke:black;stroke-width:5;opacity:0.5" />\
+        <text x="0" y="170" fill="red">I love SVG!</text>\
+    </svg>';
+
+
+    // set default for format parameter
+    format = format ? format : 'png';
+    // SVG data URL from SVG string
+    var svgData = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
+    // create canvas in memory(not in DOM)
+    var canvas = document.createElement('canvas');
+    // get canvas context for drawing on canvas
+    var context = canvas.getContext('2d');
+    // set canvas size
+    canvas.width = width;
+    canvas.height = height;
+    // create image in memory(not in DOM)
+    var image = new Image();
+    // later when image loads run this
+    image.onload = function () 
+    { // async (happens later)
+        // clear canvas
+        context.clearRect(0, 0, width, height);
+        // draw image with SVG data to canvas
+        context.drawImage(image, 0, 0, width, height);
+        // snapshot canvas as png
+        var pngData = canvas.toDataURL('image/' + format);
+        // pass png data URL to callback
+        callback(pngData);
+    }; // end async
+    // start loading SVG data into in memory image
+    image.src = svgData;
+    return image;
+}
 

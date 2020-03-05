@@ -203,7 +203,7 @@ function cargarComentarios(idOp)
                     }
                     else
                     {
-                        imagen = '<img src="'+base_del_url+'adjuntos/usuarios/'+imagen+'" alt class="d-block ui-w-40 rounded-circle">';
+                        imagen = '<img src="'+base_del_url+imagen+'" alt class="d-block ui-w-40 rounded-circle">';
                     }
 
                     fecha = fechaBDToWeb(fecha);

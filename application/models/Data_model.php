@@ -534,8 +534,8 @@ class Data_model extends CI_Model
             $this->db->join('area', 'equipo.area_id=area.id', 'left');
 
 
-            $this->db->order_by('estadoot.id', 'ASC');
             $this->db->order_by('ordenestrabajo.fechafin', 'ASC');
+            $this->db->order_by('estadoot.id', 'ASC');
             $this->db->order_by('ordenestrabajo.id', 'ASC');
         }
         /*else
@@ -934,6 +934,7 @@ class Data_model extends CI_Model
         $this->db->where('operaciones_id=', $idOp);
         $this->db->join('adjunto', 'adjunto.comentarios_id=comentarios.id', 'left');
         $this->db->order_by('fechacreacion', 'DESC');
+        $this->db->order_by('comentarios.id', 'DESC');
 
         $rpta = $this->db->get();
         return $rpta->result();

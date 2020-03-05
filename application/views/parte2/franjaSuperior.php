@@ -121,8 +121,25 @@
                 
                 <li class="nav-item">
                     <div class="dropdown">
-                        <img src="<?php echo $_SESSION["base_del_url"]."desarrollo/img/5.png"; ?>" height="40" width="40" class="ui-w-40 rounded-circle" 
-                                data-toggle="dropdown"alt="">
+                        <?php
+                            if($usuarioActual->imagen==null || $usuarioActual->imagen=="")
+                            {
+                                if($usuarioActual->nombre==null || $usuarioActual->nombre=="" || $usuarioActual->apellido==null || $usuarioActual->apellido=="")
+                                {
+                                    echo '<div class="txtFotoPerfilMenu"  data-toggle="dropdown">'.substr($usuarioActual->correo, 0, 2).'</div>';
+                                }
+                                else
+                                {
+                                    echo '<div class="txtFotoPerfilMenu"  data-toggle="dropdown">'.substr($usuarioActual->nombre, 0, 1).substr($usuarioActual->apellido, 0, 1).'</div>';
+                                }
+                            }
+                            else
+                            {
+                                echo '<img class="txtFotoPerfilMenu" src="'.$_SESSION["base_del_url"].$usuarioActual->imagen.'" alt=""  data-toggle="dropdown">';
+
+                            }
+                        ?>
+                        
                         <div class="dropdown-menu dropdown-menu-right">
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalMiperfil">Perfil</a>
                             <a class="dropdown-item" href="#" data-toggle="modal" data-target="#modalUsuarios" onclick="selectUsuarios()">Usuarios</a>

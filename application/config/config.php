@@ -24,7 +24,7 @@ session_start();
 |
 */
 
-$miIp = '192.168.0.10';//5 10
+$miIp = '192.168.0.7';//5 10
 $config['base_url'] = 'http://'.$miIp.'/appweb/';
 $_SESSION["base_del_url"] = 'http://'.$miIp.'/appweb/';
 $_SESSION["base_del_url_miApi"] = 'http://'.$miIp.'/appweb/index.php/';

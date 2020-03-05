@@ -517,7 +517,14 @@ class Api extends CI_Controller {
 					$nomResponsables = $nomResponsables.$nombre." ".$apellido."<br>";
 				}
 
-				$arr1 = array($ordentrabajo, $descripcion, $fechainicio, $fechafin, $status, $prioridadDescripcion, $nomResponsables);
+				$btnExportar = '<form id="TheForm'.$valor->id.'" method="post" action="'.$_SESSION["base_del_url_miApi"].'home/descargarOT_PDF" target="TheWindow">
+					<input type="hidden" name="token" value="" />
+					<input type="hidden" name="idOT" value="" />
+					</form>';
+
+				$btnExportar = $btnExportar.'<button onclick="exportarPdfExcel('.$valor->id.')" style="background-color: inherit; border:0; font-size: 16px;"><i class="far fa-file-excel"></i></button>';
+
+				$arr1 = array($ordentrabajo, $descripcion, $fechainicio, $fechafin, $status, $prioridadDescripcion, $nomResponsables, $btnExportar);
 				array_push($dataTabla, $arr1);
 			}
 

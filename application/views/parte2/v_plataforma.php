@@ -1,5 +1,18 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
+/*
+require_once 'dompdf/autoload.inc.php'; 
+use Dompdf\Dompdf; 
+
+$dompdf = new Dompdf();
+
+$html = file_get_contents("http://192.168.0.7/appweb/index.php/home/plataforma/"); 
+$dompdf->loadHtml($html); 
+ 
+$dompdf->setPaper('A4', 'landscape'); 
+$dompdf->render(); 
+$dompdf->stream("codexworld", array("Attachment" => 0)); //(1 = download and 0 = preview) 
+*/
 ?>
 <!DOCTYPE html>
 <html lang="es" class="default-style">
@@ -21,9 +34,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <link rel="stylesheet" href=<?php echo $_SESSION["base_del_url"]."assets/vendor/fonts/linearicons.css"; ?>>
     <link rel="stylesheet" href=<?php echo $_SESSION["base_del_url"]."assets/vendor/fonts/open-iconic.css"; ?>>
     <link rel="stylesheet" href=<?php echo $_SESSION["base_del_url"]."assets/vendor/fonts/pe-icon-7-stroke.css"; ?>>
-    
+
     
     <!--<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>--->
+
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     
     <!-- Tabla orden trabajo stylesheets -->
@@ -71,44 +86,28 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
 
-
-
-
-
-
-
-
-
-    <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/modernizr-2.8.3.js"; ?> ></script>
-    <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/jquery-1.11.3.min.js"; ?> ></script>
-    <script src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/jquery-ui.min.js"; ?> ></script>
-
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.core.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.lob.js"; ?> ></script>
-
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_core.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_collections.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_text.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_io.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_ui.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.documents.core_core.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_collectionsextended.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.excel_core.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_threading.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.ext_web.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.xml.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.documents.core_openxml.js"; ?> ></script>
-    <script type="text/javascript" src=<?php echo $_SESSION["base_del_url"]."desarrollo/js/librerias/excel/infragistics.excel_serialization_openxml.js"; ?> ></script>
-
-
-
-
-
-
-
 </head>
 
 <body onload="isMobile(), verificarMostrarMenuLateral()"> 
+
+    <form id="TheFormExportKPI" method="post" action="<?php echo $_SESSION["base_del_url_miApi"].'home/descargarKPIs_PDF';?>" target="TheWindow">
+        <input type="hidden" name="token" value="" />
+        <input type="hidden" name="imgKPI0" value="" />
+        <input type="hidden" name="imgKPI01" value="" />
+        <input type="hidden" name="imgKPI1" value="" />
+        <input type="hidden" name="imgKPI2" value="" />
+        <input type="hidden" name="imgKPI3" value="" />
+        <input type="hidden" name="imgKPI4" value="" />
+    </form>
+
+    <div id="divImgExportKipPrueba"></div>
+    
+
+
+
+
+
+
 
     <div id="ventana" class="h-100">
         <?php $this->load->view('mensajeNaranja.php'); ?> 
@@ -141,6 +140,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     
     <script>
+        //document.observe('dom:loaded', function() 
+        { 
+/*
+            jQuery(document).on("xepOnlineStatus", function(event, state){
+                if (state == "Started"){
+                    var screenTop = jQuery(document).scrollTop();
+                    var screenHeight = jQuery(window).height();
+                    jQuery('#spinner-overlay').css('top', screenTop);
+                    jQuery('#spinner-overlay').css('height', screenHeight);
+                    jQuery('#spinner-overlay').toggle('show');
+                }
+                else if (state == "Finished"){
+                    jQuery('#spinner-overlay').toggle('hide');
+                }
+            });*/
+        }//)            
+             
+        
+       
     
         
 
@@ -241,7 +259,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         
     </script>
 
-
+    
 
     
     <!-- Optional JavaScript -->
@@ -249,7 +267,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
 
 
 </body>

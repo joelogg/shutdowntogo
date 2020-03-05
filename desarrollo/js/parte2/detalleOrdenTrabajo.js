@@ -59,7 +59,7 @@ function colocarDatosOTDetalle(idOT)
             editarResponsableOT(idOT, responsablesIds);
             document.getElementById('txtFechaInicioOT').innerHTML = ordenesTrabajoLista[i].fechainicio;
             document.getElementById('txtFechaVencimientoOT').innerHTML = ordenesTrabajoLista[i].fechafin;
-            document.getElementById('txtAreaOT').innerHTML = ordenesTrabajoLista[i].descripcionArea;
+            document.getElementById('txtAreaOT').innerHTML = ordenesTrabajoLista[i].codigoArea;
             document.getElementById('txtEquipoOT').innerHTML = "(" + ordenesTrabajoLista[i].codigoEquipo + ") " + ordenesTrabajoLista[i].descripcionEquipo;
             
             colocarOperacionesListaIdOT(idOT)
@@ -244,4 +244,13 @@ function cambiarResponsablesBD()
             mensajeAmarillo("Error de conexión");
         }
     });
+}
+
+function exportarPdfExcel(idOT)
+{
+    var f = document.getElementById('TheForm'+idOT);
+    f.token.value = token;
+    f.idOT.value = idOT;
+    //window.open(base_del_url_miApi+"home/descargarOT_PDF", 'TheWindow');
+    f.submit();
 }
