@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once 'fpdf/fpdf.php';
-require_once 'dompdf/autoload.inc.php'; 
-use Dompdf\Dompdf; 
+//require_once 'dompdf/autoload.inc.php'; 
+//use Dompdf\Dompdf; 
 
 
 
@@ -265,19 +265,24 @@ class Home extends CI_Controller {
 		
 	public function descargarKPIs_PDF()
 	{
-		if(/*!isset($_POST['idOT']) ||*/ !isset($_POST['token']) )
+		echo "hola";
+		/*if(!isset($_POST['token']) )
 		{
 			echo "<h1>Datos de exportación no ingresados</h1>";
 		}
 		else
 		{
 			$token = $_POST['token'];
-			$imgKPI0 = $_POST['imgKPI0'];
-			$imgKPI01 = $_POST['imgKPI01'];
+			
 			$imgKPI1 = $_POST['imgKPI1'];
-			$imgKPI2 = $_POST['imgKPI2'];
-			$imgKPI3 = $_POST['imgKPI3'];
-			$imgKPI4 = $_POST['imgKPI4'];
+			//$imgKPI2 = $_POST['imgKPI2'];
+			//$imgKPI3 = $_POST['imgKPI3'];
+			//$imgKPI4 = $_POST['imgKPI4'];
+			
+			//$imgKPI1 = $token;
+			$imgKPI2 = $token;
+			$imgKPI3 = $token;
+			$imgKPI4 = $token;
 
 
 			$this->load->model('data_model');
@@ -286,35 +291,91 @@ class Home extends CI_Controller {
 			if($rpta["data"]!="")
 			{
 				//$dompdf = new Dompdf();
-				$dompdf = new Dompdf(array('enable_remote' => true));
+				//$dompdf = new Dompdf(array('enable_remote' => true));
 
 				$html = "
 				<!DOCTYPE html>
 				<html>
 				<head>
 					<meta charset='utf-8'>
+					<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' crossorigin='anonymous'>
+
+					<style>
+						body
+						{
+							padding: 2rem;
+						}
+						.titGraficasDashBoard 
+						{
+							color: #778CA2;
+							font-size: 14px;
+							font-weight: 500;
+							margin-bottom: 1rem;
+						}
+						.divUnGrafDashBoard 
+						{
+							margin-top: 0.5rem;
+							border-radius: 10px;
+							border: 1px solid #EEE;
+							border-right: 2px solid #EEE;
+							border-bottom: 2px solid #EEE;
+							width: 450px;
+							height: 250px;
+						}
+						.imgGrafico
+						{
+							width: 445px;
+							height: 370px;
+						}
+
+					</style>
 				</head>
 
 				<body> 
-					<h1>KPIs</h1>
-					<div><img src='$imgKPI0' alt='image' ></div>
-					<div style='background-color: orange'><img src='$imgKPI01' alt='image' ></div>
-					<div><img src='$imgKPI1' alt='image' ></div>
-					<div><img src='$imgKPI2' alt='image' ></div>
-					<div><img src='$imgKPI3' alt='image' ></div>
-					<div><img src='$imgKPI4' alt='image' ></div>
+					<h1>KPI's</h1>
+					<div class='row'>
+
+						<div class='col-6 mb-5'>
+							<span class='titGraficasDashBoard'>% COMPLETADO</span>
+							<div class='divUnGrafDashBoard'>
+								<img src='$imgKPI1' alt='image' class='imgGrafico'>
+							</div>
+						</div>
+
+						<div class='col-6 mb-5'>
+							<span class='titGraficasDashBoard'>ORDENES DE TRABAJO POR ESTATUS</span>
+							<div class='divUnGrafDashBoard'>
+								<img src='$imgKPI2' alt='image' class='imgGrafico'>
+							</div>
+						</div>
+
+						<div class='col-6 mb-5'>
+							<span class='titGraficasDashBoard'>ORDENES DE TRABAJO POR PRIORIDAD</span>
+							<div class='divUnGrafDashBoard'>
+								<img src='$imgKPI3' alt='image' class='imgGrafico'>
+							</div>
+						</div>
+
+						<div class='col-6 mb-5'>
+							<span class='titGraficasDashBoard'>ORDENES DE TRABAJO POR ÁREAS</span>
+							<div class='divUnGrafDashBoard'>
+								<img src='$imgKPI4' alt='image' class='imgGrafico'>
+							</div>
+						</div>
+					</div>
+
 				</body>
 				</html>";
 				
-				//echo $html;
+				echo $html;
 				
-				$dompdf->loadHtml($html); 
+				//$dompdf->loadHtml($html); 
 				
 				//$dompdf->setPaper('A4', 'landscape'); 
-				$dompdf->setPaper('A4', 'portrait'); 
-				$dompdf->render(); 
+				//$dompdf->setPaper('A4', 'portrait'); 
+				//$dompdf->render(); 
 				//$dompdf->stream("codexworld", array("Attachment" => 0)); //(1 = download and 0 = preview) 
-				$dompdf->stream('document.pdf', array("Attachment" => 0));
+				//$dompdf->stream('document.pdf', array("Attachment" => 0));
 				
 				
 				
@@ -326,7 +387,7 @@ class Home extends CI_Controller {
 			{
 				echo "<h1>Autorización no válidad</h1>";
 			}
-		}
+		}*/
 	}
 }
 

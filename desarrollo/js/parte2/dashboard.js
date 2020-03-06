@@ -266,6 +266,7 @@ function crearGraficoPrioridad(data)
     var atrasadas  = ['Atrasadas', 0, 0, 0, 0];
     var reprogramadas  = ['Reprogramadas', 0, 0, 0, 0];
 
+
     for (let i = 0; i < data.length; i++) 
     {
         if(data[i].atrasado==1)//atrasadas
@@ -290,7 +291,26 @@ function crearGraficoPrioridad(data)
         }
     }
 
-
+    var nomDatosPrioridad = ['x', 'Muy alta', 'Alta', 'Media', 'Baja'];
+    var contadorDatosPrioridad = [0, 0, 0, 0, 0]; 
+    var listDatos = [atrasadas, abiertas, enProgreso, finalizados, reprogramadas];
+    //obtener el maximo Y
+    var maxY = "";
+    var auxSuma = 0;
+    for (let j = 1; j < atrasadas.length; j++)
+    {
+        auxSuma = 0;
+        for (let i = 0; i < listDatos.length; i++) 
+        {
+            auxSuma += listDatos[i][j];
+            contadorDatosPrioridad[j] += listDatos[i][j];
+        }
+        if(auxSuma>0 && auxSuma>maxY)
+        {
+            maxY = auxSuma;
+        }
+    }
+    
     grafica3 = c3.generate(
     {
         bindto: '#bar_g3',
@@ -299,7 +319,7 @@ function crearGraficoPrioridad(data)
             x : 'x',
             columns: 
             [
-                ['x', 'Muy alta', 'Alta', 'Media', 'Baja'],
+                nomDatosPrioridad,
                 finalizados,
                 abiertas,
                 enProgreso,
@@ -316,6 +336,12 @@ function crearGraficoPrioridad(data)
         {
             //width: { ratio: 0.5 },
         },
+        tooltip: {
+            format: 
+            {
+                title: function (d) { return nomDatosPrioridad[d+1] + " (" + contadorDatosPrioridad[d+1] + ")"; },
+            }
+        },
         axis: 
         {
             rotated: true,
@@ -327,6 +353,14 @@ function crearGraficoPrioridad(data)
                     multiline: true
                 }
             },
+            y: 
+            {
+                max: maxY,
+            }
+        },
+        legend: 
+        {
+            show: false
         }
     });
 }
@@ -335,6 +369,7 @@ var grafica4;
 function crearGraficoAreas(data)
 {
     var areas = new Array();
+
     var j = 1;
     for (let i = 0; i < data.length; i++) 
     {
@@ -344,8 +379,7 @@ function crearGraficoAreas(data)
             j++;
         }
     }
-
-
+    
     var finalizados  = ['Finalizadas'];
     var abiertas  = ['Abiertas'];
     var enProgreso  = ['En progreso'];
@@ -353,6 +387,7 @@ function crearGraficoAreas(data)
     var reprogramadas  = ['Reprogramadas'];
 
     var ejeX = ['x']
+    var contadorDatosAreas = [0]; 
     for(var clave in areas) 
     {
         if(clave=="null")
@@ -363,6 +398,7 @@ function crearGraficoAreas(data)
         {
             ejeX.push(clave);
         }
+        contadorDatosAreas.push(0);
 
         finalizados.push(0);
         abiertas.push(0);
@@ -370,6 +406,7 @@ function crearGraficoAreas(data)
         atrasadas.push(0);
         reprogramadas.push(0);
     }
+    
 
 
     
@@ -403,6 +440,25 @@ function crearGraficoAreas(data)
     }
 
 
+    var listDatos = [atrasadas, abiertas, enProgreso, finalizados, reprogramadas];
+    //obtener el maximo Y
+    var maxY = "";
+    var auxSuma = 0;
+    for (let j = 1; j < atrasadas.length; j++)
+    {
+        auxSuma = 0;
+        for (let i = 0; i < listDatos.length; i++) 
+        {
+            auxSuma += listDatos[i][j];
+            contadorDatosAreas[j] += listDatos[i][j];
+        }
+        if(auxSuma>0 && auxSuma>maxY)
+        {
+            maxY = auxSuma;
+        }
+    }
+
+    
     grafica4 = c3.generate(
         {
             bindto: '#bar_g4',
@@ -438,6 +494,20 @@ function crearGraficoAreas(data)
                         multiline: true
                     }
                 },
+                y: 
+                {
+                    max: maxY,
+                }
+            },
+            tooltip: {
+                format: 
+                {
+                    title: function (d) { return ejeX[d+1] + " (" + contadorDatosAreas[d+1] + ")"; },
+                }
+            },
+            legend: 
+            {
+                show: false
             }
         });
 
@@ -602,25 +672,6 @@ function eliminarEtiquetaSVG(txt)
 }
 
 
-//transform="translate(10.5,4.5)"
-function moverGrafico(txt, mx, my)
-{
-    /*txt = cambiarPosCentro(txt, mx, 'x="', 0);
-    txt = cambiarPosCentro(txt, my, 'y="', 0);
-    
-    txt = cambiarPosCentro(txt, mx, 'cx="', 0);
-    txt = cambiarPosCentro(txt, my, 'cy="', 0);
-    
-    txt = cambiarPosCentro(txt, mx, 'x1="', 0);
-    txt = cambiarPosCentro(txt, my, 'y1="', 0);
-    
-    txt = cambiarPosCentro(txt, mx, 'x2="', 0);
-    txt = cambiarPosCentro(txt, my, 'y2="', 0);*/
-    
-    txt = '<g transform="translate('+mx+','+my+')">' + txt + '</g>'
-
-    return txt;
-}
 
 
 
@@ -713,42 +764,63 @@ function svgString2Image(nomDivSVG, width, height, format, callback)
 
 function exportarKPIs()
 {
-    img0 = svgString2Image2("bar_g4", 400, 300, 'png', function (pngData) { });
-    img01 = svgString2Image2("bar_g4", 400, 300, 'png', function (pngData) { });
     img1 = svgString2Image("gauge_g1", 400, 300, 'png', function (pngData) { });
     img2 = svgString2Image("donut_g2", 400, 300, 'png', function (pngData) { });
     img3 = svgString2Image("bar_g3", 400, 300, 'png', function (pngData) { });
     img4 = svgString2Image("bar_g4", 400, 300, 'png', function (pngData) { });
+
+
     
+   /* var mapForm = document.createElement("form");
+    mapForm.target = "Map";//
+    mapForm.method = "POST"; // or "post" if appropriate
+    mapForm.action = base_del_url_miApi+"home/descargarKPIs_PDF";
+    
+    var tokenInput = document.createElement("input");
+    tokenInput.type = "hidden";
+    tokenInput.name = "token";
+    tokenInput.value = token;
+    mapForm.appendChild(tokenInput);
 
+    var img1Input = document.createElement("textarea");
+    img1Input.name = "imgKPI1";
+    //img1Input.innerHTML = img1.src;
+    mapForm.appendChild(img1Input);
+    console.log(img1.src);
+    /*
+    var img2Input = document.createElement("input");
+    img2Input.type = "hidden";
+    img2Input.name = "imgKPI2";
+    img2Input.value = img2.src;
+    mapForm.appendChild(img2Input);
 
-    var f = document.getElementById('TheFormExportKPI');
-    f.token.value = token;
-    f.imgKPI0.value = img0.src;
-    f.imgKPI01.value = img0.src;
-    f.imgKPI1.value = img1.src;
-    f.imgKPI2.value = img2.src;
-    f.imgKPI3.value = img3.src;
-    f.imgKPI4.value = img4.src;
-    f.submit();
+    var img3Input = document.createElement("input");
+    img3Input.type = "hidden";
+    img3Input.name = "imgKPI3";
+    img3Input.value = img3.src;
+    mapForm.appendChild(img3Input);
+
+    var img4Input = document.createElement("input");
+    img4Input.type = "hidden";
+    img4Input.name = "imgKPI4";
+    img4Input.value = img4.src;
+    mapForm.appendChild(img4Input);*/
+    
+    /*document.body.appendChild(mapForm);
+    
+    map = window.open('', "Map", 'width=1100 height=800, left=0, top=0');
+    if (map) 
+    {
+        mapForm.submit();
+    } 
+    else 
+    {
+        alert('You must allow popups for this map to work.');
+    }*/
 
     /*
     divImgExportKipPrueba = document.getElementById("divImgExportKipPrueba");
     
-    var image = document.createElement('img');
-    image.src=img0.src;
-    image.width=200;
-    image.height=200;
-    image.alt="here should be some image";
-    divImgExportKipPrueba.appendChild(image);
-
-    var image = document.createElement('img');
-    image.src=img01.src;
-    image.width=200;
-    image.height=200;
-    image.alt="here should be some image";
-    divImgExportKipPrueba.appendChild(image);
-
     var image = document.createElement('img');
     image.src=img1.src;
     image.width=200;
@@ -775,54 +847,7 @@ function exportarKPIs()
     image.width=200;
     image.height=200;
     image.alt="here should be some image";
-    divImgExportKipPrueba.appendChild(image);
-    */
-}
-
-
-
-
-function svgString2Image2(nomDivSVG, width, height, format, callback) 
-{
-    var svgString = '\
-    <svg width="400" height="200">\
-        <g style="font-size: 14px; fill:#222;color: blue;fill-opacity:0.9;">\
-            <circle cx="26" cy="26" r="25" stroke="green" stroke-width="4" fill="yellow" />\
-        </g>\
-        \
-        <rect x="55" y="0" rx="0" ry="25" width="150" height="150"\
-        style="fill:red;stroke:black;stroke-width:5;opacity:0.5" />\
-        <text x="0" y="170" fill="red">I love SVG!</text>\
-    </svg>';
-
-
-    // set default for format parameter
-    format = format ? format : 'png';
-    // SVG data URL from SVG string
-    var svgData = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
-    // create canvas in memory(not in DOM)
-    var canvas = document.createElement('canvas');
-    // get canvas context for drawing on canvas
-    var context = canvas.getContext('2d');
-    // set canvas size
-    canvas.width = width;
-    canvas.height = height;
-    // create image in memory(not in DOM)
-    var image = new Image();
-    // later when image loads run this
-    image.onload = function () 
-    { // async (happens later)
-        // clear canvas
-        context.clearRect(0, 0, width, height);
-        // draw image with SVG data to canvas
-        context.drawImage(image, 0, 0, width, height);
-        // snapshot canvas as png
-        var pngData = canvas.toDataURL('image/' + format);
-        // pass png data URL to callback
-        callback(pngData);
-    }; // end async
-    // start loading SVG data into in memory image
-    image.src = svgData;
-    return image;
+    divImgExportKipPrueba.appendChild(image);*/
+    
 }
 

@@ -90,21 +90,8 @@ $dompdf->stream("codexworld", array("Attachment" => 0)); //(1 = download and 0 =
 
 <body onload="isMobile(), verificarMostrarMenuLateral()"> 
 
-    <form id="TheFormExportKPI" method="post" action="<?php echo $_SESSION["base_del_url_miApi"].'home/descargarKPIs_PDF';?>" target="TheWindow">
-        <input type="hidden" name="token" value="" />
-        <input type="hidden" name="imgKPI0" value="" />
-        <input type="hidden" name="imgKPI01" value="" />
-        <input type="hidden" name="imgKPI1" value="" />
-        <input type="hidden" name="imgKPI2" value="" />
-        <input type="hidden" name="imgKPI3" value="" />
-        <input type="hidden" name="imgKPI4" value="" />
-    </form>
-
     <div id="divImgExportKipPrueba"></div>
     
-
-
-
 
 
 

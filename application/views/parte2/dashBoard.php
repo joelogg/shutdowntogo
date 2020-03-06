@@ -64,7 +64,7 @@
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-12 col-xl-6 divGrafDashBoard">
-                    <span class="titGraficasDashBoard">ESTATUS</span>
+                    <span class="titGraficasDashBoard">ORDENES DE TRABAJO POR ESTATUS</span>
                     <div class="divUnGrafDashBoard">
                         
                         <div id="donut_g2" style="height: 250px;"></div>
@@ -72,7 +72,7 @@
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-12 col-xl-6 divGrafDashBoard">
-                    <span class="titGraficasDashBoard">PRIORIDAD</span>
+                    <span class="titGraficasDashBoard">ORDENES DE TRABAJO POR PRIORIDAD</span>
                     <div class="divUnGrafDashBoard">
 
                         <div id="bar_g3" style="height: 250px;"></div>
@@ -80,7 +80,7 @@
                 </div>
 
                 <div class="col-12 col-md-6 col-lg-12 col-xl-6 divGrafDashBoard">
-                    <span class="titGraficasDashBoard">ÁREAS</span>
+                    <span class="titGraficasDashBoard">ORDENES DE TRABAJO POR ÁREAS</span>
                     <div class="divUnGrafDashBoard">
 
                         <div id="bar_g4" style="height: 250px;"></div>

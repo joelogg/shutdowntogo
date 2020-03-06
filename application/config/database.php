@@ -81,6 +81,7 @@ $db['default'] = array(
 	'password' => 'J6t0JlwyAbHk3mdaIySe',
 	'database' => 'ib01db',
 	//'database' => 'innovadi_ib01db_v2',
+	//'database' => 'innovadi_pmdigital',
 	'dbdriver' => 'mysqli',
 	'dbprefix' => '',
 	'pconnect' => FALSE,
