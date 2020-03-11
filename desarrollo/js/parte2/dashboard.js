@@ -166,7 +166,9 @@ function crearGraficoCompletado(data)
 
     var porcentaje = numFinalziados/data.length*100;
     porcentaje = Math.round(porcentaje);
-    
+
+    datosGraficaActual.g1 = {"numFinalziados": numFinalziados, "total": data.length, "porcentaje":porcentaje  } ;
+
     c3.generate(
     {
         bindto: '#gauge_g1',
@@ -174,7 +176,7 @@ function crearGraficoCompletado(data)
         {
             columns: 
             [
-                ['Finalizdo/Total  ('+numFinalziados + "/" + data.length+")", porcentaje]
+                ['Finalizado/Total  ('+numFinalziados + "/" + data.length+")", porcentaje]
             ],
             type: 'gauge'
         },
@@ -226,7 +228,8 @@ function crearGraficoEstatus(data)
         }
     }
 
-
+    datosGraficaActual.g2 = {'Finalizadas':numFinalizados, 'Abiertas': numAbiertas, 'En progreso': numEnProgreso, 'Atrasadas': numAtrasadas, 'Reprogramadas': numReprogramadas  } ;
+    
     grafica2 = c3.generate(
     {
         bindto: '#donut_g2',
@@ -310,7 +313,10 @@ function crearGraficoPrioridad(data)
             maxY = auxSuma;
         }
     }
-    
+
+
+    datosGraficaActual.g3 = {'finalizados':finalizados, 'abiertas': abiertas, 'enProgreso': enProgreso, 'atrasadas': atrasadas, 'reprogramadas': reprogramadas  } ;
+    console.log(datosGraficaActual.g3);
     grafica3 = c3.generate(
     {
         bindto: '#bar_g3',
@@ -458,6 +464,7 @@ function crearGraficoAreas(data)
         }
     }
 
+    datosGraficaActual.g4 = {'finalizados':finalizados, 'abiertas': abiertas, 'enProgreso': enProgreso, 'atrasadas': atrasadas, 'reprogramadas': reprogramadas  } ;
     
     grafica4 = c3.generate(
         {
@@ -660,119 +667,18 @@ function restarurarGraficosSelect(data)
 
 
 
-function eliminarEtiquetaSVG(txt)
-{
-    txt = txt.trim();
-    txt = txt.trim();
-    posMayorMenor = txt.indexOf(">");
-    txt = txt.substr(posMayorMenor+1)
-    posMayorMenor = txt.lastIndexOf("<");
-    txt = txt.substr(0, posMayorMenor)
-    return txt;
-}
 
-
-
-
-
-
-function svgToImg(divSVG, divCanvas, div)
-{
-    var doc1 = document.querySelector('#'+divSVG+' svg');   
-    var svgString = new XMLSerializer().serializeToString(doc1);
-    svgString = eliminarEtiquetaSVG(svgString);
-    svgString = '<svg xmlns="http://www.w3.org/2000/svg" width="500" height="400" style="overflow: hidden;">\
-    <g style="font-size: 14px; fill:#222;color: blue;fill-opacity:0.9;" >' 
-    + svgString + '</g></svg>';
-    
-    var canvas = document.getElementById(divCanvas);
-    canvas.innerHTML = "";
-    canvas.value = "";
-    var ctx = canvas.getContext("2d");
-    var DOMURL = self.URL || self.webkitURL || self;
-    var img = new Image();
-    var svg = new Blob([svgString], {type: "image/svg+xml"});
-    var url = DOMURL.createObjectURL(svg);
-
-    var pngReal = "";
-
-    img.onload = function() 
-    {
-        ctx.drawImage(img, 0, 0);
-        var png = canvas.toDataURL("image/png");
-        pngReal = canvas.toDataURL("image/png");
-        
-        var image = document.createElement('img');
-    image.src=pngReal;
-    image.width=100;
-    image.height=100;
-    image.alt="here should be some image";
-    document.body.appendChild(image);
-
-        document.querySelector('#'+div).innerHTML = '<img src="'+png+'"/>';
-        DOMURL.revokeObjectURL(png);
-    };
-    img.src = url;
-    
-    
-    return svg;
-}
-
-
-//convierte SVG a imagen
-function svgString2Image(nomDivSVG, width, height, format, callback) 
-{
-    var doc1 = document.querySelector('#'+nomDivSVG+' svg');   
-    var svgString = new XMLSerializer().serializeToString(doc1);
-    svgString = eliminarEtiquetaSVG(svgString);
-    svgString = '<svg xmlns="http://www.w3.org/2000/svg" width="500" height="400" style="overflow: hidden;">\
-    <g style="font-size: 14px; fill:#222;color: blue;fill-opacity:0.9;" >' 
-    + svgString + '</g></svg>';
-
-
-    // set default for format parameter
-    format = format ? format : 'png';
-    // SVG data URL from SVG string
-    var svgData = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
-    // create canvas in memory(not in DOM)
-    var canvas = document.createElement('canvas');
-    // get canvas context for drawing on canvas
-    var context = canvas.getContext('2d');
-    // set canvas size
-    canvas.width = width;
-    canvas.height = height;
-    // create image in memory(not in DOM)
-    var image = new Image();
-    // later when image loads run this
-    image.onload = function () 
-    { // async (happens later)
-        // clear canvas
-        context.clearRect(0, 0, width, height);
-        // draw image with SVG data to canvas
-        context.drawImage(image, 0, 0, width, height);
-        // snapshot canvas as png
-        var pngData = canvas.toDataURL('image/' + format);
-        // pass png data URL to callback
-        callback(pngData);
-    }; // end async
-    // start loading SVG data into in memory image
-    image.src = svgData;
-    return image;
-}
 
 
 
 function exportarKPIs()
 {
-    img1 = svgString2Image("gauge_g1", 400, 300, 'png', function (pngData) { });
-    img2 = svgString2Image("donut_g2", 400, 300, 'png', function (pngData) { });
-    img3 = svgString2Image("bar_g3", 400, 300, 'png', function (pngData) { });
-    img4 = svgString2Image("bar_g4", 400, 300, 'png', function (pngData) { });
-
-
+    datosGraficaActualEnviar = JSON.stringify(datosGraficaActual);
     
-   /* var mapForm = document.createElement("form");
+    
+    var mapForm = document.createElement("form");
     mapForm.target = "Map";//
+    mapForm.enctype = "multipart/form-data";//
     mapForm.method = "POST"; // or "post" if appropriate
     mapForm.action = base_del_url_miApi+"home/descargarKPIs_PDF";
     
@@ -783,32 +689,13 @@ function exportarKPIs()
     mapForm.appendChild(tokenInput);
 
     var img1Input = document.createElement("textarea");
-    img1Input.name = "imgKPI1";
-    //img1Input.innerHTML = img1.src;
+    img1Input.name = "imgKPIs";
+    img1Input.innerHTML = datosGraficaActualEnviar;
     mapForm.appendChild(img1Input);
-    console.log(img1.src);
-    /*
-    var img2Input = document.createElement("input");
-    img2Input.type = "hidden";
-    img2Input.name = "imgKPI2";
-    img2Input.value = img2.src;
-    mapForm.appendChild(img2Input);
 
-    var img3Input = document.createElement("input");
-    img3Input.type = "hidden";
-    img3Input.name = "imgKPI3";
-    img3Input.value = img3.src;
-    mapForm.appendChild(img3Input);
-
-    var img4Input = document.createElement("input");
-    img4Input.type = "hidden";
-    img4Input.name = "imgKPI4";
-    img4Input.value = img4.src;
-    mapForm.appendChild(img4Input);*/
-    
-    /*document.body.appendChild(mapForm);
-    
-    map = window.open('', "Map", 'width=1100 height=800, left=0, top=0');
+    document.body.appendChild(mapForm);    
+    //map = window.open('', "Map", 'width=1100 height=800, left=0, top=0');
+    map = window.open('', "Map");
     if (map) 
     {
         mapForm.submit();
@@ -816,38 +703,7 @@ function exportarKPIs()
     else 
     {
         alert('You must allow popups for this map to work.');
-    }*/
+    }
 
-    /*
-    divImgExportKipPrueba = document.getElementById("divImgExportKipPrueba");
-    
-    var image = document.createElement('img');
-    image.src=img1.src;
-    image.width=200;
-    image.height=200;
-    image.alt="here should be some image";
-    divImgExportKipPrueba.appendChild(image);
-
-    var image = document.createElement('img');
-    image.src=img2.src;
-    image.width=200;
-    image.height=200;
-    image.alt="here should be some image";
-    divImgExportKipPrueba.appendChild(image);
-
-    var image = document.createElement('img');
-    image.src=img3.src;
-    image.width=200;
-    image.height=200;
-    image.alt="here should be some image";
-    divImgExportKipPrueba.appendChild(image);
-
-    var image = document.createElement('img');
-    image.src=img4.src;
-    image.width=200;
-    image.height=200;
-    image.alt="here should be some image";
-    divImgExportKipPrueba.appendChild(image);*/
-    
 }
 

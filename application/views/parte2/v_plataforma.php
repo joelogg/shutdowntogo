@@ -90,6 +90,7 @@ $dompdf->stream("codexworld", array("Attachment" => 0)); //(1 = download and 0 =
 
 <body onload="isMobile(), verificarMostrarMenuLateral()"> 
 
+
     <div id="divImgExportKipPrueba"></div>
     
 
@@ -104,7 +105,7 @@ $dompdf->stream("codexworld", array("Attachment" => 0)); //(1 = download and 0 =
         <?php $this->load->view('parte2/panelIzquierdo.php'); ?> 
 
         <div id="contenidoVentana">
-            
+        
             <!-- Inicio menu superior -->
             <?php $this->load->view('parte2/franjaSuperior.php'); ?> 
             <!-- Din menu superior -->
@@ -243,7 +244,6 @@ $dompdf->stream("codexworld", array("Attachment" => 0)); //(1 = download and 0 =
         var base_del_url_miApi = '<?php echo $_SESSION["base_del_url_miApi"] ?>';
         var token = '<?php echo $_SESSION["token"] ?>';
 
-        
     </script>
 
     
@@ -256,6 +256,8 @@ $dompdf->stream("codexworld", array("Attachment" => 0)); //(1 = download and 0 =
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 
 
+
+    
 </body>
 
 </html>

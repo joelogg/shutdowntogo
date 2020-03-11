@@ -1,8 +1,8 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 require_once 'fpdf/fpdf.php';
-//require_once 'dompdf/autoload.inc.php'; 
-//use Dompdf\Dompdf; 
+require_once 'dompdf/autoload.inc.php'; 
+use Dompdf\Dompdf; 
 
 
 
@@ -265,8 +265,8 @@ class Home extends CI_Controller {
 		
 	public function descargarKPIs_PDF()
 	{
-		echo "hola";
-		/*if(!isset($_POST['token']) )
+		
+		if(!isset($_POST['token']) )
 		{
 			echo "<h1>Datos de exportación no ingresados</h1>";
 		}
@@ -274,123 +274,389 @@ class Home extends CI_Controller {
 		{
 			$token = $_POST['token'];
 			
-			$imgKPI1 = $_POST['imgKPI1'];
-			//$imgKPI2 = $_POST['imgKPI2'];
-			//$imgKPI3 = $_POST['imgKPI3'];
-			//$imgKPI4 = $_POST['imgKPI4'];
 			
-			//$imgKPI1 = $token;
-			$imgKPI2 = $token;
-			$imgKPI3 = $token;
-			$imgKPI4 = $token;
+			$imgKPIs = $_POST['imgKPIs'];
 
-
+			
+			
 			$this->load->model('data_model');
 			$rpta = $this->data_model->selectUsuarioToken($token);
 			
 			if($rpta["data"]!="")
 			{
-				//$dompdf = new Dompdf();
-				//$dompdf = new Dompdf(array('enable_remote' => true));
-
-				$html = "
-				<!DOCTYPE html>
-				<html>
-				<head>
-					<meta charset='utf-8'>
-					<link rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css' crossorigin='anonymous'>
-
-					<style>
-						body
-						{
-							padding: 2rem;
-						}
-						.titGraficasDashBoard 
-						{
-							color: #778CA2;
-							font-size: 14px;
-							font-weight: 500;
-							margin-bottom: 1rem;
-						}
-						.divUnGrafDashBoard 
-						{
-							margin-top: 0.5rem;
-							border-radius: 10px;
-							border: 1px solid #EEE;
-							border-right: 2px solid #EEE;
-							border-bottom: 2px solid #EEE;
-							width: 450px;
-							height: 250px;
-						}
-						.imgGrafico
-						{
-							width: 445px;
-							height: 370px;
-						}
-
-					</style>
-				</head>
-
-				<body> 
-					<h1>KPI's</h1>
-					<div class='row'>
-
-						<div class='col-6 mb-5'>
-							<span class='titGraficasDashBoard'>% COMPLETADO</span>
-							<div class='divUnGrafDashBoard'>
-								<img src='$imgKPI1' alt='image' class='imgGrafico'>
-							</div>
-						</div>
-
-						<div class='col-6 mb-5'>
-							<span class='titGraficasDashBoard'>ORDENES DE TRABAJO POR ESTATUS</span>
-							<div class='divUnGrafDashBoard'>
-								<img src='$imgKPI2' alt='image' class='imgGrafico'>
-							</div>
-						</div>
-
-						<div class='col-6 mb-5'>
-							<span class='titGraficasDashBoard'>ORDENES DE TRABAJO POR PRIORIDAD</span>
-							<div class='divUnGrafDashBoard'>
-								<img src='$imgKPI3' alt='image' class='imgGrafico'>
-							</div>
-						</div>
-
-						<div class='col-6 mb-5'>
-							<span class='titGraficasDashBoard'>ORDENES DE TRABAJO POR ÁREAS</span>
-							<div class='divUnGrafDashBoard'>
-								<img src='$imgKPI4' alt='image' class='imgGrafico'>
-							</div>
-						</div>
-					</div>
-
-				</body>
-				</html>";
-				
-				echo $html;
-				
-				//$dompdf->loadHtml($html); 
-				
-				//$dompdf->setPaper('A4', 'landscape'); 
-				//$dompdf->setPaper('A4', 'portrait'); 
-				//$dompdf->render(); 
-				//$dompdf->stream("codexworld", array("Attachment" => 0)); //(1 = download and 0 = preview) 
-				//$dompdf->stream('document.pdf', array("Attachment" => 0));
+				$imgKPIs = json_decode($imgKPIs, true);
+				$imgKPI1 = $imgKPIs["g1"];
 				
 				
+				$pdf = new PDF_Diag();
+				$pdf->AddPage();
 				
+				//-------grafico 1-------------
+				$pdf->SetFont('Arial', 'BIU', 12);
+				$pdf->Cell(0, 5, '% COMPLETADO', 0, 1);
+				$pdf->Ln(8);
+				
+				$pdf->SetFont('Arial', '', 10);
+				$valX = $pdf->GetX();
+				$valY = $pdf->GetY();
+				
+				$pdf->SemiPieChart(180, 70, $imgKPI1, '%l (%p)');
+				$pdf->SetXY($valX, $valY + 40);
 
-		
+				//---------colores para el resto de graficos--------
+				$col1=array(31, 119, 180);
+				$col2=array(255, 127, 14);
+				$col3=array(44, 160, 44);
+				$col4=array(214, 39, 40);
+				$col5=array(148, 103, 189);
+
+				//---------grafico 2-----------
+				$imgKPI2 = $imgKPIs["g2"];
+				$pdf->Ln(12);
+				
+				$pdf->SetXY(90, 10);
+				$pdf->SetFont('Arial', 'BIU', 12);
+				$pdf->Cell(0, 5, 'ORDENES DE TRABAJO POR ESTATUS', 0, 1);
+				$pdf->Ln(8);
+				
+				$valX = $pdf->GetX();
+				$valY = $pdf->GetY();
+				$pdf->SetXY(90, $valY);
+				
+				$pdf->PieChart(100, 35, $imgKPI2, '%l (%p)', array($col1,$col2,$col3, $col4, $col5));
+				$pdf->SetXY($valX, $valY + 40);
+				
+			
+				//Bar diagram
+				$pdf->Ln(10);
+				$pdf->SetFont('Arial', 'BIU', 12);
+				$pdf->Cell(0, 5, '2 - Bar diagram', 0, 1);
+				$pdf->Ln(8);
+				$valX = $pdf->GetX();
+				$valY = $pdf->GetY();
+				$pdf->BarDiagram(190, 70, $imgKPI2, '%l : %v (%p)', array(255,175,100));
+				$pdf->SetXY($valX, $valY + 80);
+			
+				$pdf->Output();
 
 			}
 			else
 			{
 				echo "<h1>Autorización no válidad</h1>";
 			}
-		}*/
+		}
 	}
 }
 
+class PDF_Sector extends FPDF
+{
+    function Sector($xc, $yc, $r, $a, $b, $style='FD', $cw=true, $o=90)
+    {
+        $d0 = $a - $b;
+        if($cw){
+            $d = $b;
+            $b = $o - $a;
+            $a = $o - $d;
+        }else{
+            $b += $o;
+            $a += $o;
+        }
+        while($a<0)
+            $a += 360;
+        while($a>360)
+            $a -= 360;
+        while($b<0)
+            $b += 360;
+        while($b>360)
+            $b -= 360;
+        if ($a > $b)
+            $b += 360;
+        $b = $b/360*2*M_PI;
+        $a = $a/360*2*M_PI;
+        $d = $b - $a;
+        if ($d == 0 && $d0 != 0)
+            $d = 2*M_PI;
+        $k = $this->k;
+        $hp = $this->h;
+        if (sin($d/2))
+            $MyArc = 4/3*(1-cos($d/2))/sin($d/2)*$r;
+        else
+            $MyArc = 0;
+        //first put the center
+        $this->_out(sprintf('%.2F %.2F m',($xc)*$k,($hp-$yc)*$k));
+        //put the first point
+        $this->_out(sprintf('%.2F %.2F l',($xc+$r*cos($a))*$k,(($hp-($yc-$r*sin($a)))*$k)));
+        //draw the arc
+        if ($d < M_PI/2){
+            $this->_Arc($xc+$r*cos($a)+$MyArc*cos(M_PI/2+$a),
+                        $yc-$r*sin($a)-$MyArc*sin(M_PI/2+$a),
+                        $xc+$r*cos($b)+$MyArc*cos($b-M_PI/2),
+                        $yc-$r*sin($b)-$MyArc*sin($b-M_PI/2),
+                        $xc+$r*cos($b),
+                        $yc-$r*sin($b)
+                        );
+        }else{
+            $b = $a + $d/4;
+            $MyArc = 4/3*(1-cos($d/8))/sin($d/8)*$r;
+            $this->_Arc($xc+$r*cos($a)+$MyArc*cos(M_PI/2+$a),
+                        $yc-$r*sin($a)-$MyArc*sin(M_PI/2+$a),
+                        $xc+$r*cos($b)+$MyArc*cos($b-M_PI/2),
+                        $yc-$r*sin($b)-$MyArc*sin($b-M_PI/2),
+                        $xc+$r*cos($b),
+                        $yc-$r*sin($b)
+                        );
+            $a = $b;
+            $b = $a + $d/4;
+            $this->_Arc($xc+$r*cos($a)+$MyArc*cos(M_PI/2+$a),
+                        $yc-$r*sin($a)-$MyArc*sin(M_PI/2+$a),
+                        $xc+$r*cos($b)+$MyArc*cos($b-M_PI/2),
+                        $yc-$r*sin($b)-$MyArc*sin($b-M_PI/2),
+                        $xc+$r*cos($b),
+                        $yc-$r*sin($b)
+                        );
+            $a = $b;
+            $b = $a + $d/4;
+            $this->_Arc($xc+$r*cos($a)+$MyArc*cos(M_PI/2+$a),
+                        $yc-$r*sin($a)-$MyArc*sin(M_PI/2+$a),
+                        $xc+$r*cos($b)+$MyArc*cos($b-M_PI/2),
+                        $yc-$r*sin($b)-$MyArc*sin($b-M_PI/2),
+                        $xc+$r*cos($b),
+                        $yc-$r*sin($b)
+                        );
+            $a = $b;
+            $b = $a + $d/4;
+            $this->_Arc($xc+$r*cos($a)+$MyArc*cos(M_PI/2+$a),
+                        $yc-$r*sin($a)-$MyArc*sin(M_PI/2+$a),
+                        $xc+$r*cos($b)+$MyArc*cos($b-M_PI/2),
+                        $yc-$r*sin($b)-$MyArc*sin($b-M_PI/2),
+                        $xc+$r*cos($b),
+                        $yc-$r*sin($b)
+                        );
+        }
+        //terminate drawing
+        if($style=='F')
+            $op='f';
+        elseif($style=='FD' || $style=='DF')
+            $op='b';
+        else
+            $op='s';
+        $this->_out($op);
+    }
+
+    function _Arc($x1, $y1, $x2, $y2, $x3, $y3 )
+    {
+        $h = $this->h;
+        $this->_out(sprintf('%.2F %.2F %.2F %.2F %.2F %.2F c',
+            $x1*$this->k,
+            ($h-$y1)*$this->k,
+            $x2*$this->k,
+            ($h-$y2)*$this->k,
+            $x3*$this->k,
+            ($h-$y3)*$this->k));
+    }
+}
+
+class PDF_Diag extends PDF_Sector {
+	var $legends;
+	var $legendsVal;
+    var $wLegend;
+    var $sum;
+    var $NbVal;
+
+	function SemiPieChart($w, $h, $data, $format)
+    {
+        $this->SetFont('Courier', '', 10);
+        $this->SetLegends($data,$format);
+
+        $XPage = $this->GetX();
+        $YPage = $this->GetY();
+        $margin = 2;
+        $hLegend = 3;
+        $radius = min($w - $margin * 4 - $hLegend - $this->wLegend, $h - $margin * 2);
+        $radius = floor($radius / 2);
+        $XDiag = $XPage + $margin + $radius;
+        $YDiag = $YPage + $margin + $radius;
+		
+
+        //Sectors
+        $angleStart = 0;
+        $angleEnd = 0;
+		
+		$this->SetDrawColor(255, 255, 255);
+		$this->SetLineWidth(0);
+
+		//Dibujando el porcentaje completado
+		$angle = ($data["numFinalziados"] * 180) / $data["total"];
+		if ($angle != 0) 
+		{
+			$angleEnd = $angleStart + $angle;
+			$this->SetFillColor(31, 119, 180);
+			$this->Sector($XDiag, $YDiag, $radius, $angleStart, $angleEnd, 'FD', true, 180);
+			$angleStart += $angle;
+		}
+		
+		//Dibujando el porcentaje total o el plomo
+		$this->SetFillColor(220, 220, 220);
+		$this->Sector($XDiag, $YDiag, $radius, $angleStart, 180, 'FD', true, 180);
+		
+		//Dibujando un circulo blanco en el medio
+		$this->SetFillColor(255, 255, 255);
+		$this->Sector($XDiag, $YDiag, 20, 0, 180, 'FD', true, 180);
+
+        
+        $this->SetFont('Courier', '', 10);
+        $x1 = $XPage + 4 * $margin;
+        $x2 = $x1 + $hLegend + $margin;
+        $y1 = $YDiag - $radius + (2 * $radius - $this->NbVal*($hLegend + $margin)) / 2 + $radius/2 - 3;
+		
+		//Legends
+		$this->SetFillColor(31, 119, 180);
+        $this->Rect($x1, $y1, $hLegend, $hLegend, 'DF');
+		$this->SetXY($x2,$y1);
+		$this->Cell(0,$hLegend, "Finalizados/Total(".$data["numFinalziados"]."/".$data["total"].")");
+
+		//Colocando el numero cero
+		$this->SetXY($x2-6,$y1-5);
+		$this->Cell(0,$hLegend, "0");
+
+		//Colocando el numero cien
+		$this->SetXY($x2+$radius+10,$y1-5);
+		$this->Cell(0,$hLegend, "100");
+
+		//Colocando el porcentaje completado
+		$this->SetFont('Courier', '', 20);
+		$this->SetXY($x2+12,$y1-10);
+        $this->Cell(0,$hLegend, $data["porcentaje"]."%");
+	}
+	
+    function PieChart($w, $h, $data, $format, $colors=null)
+    {
+        $this->SetFont('Courier', '', 10);
+        $this->SetLegends($data,$format);
+
+        $XPage = $this->GetX();
+        $YPage = $this->GetY();
+        $margin = 2;
+        $hLegend = 5;
+        $radius = min($w - $margin * 4 - $hLegend - $this->wLegend, $h - $margin * 2)+5;
+        $radius = floor($radius / 2);
+        $XDiag = $XPage + $margin + $radius;
+        $YDiag = $YPage + $margin + $radius;
+		if($colors == null) 
+		{
+			for($i = 0; $i < $this->NbVal; $i++) 
+			{
+                $gray = $i * intval(255 / $this->NbVal);
+                $colors[$i] = array($gray,$gray,$gray);
+            }
+        }
+
+        //Sectors
+        $this->SetLineWidth(0.2);
+        $angleStart = 0;
+        $angleEnd = 0;
+        $i = 0;
+		foreach($data as $val) 
+		{
+            $angle = ($val * 360) / doubleval($this->sum);
+			if ($angle != 0) 
+			{
+                $angleEnd = $angleStart + $angle;
+                $this->SetFillColor($colors[$i][0],$colors[$i][1],$colors[$i][2]);
+                $this->Sector($XDiag, $YDiag, $radius, $angleStart, $angleEnd, 'FD', true, 180);
+                $angleStart += $angle;
+            }
+            $i++;
+		}
+
+        //Legends
+        $this->SetFont('Courier', '', 10);
+        $x1 = $XPage + 2 * $radius + 4 * $margin;
+        $x2 = $x1 + $hLegend + $margin;
+        $y1 = $YDiag - $radius + (2 * $radius - $this->NbVal*($hLegend + $margin)) / 2;
+		for($i=0; $i<$this->NbVal; $i++) 
+		{
+            $this->SetFillColor($colors[$i][0],$colors[$i][1],$colors[$i][2]);
+            $this->Rect($x1, $y1, $hLegend, $hLegend, 'DF');
+            $this->SetXY($x2,$y1);
+            $this->Cell(0,$hLegend,$this->legends[$i]." (".$this->legendsVal[$i]."/".$this->sum.")");
+            $y1+=$hLegend + $margin;
+        }
+    }
+
+    function BarDiagram($w, $h, $data, $format, $color=null, $maxVal=0, $nbDiv=4)
+    {
+        $this->SetFont('Courier', '', 10);
+        $this->SetLegends($data,$format);
+
+        $XPage = $this->GetX();
+        $YPage = $this->GetY();
+        $margin = 2;
+        $YDiag = $YPage + $margin;
+        $hDiag = floor($h - $margin * 2);
+        $XDiag = $XPage + $margin * 2 + $this->wLegend;
+        $lDiag = floor($w - $margin * 3 - $this->wLegend);
+        if($color == null)
+            $color=array(155,155,155);
+        if ($maxVal == 0) {
+            $maxVal = max($data);
+        }
+        $valIndRepere = ceil($maxVal / $nbDiv);
+        $maxVal = $valIndRepere * $nbDiv;
+        $lRepere = floor($lDiag / $nbDiv);
+        $lDiag = $lRepere * $nbDiv;
+        $unit = $lDiag / $maxVal;
+        $hBar = floor($hDiag / ($this->NbVal + 1));
+        $hDiag = $hBar * ($this->NbVal + 1);
+        $eBaton = floor($hBar * 80 / 100);
+
+        $this->SetLineWidth(0.2);
+        $this->Rect($XDiag, $YDiag, $lDiag, $hDiag);
+
+        $this->SetFont('Courier', '', 10);
+        $this->SetFillColor($color[0],$color[1],$color[2]);
+        $i=0;
+        foreach($data as $val) {
+            //Bar
+            $xval = $XDiag;
+            $lval = (int)($val * $unit);
+            $yval = $YDiag + ($i + 1) * $hBar - $eBaton / 2;
+            $hval = $eBaton;
+            $this->Rect($xval, $yval, $lval, $hval, 'DF');
+            //Legend
+            $this->SetXY(0, $yval);
+            $this->Cell($xval - $margin, $hval, $this->legends[$i],0,0,'R');
+            $i++;
+        }
+
+        //Scales
+        for ($i = 0; $i <= $nbDiv; $i++) {
+            $xpos = $XDiag + $lRepere * $i;
+            $this->Line($xpos, $YDiag, $xpos, $YDiag + $hDiag);
+            $val = $i * $valIndRepere;
+            $xpos = $XDiag + $lRepere * $i - $this->GetStringWidth($val) / 2;
+            $ypos = $YDiag + $hDiag - $margin;
+            $this->Text($xpos, $ypos, $val);
+        }
+    }
+
+    function SetLegends($data, $format)
+    {
+		$this->legends=array();
+		$this->legendsVal=array();
+        $this->wLegend=0;
+        $this->sum=array_sum($data);
+        $this->NbVal=count($data);
+        foreach($data as $l=>$val)
+        {
+            $p=sprintf('%.2f',$val/$this->sum*100).'%';
+            $legend=str_replace(array('%l','%v','%p'),array($l,$val,$p),$format);
+			$this->legends[]=$legend;
+			$this->legendsVal[]=$val;
+            $this->wLegend=max($this->GetStringWidth($legend),$this->wLegend);
+        }
+    }
+}
 
 class PDFdetalleOT extends FPDF
 {

@@ -23,3 +23,5 @@ var listOTsAbiertas = [];
 var listOTsEnProgreso = [];
 var listOTsAtrasadas = [];
 var listOTsReprogramadas = [];
+
+var datosGraficaActual = {};
