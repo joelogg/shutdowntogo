@@ -325,16 +325,36 @@ class Home extends CI_Controller {
 				
 				$pdf->PieChart(100, 35, $imgKPI2, '%l (%p)', array($col1,$col2,$col3, $col4, $col5));
 				$pdf->SetXY($valX, $valY + 40);
-				
+				$pdf->Ln(10);
 			
-				//Bar diagram
+				//---------grafico 3-----------
+				$imgKPI3 = $imgKPIs["g3"]["datos"];
+				$maxY = $imgKPIs["g3"]["maxY"];
 				$pdf->Ln(10);
 				$pdf->SetFont('Arial', 'BIU', 12);
-				$pdf->Cell(0, 5, '2 - Bar diagram', 0, 1);
+				$pdf->Cell(0, 5, 'ORDENES DE TRABAJO POR PRIORIDAD', 0, 1);
 				$pdf->Ln(8);
 				$valX = $pdf->GetX();
 				$valY = $pdf->GetY();
-				$pdf->BarDiagram(190, 70, $imgKPI2, '%l : %v (%p)', array(255,175,100));
+				$pdf->BarDiagram(190, 70, $imgKPI3, '%l: %v', array($col1,$col2,$col3, $col4, $col5), $maxY , 4);
+				$pdf->SetXY($valX, $valY + 80);
+
+
+				//---------grafico 4-----------
+				
+
+
+
+				$imgKPI4 = $imgKPIs["g4"]["datos"];
+				$maxY = $imgKPIs["g4"]["maxY"];
+				$pdf->Ln(10);
+				$pdf->SetFont('Arial', 'BIU', 12);
+				$txt = iconv('utf-8', 'cp1252', 'ORDENES DE TRABAJO POR ÁREAS' );
+				$pdf->Cell(0, 5, $txt, 0, 1);
+				$pdf->Ln(8);
+				$valX = $pdf->GetX();
+				$valY = $pdf->GetY();
+				$pdf->BarDiagram2(95, 70, $imgKPI4, '%l: %v', array($col1,$col2,$col3, $col4, $col5), $maxY , 4);
 				$pdf->SetXY($valX, $valY + 80);
 			
 				$pdf->Output();
@@ -466,7 +486,11 @@ class PDF_Diag extends PDF_Sector {
 	function SemiPieChart($w, $h, $data, $format)
     {
         $this->SetFont('Courier', '', 10);
-        $this->SetLegends($data,$format);
+		$this->SetLegends($data,$format);
+		if($this->sum<=0)
+		{
+			return;
+		}
 
         $XPage = $this->GetX();
         $YPage = $this->GetY();
@@ -532,7 +556,11 @@ class PDF_Diag extends PDF_Sector {
     function PieChart($w, $h, $data, $format, $colors=null)
     {
         $this->SetFont('Courier', '', 10);
-        $this->SetLegends($data,$format);
+		$this->SetLegends($data,$format);
+		if($this->sum<=0)
+		{
+			return;
+		}
 
         $XPage = $this->GetX();
         $YPage = $this->GetY();
@@ -563,11 +591,80 @@ class PDF_Diag extends PDF_Sector {
 			{
                 $angleEnd = $angleStart + $angle;
                 $this->SetFillColor($colors[$i][0],$colors[$i][1],$colors[$i][2]);
-                $this->Sector($XDiag, $YDiag, $radius, $angleStart, $angleEnd, 'FD', true, 180);
+				$this->Sector($XDiag, $YDiag, $radius, $angleStart, $angleEnd, 'FD', true, 180);
+				//$this->Sector($XDiag, $YDiag, $radius, $angleStart, $angleEnd, 'FD', false, 0);
+
                 $angleStart += $angle;
             }
             $i++;
 		}
+
+		//Dibujando un circulo blanco en el medio
+		$this->SetFillColor(255, 255, 255);
+		$this->Sector($XDiag, $YDiag, 10, 0, 360, 'FD', true, 180);
+
+		//Colocando el numero de OT
+		$this->SetXY($XDiag-7, $YDiag-2);
+		$this->Cell(0,$hLegend, $this->sum." OT");
+
+
+		//Datos en el grafico en si
+		$this->SetFont('Courier', '', 9);
+		$angleStart = 0;
+        $angleEnd = 0;
+		$i = 0;
+		foreach($data as $val) 
+		{ 
+			//$b/360*2*M_PI
+			$angle = ($val * 360) / doubleval($this->sum);
+			if ($angle != 0) 
+			{
+				$angleEnd = $angleStart + $angle;
+				
+				$anguloTextDeg = ($angleEnd + $angleStart)/2.0;
+				$anguloText = $anguloTextDeg+180;
+				$anguloText = $anguloText*M_PI/180.0;
+				
+				$xPos = $XDiag;
+				$yPos = $YDiag;
+
+				$aumX = 0;
+				$aumY = 0;
+				if($anguloTextDeg<90)
+				{
+					$aumX = 2;
+					$aumY = 2;
+				}
+				elseif($anguloTextDeg>=90 && $anguloTextDeg<180)
+				{
+					$aumX = -4.5;
+					$aumY = 4.5;
+				}
+				elseif($anguloTextDeg>=180 && $anguloTextDeg<270)
+				{
+					$aumX = -4.5;
+					$aumY = -4;
+				}
+				elseif($anguloTextDeg>=270 && $anguloTextDeg<360)
+				{
+					$aumX = 1;
+					$aumY = -1;
+				}
+
+				$xPos = cos($anguloText)*($radius) + $XDiag + $aumX;
+				$yPos = sin($anguloText)*($radius) + $YDiag + $aumY;
+
+				$p=sprintf('%.0f',$val/$this->sum*100).'%';
+				$this->Text($xPos, $yPos, $p);
+
+				$angleStart += $angle;
+			}
+
+			$i++;
+		//break;
+        }
+
+		
 
         //Legends
         $this->SetFont('Courier', '', 10);
@@ -584,10 +681,50 @@ class PDF_Diag extends PDF_Sector {
         }
     }
 
-    function BarDiagram($w, $h, $data, $format, $color=null, $maxVal=0, $nbDiv=4)
+    function BarDiagram($w, $h, $dataI, $format, $color=null, $maxVal=0, $nbDiv=4)
     {
-        $this->SetFont('Courier', '', 10);
-        $this->SetLegends($data,$format);
+		$data = array();
+		$dataTabla = array();
+
+		for ($i=0; $i < 4; $i++) 
+		{ 
+			array_push($data, 0);
+			$dataAux = array();
+			foreach($dataI as $valTipo) 
+			{
+				array_push($dataAux, 0);
+			}
+			array_push($dataTabla, $dataAux);
+		}
+
+
+		$j=0;
+		foreach($dataI as $valTipo) 
+		{
+			$i = 0;
+			foreach($valTipo as $val)
+			{
+				if($i > 0)
+				{
+					$data[$i-1] += $val;
+					$dataTabla[$i-1][$j] = $val;
+				}
+				$i++;
+			}
+			$j++;
+		}
+
+
+
+		$data = array("Muy alta"=>$data[0], "Alta"=>$data[1], "Media"=>$data[2], "Baja"=>$data[3]);
+
+		$this->SetFont('Courier', '', 10);
+		$this->SetLegends($data,$format);
+		
+		if($this->sum<=0)
+		{
+			return;
+		}
 
         $XPage = $this->GetX();
         $YPage = $this->GetY();
@@ -596,11 +733,8 @@ class PDF_Diag extends PDF_Sector {
         $hDiag = floor($h - $margin * 2);
         $XDiag = $XPage + $margin * 2 + $this->wLegend;
         $lDiag = floor($w - $margin * 3 - $this->wLegend);
-        if($color == null)
-            $color=array(155,155,155);
-        if ($maxVal == 0) {
-            $maxVal = max($data);
-        }
+        
+		
         $valIndRepere = ceil($maxVal / $nbDiv);
         $maxVal = $valIndRepere * $nbDiv;
         $lRepere = floor($lDiag / $nbDiv);
@@ -614,38 +748,238 @@ class PDF_Diag extends PDF_Sector {
         $this->Rect($XDiag, $YDiag, $lDiag, $hDiag);
 
         $this->SetFont('Courier', '', 10);
-        $this->SetFillColor($color[0],$color[1],$color[2]);
-        $i=0;
-        foreach($data as $val) {
-            //Bar
+		$this->SetFillColor($color[0][0],$color[0][1],$color[0][2]);
+		
+		$i=0;
+		foreach($data as $val) 
+		{
             $xval = $XDiag;
-            $lval = (int)($val * $unit);
             $yval = $YDiag + ($i + 1) * $hBar - $eBaton / 2;
             $hval = $eBaton;
-            $this->Rect($xval, $yval, $lval, $hval, 'DF');
-            //Legend
+
             $this->SetXY(0, $yval);
             $this->Cell($xval - $margin, $hval, $this->legends[$i],0,0,'R');
             $i++;
-        }
+		}
 
+		
+		
+		$this->SetFillColor(255,0,0);
+		for ($i=0; $i < count($dataTabla); $i++)  
+		{
+			$yval = $YDiag + ($i + 1) * $hBar - $eBaton / 2;
+			$hval = $eBaton;
+
+			$lvalAnterior = 0;
+			for ($j=0; $j < count($dataTabla[$i]); $j++)  
+			{
+				$this->SetFillColor($color[$j][0],$color[$j][1],$color[$j][2]);
+				
+				$val = $dataTabla[$i][$j];
+				$xval = $XDiag;
+				$lval = (int)($val * $unit);
+				
+				if($val>0)
+				{
+					$this->Rect($xval+$lvalAnterior, $yval, $lval, $hval, 'F');
+					$this->Text($xval+$lvalAnterior+0.2, $yval+$hval/2, $val);
+	
+					$lvalAnterior += $lval;
+				}	
+			}
+		}
+
+		
+		$this->SetDrawColor(220, 220, 220);
         //Scales
-        for ($i = 0; $i <= $nbDiv; $i++) {
+		for ($i = 0; $i <= $nbDiv; $i++) 
+		{
             $xpos = $XDiag + $lRepere * $i;
-            $this->Line($xpos, $YDiag, $xpos, $YDiag + $hDiag);
+            $this->Line($xpos, $YDiag, $xpos, $YDiag + $hDiag-7);
             $val = $i * $valIndRepere;
             $xpos = $XDiag + $lRepere * $i - $this->GetStringWidth($val) / 2;
             $ypos = $YDiag + $hDiag - $margin;
             $this->Text($xpos, $ypos, $val);
         }
-    }
+	}
+	
+
+	function BarDiagram2($w, $h, $dataI, $format, $color=null, $maxVal=0, $nbDiv=4)
+    {
+		$this->SetDrawColor(255, 255, 255);
+		
+		$data = array();
+		$dataTabla = array();
+
+		for ($i=0; $i < 3; $i++) 
+		{ 
+			array_push($data, 0);
+			$dataAux = array();
+			foreach($dataI as $valTipo) 
+			{
+				array_push($dataAux, 0);
+			}
+			array_push($dataTabla, $dataAux);
+		}
+
+
+		$j=0;
+		foreach($dataI as $valTipo) 
+		{
+			$i = 0;
+			foreach($valTipo as $val)
+			{
+				if($i > 0)
+				{
+					$data[$i-1] += $val;
+					$dataTabla[$i-1][$j] = $val;
+				}
+				$i++;
+			}
+			$j++;
+		}
+
+
+		$txt = iconv('utf-8', 'cp1252', 'Sin área' );
+		$data = array("MGRI"=>$data[0], "MGRI2"=>$data[1], $txt=>$data[2]);
+
+		$this->SetFont('Courier', '', 10);
+		$this->SetLegends($data,$format);
+		
+		if($this->sum<=0)
+		{
+			return;
+		}
+
+
+		$margin = 2;
+		$XPage = $this->GetX();
+		$YPage = $this->GetY();
+		$anchoEje = 5;
+		
+		$anchoGra = floor($w - $margin * 2) - 2 - $anchoEje;
+		$anchoEspacioBarra = floor($anchoGra / ($this->NbVal));
+		$anchoBarra = floor($anchoEspacioBarra * 80 / 100);
+		$anchoContorno = $anchoEspacioBarra - $anchoBarra;
+		
+		$altoGra = floor($h - $margin*3);
+		$altoEspacioBarra = ($altoGra / $maxVal);
+
+		$x = $XPage + $margin * 2 + $anchoEje;
+		$y = $YPage;
+
+		
+		$this->SetLineWidth(0.2);
+        $this->Rect($XPage + $anchoEje, $YPage, $anchoGra, $altoGra);
+
+        $this->SetFont('Courier', '', 10);
+		$this->SetFillColor($color[0][0],$color[0][1],$color[0][2]);
+
+
+
+		//graficando los valores internos recuadros
+		$this->SetFillColor(255,0,0);
+		for ($i=0; $i < count($dataTabla); $i++)  
+		{
+			$xPos = $x + $anchoEspacioBarra*$i + $anchoContorno/2;
+			$lvalAnterior = 0;
+
+			for ($j=0; $j < count($dataTabla[$i]); $j++)  
+			{
+				$this->SetFillColor($color[$j][0],$color[$j][1],$color[$j][2]);
+				
+				$val = $dataTabla[$i][$j];
+				$lval = $val * $altoEspacioBarra;
+
+				$yPos = $y+$altoGra-$lval-$lvalAnterior;
+				
+				if($val>0)
+				{
+					$this->Rect($xPos, $yPos, $anchoBarra, $lval, 'F');
+					$lvalAnterior += $lval;
+				}	
+			}
+		}
+
+		//graficando los valores internos texto
+		for ($i=0; $i < count($dataTabla); $i++)  
+		{
+			$xPos = $x + $anchoEspacioBarra*$i + $anchoEspacioBarra/2-1;
+			$lvalAnterior = 0;
+
+			for ($j=0; $j < count($dataTabla[$i]); $j++)  
+			{
+				$this->SetFillColor($color[$j][0],$color[$j][1],$color[$j][2]);
+				
+				$val = $dataTabla[$i][$j];
+				$lval = $val * $altoEspacioBarra;
+
+				$yPos = $y+$altoGra-$lvalAnterior-$lval/2+1;
+				
+				if($val>0)
+				{
+					$this->Text($xPos, $yPos, $val);
+					$lvalAnterior += $lval;
+				}	
+			}
+		}
+
+
+		//graficando el eje X
+		for ($i=0; $i < count($data); $i++)  
+		{
+			$xPos = $x + $anchoEspacioBarra*$i - $anchoContorno + 2;
+			$yPos = $y+$altoGra;
+			
+			$this->SetXY($xPos, $yPos);
+            $this->Cell($anchoEspacioBarra, 10, $this->legends[$i],0,0,'R');
+		}
+
+
+		
+
+		
+
+		//graficando el eje Y
+		$this->SetDrawColor(220, 220, 220);
+		$xPos = $x - $anchoContorno/2;
+		$dataScala = array();
+		$espacio = floor($maxVal/$nbDiv);
+		for ($i=1; $i <= $nbDiv; $i++) 
+		{ 
+			array_push($dataScala, $i*$espacio);
+		}
+
+		for ($j=0; $j < count($dataScala); $j++)  
+		{
+			$this->SetFillColor($color[$j][0],$color[$j][1],$color[$j][2]);
+			
+			$val = $dataScala[$j];
+			$lval = $val * $altoEspacioBarra;
+			$yPos = $y+$altoGra-$lval;
+			
+			if($val>0)
+			{
+				$this->Line($xPos, $yPos, $xPos+$anchoGra, $yPos);
+				$this->Text($xPos-$anchoEje, $yPos, $val);
+			}	
+		}
+
+		
+
+	}
+	
 
     function SetLegends($data, $format)
     {
 		$this->legends=array();
 		$this->legendsVal=array();
         $this->wLegend=0;
-        $this->sum=array_sum($data);
+		$this->sum=array_sum($data);
+		if($this->sum<=0)
+		{
+			return;
+		}
         $this->NbVal=count($data);
         foreach($data as $l=>$val)
         {
@@ -655,7 +989,10 @@ class PDF_Diag extends PDF_Sector {
 			$this->legendsVal[]=$val;
             $this->wLegend=max($this->GetStringWidth($legend),$this->wLegend);
         }
-    }
+	}
+
+	
+	
 }
 
 class PDFdetalleOT extends FPDF

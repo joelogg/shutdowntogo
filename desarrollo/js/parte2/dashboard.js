@@ -315,8 +315,8 @@ function crearGraficoPrioridad(data)
     }
 
 
-    datosGraficaActual.g3 = {'finalizados':finalizados, 'abiertas': abiertas, 'enProgreso': enProgreso, 'atrasadas': atrasadas, 'reprogramadas': reprogramadas  } ;
-    console.log(datosGraficaActual.g3);
+    datosGraficaActual.g3 = {'datos':{'Finalizados':finalizados, 'Abiertas': abiertas, 'En progreso': enProgreso, 'Atrasadas': atrasadas, 'Reprogramadas': reprogramadas}, 'maxY':maxY  } ;
+    
     grafica3 = c3.generate(
     {
         bindto: '#bar_g3',
@@ -464,8 +464,9 @@ function crearGraficoAreas(data)
         }
     }
 
-    datosGraficaActual.g4 = {'finalizados':finalizados, 'abiertas': abiertas, 'enProgreso': enProgreso, 'atrasadas': atrasadas, 'reprogramadas': reprogramadas  } ;
-    
+    datosGraficaActual.g4 = {'datos':{'Finalizados':finalizados, 'Abiertas': abiertas, 'En progreso': enProgreso, 'Atrasadas': atrasadas, 'Reprogramadas': reprogramadas}, 'maxY':maxY  } ;
+    console.log(datosGraficaActual.g4.datos);
+
     grafica4 = c3.generate(
         {
             bindto: '#bar_g4',
